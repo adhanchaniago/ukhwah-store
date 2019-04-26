@@ -1,4 +1,4 @@
-.<?php 
+<?php 
 
 class Admin extends MY_Controller{
 
@@ -150,6 +150,62 @@ class Admin extends MY_Controller{
 				# code...
 				break;
 		}
+	}
+
+	function add_data_kategori()
+	{
+		$msg= "";
+		$this->M_admin->post= $_POST;
+		if ( $this->M_admin->add_data_kategori() ) {
+			$msg= "1";
+		} else {
+			$msg= "0";
+		}
+		
+		echo json_encode($msg);
+	}
+
+	function edit_data_kategori()
+	{
+		$this->M_admin->id_kategori= $this->uri->segment(3);
+		$row= $this->M_admin->edit_data_kategori()[0];
+		echo '
+			<form action="'.base_url().'admin/update-data-kategori" role="form" id="editKategori" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="id_kategori" value="'.$row->id_kategori.'">	
+				<div class="form-group">
+					<label for="inputKategoriProduk">Nama Kategori Produk</label>
+					<input value="'.$row->kategori.'" name="kategori" type="text" class="form-control" id="inputKategoriProduk" placeholder="*) Nama Kategori Produk Baru" required="">
+				</div>
+				<button type="submit" class="btn btn-primary">Publish</button>
+			</form>
+		';
+
+	}
+
+	function update_data_kategori(){
+		$msg= "";
+		$this->M_admin->post= $this->input->post();
+		if ( $this->M_admin->update_data_kategori() ) {
+			$msg= "1";
+		} else {
+			$msg= "0";
+		}
+		echo json_encode($msg);
+		
+	}
+
+	function delete_data_kategori()
+	{
+		$msg= "";
+		$this->M_admin->id_kategori= $this->uri->segment(3);
+		if ( $this->M_admin->delete_data_kategori() ) {
+			$msg= "1";
+		} else {
+			$msg= "0";
+		}
+		
+		echo json_encode($msg);
+		
 	}
 	// data_kategori controller
 

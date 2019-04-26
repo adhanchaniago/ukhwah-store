@@ -32,7 +32,7 @@ class Login extends CI_Controller{
 
         $cek_admin      = $this->m_login->cek_login("tb_admin",$where_admin)->num_rows();
         $cek_pelanggan  = $this->m_login->cek_login("tb_pelanggan",$where_pelanggan)->num_rows();
-        $cek_supplier   = $this->m_login->cek_login("tb_supplier",$where_supplier)->num_rows();
+        // $cek_supplier   = $this->m_login->cek_login("tb_supplier",$where_supplier)->num_rows();
 
         if ( $cek_admin > 0 ) {
             # code...
@@ -47,31 +47,31 @@ class Login extends CI_Controller{
             redirect(base_url("admin/beranda"));
         }
 
-        elseif ( $cek_guru > 0 ) {
-            # code...
-            $data_session = array(
-                'nama' => $username,
-                'status' => "login",
-                'level' => 'guru'
-            );
+        // elseif ( $cek_guru > 0 ) {
+        //     # code...
+        //     $data_session = array(
+        //         'nama' => $username,
+        //         'status' => "login",
+        //         'level' => 'guru'
+        //     );
         
-            $this->session->set_userdata($data_session);
+        //     $this->session->set_userdata($data_session);
         
-            redirect(base_url("admin/beranda"));
-        }
+        //     redirect(base_url("admin/beranda"));
+        // }
 
-        elseif ( $cek_siswa > 0 ) {
-            # code...
-            $data_session = array(
-                'nama' => $username,
-                'status' => "login",
-                'level' => 'siswa'
-            );
+        // elseif ( $cek_siswa > 0 ) {
+        //     # code...
+        //     $data_session = array(
+        //         'nama' => $username,
+        //         'status' => "login",
+        //         'level' => 'siswa'
+        //     );
         
-            $this->session->set_userdata($data_session);
+        //     $this->session->set_userdata($data_session);
         
-            redirect(base_url("admin/beranda"));
-        }
+        //     redirect(base_url("admin/beranda"));
+        // }
 
         else{
             // login error

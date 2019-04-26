@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 25, 2019 at 03:55 PM
+-- Generation Time: Apr 26, 2019 at 12:56 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -69,6 +69,18 @@ CREATE TABLE `tb_kategori` (
   `id_kategori` int(11) NOT NULL,
   `kategori` varchar(25) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tb_kategori`
+--
+
+INSERT INTO `tb_kategori` (`id_kategori`, `kategori`) VALUES
+(1, 'Aksesoris'),
+(2, 'T-Shirt'),
+(3, 'Kemeja'),
+(4, 'Jilbab'),
+(5, 'Mukena'),
+(12, 'kategori baru');
 
 -- --------------------------------------------------------
 
@@ -244,7 +256,7 @@ ALTER TABLE `tb_admin`
 -- AUTO_INCREMENT for table `tb_kategori`
 --
 ALTER TABLE `tb_kategori`
-  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_kategori` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `tb_konfirmasi`

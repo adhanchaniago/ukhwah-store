@@ -40,15 +40,15 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          <li class="nav-item ">
-            <a href="<?php echo base_url() ?>admin/beranda" class="nav-link">
+          <li class="nav-item">
+            <a href="<?php echo base_url() ?>admin/beranda" class="nav-link <?php echo ($this->uri->segment(2)=='beranda') ? 'active' : null ?>">
               <i class="nav-icon fa fa-user-circle-o"></i>
               <p>
                 Beranda
               </p>
             </a>
           </li>
-          <li class="nav-item has-treeview">
+          <li class="nav-item has-treeview <?php echo ($this->uri->segment(2)=='data-pemesanan-produk' || $this->uri->segment(2)=='data-konfirmasi-pembayaran') ? 'menu-open' : null ?>">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-user"></i>
               <p>
@@ -58,20 +58,20 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<?php echo base_url() ?>admin/data-pemesanan-produk" class="nav-link">
+                <a href="<?php echo base_url() ?>admin/data-pemesanan-produk" class="nav-link <?php echo ($this->uri->segment(2)=='data-pemesanan-produk') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Pemesanan Produk</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url() ?>admin/data-konfirmasi-pembayaran" class="nav-link">
+                <a href="<?php echo base_url() ?>admin/data-konfirmasi-pembayaran" class="nav-link <?php echo ($this->uri->segment(2)=='data-konfirmasi-pembayaran') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Konfirmasi Pembayaran</p>
                 </a>
               </li>
             </ul>
           </li>
-          <li class="nav-item has-treeview">
+          <li class="nav-item has-treeview <?php echo ($this->uri->segment(2)=='data-admin' || $this->uri->segment(2)=='data-supplier' || $this->uri->segment(2)=='data-kategori' || $this->uri->segment(2)=='data-produk' || $this->uri->segment(2)=='data-pelanggan' || $this->uri->segment(2)=='data-ongkir' ) ? 'menu-open' : null ?>">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-user"></i>
               <p>
@@ -81,37 +81,37 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="<?php echo base_url() ?>admin/data-admin" class="nav-link">
+                <a href="<?php echo base_url() ?>admin/data-admin" class="nav-link <?php echo ($this->uri->segment(2)=='data-admin') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Admin</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url() ?>admin/data-supplier" class="nav-link">
+                <a href="<?php echo base_url() ?>admin/data-supplier" class="nav-link <?php echo ($this->uri->segment(2)=='data-supplier') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Supplier</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url() ?>admin/data-kategori" class="nav-link">
+                <a href="<?php echo base_url() ?>admin/data-kategori" class="nav-link <?php echo ($this->uri->segment(2)=='data-kategori') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Kategori Produk</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url() ?>admin/data-produk" class="nav-link">
+                <a href="<?php echo base_url() ?>admin/data-produk" class="nav-link <?php echo ($this->uri->segment(2)=='data-produk') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Produk</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url() ?>admin/data-pelanggan" class="nav-link">
+                <a href="<?php echo base_url() ?>admin/data-pelanggan" class="nav-link <?php echo ($this->uri->segment(2)=='data-pelanggan') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Pelanggan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="<?php echo base_url() ?>admin/data-ongkir" class="nav-link">
+                <a href="<?php echo base_url() ?>admin/data-ongkir" class="nav-link <?php echo ($this->uri->segment(2)=='data-ongkir') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Ongkir</p>
                 </a>
