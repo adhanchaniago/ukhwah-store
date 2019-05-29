@@ -9,7 +9,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Master Data Kategori Produk</h1>
+            <h1>Master Data Informasi Kategori Produk</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -24,33 +24,12 @@
     <!-- Main content -->
     <section class="content">
       <div class="row">
-        <div class="col-sm-6">
-          <!-- general form elements -->
+        <div class="col-sm-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Add New</h3>
+              <!-- <h3 class="card-title">Daftar Informasi Kelas</h3> -->
+              <a href="<?php echo base_url() ?>admin/form-add-kategori" class="btn btn-default float-right form-add-new"><i class="fa fa-plus"></i> Add New</a>
             </div>
-            <!-- /.card-header -->
-            <!-- form start -->
-            <form action="<?php echo base_url() ?>admin/add-data-kategori" role="form" id="addNewKategori" method="post" enctype="multipart/form-data">
-              <div class="card-body">
-                <div class="form-group">
-                  <label for="inputKategoriProduk">Nama Kategori Produk</label>
-                  <input name="kategori" type="text" class="form-control" id="inputKategoriProduk" placeholder="*) Nama Kategori Produk Baru" required="">
-                </div>
-              </div>
-              <!-- /.card-body -->
-
-              <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Publish</button>
-              </div>
-            </form>
-          </div>
-          <!-- /.card -->
-        </div>
-
-        <div class="col-sm-6">
-          <div class="card">
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
@@ -136,61 +115,70 @@
   $(function () {
     $("#example1").DataTable();
   });
-
-  $("form#addNewKategori").submit(function(e) {
+  $(document).on('click', '.form-add-new', function(e){
+    e.preventDefault();
+    $.get($(this).attr('href'), function(data){
+      $('#myModal .modal-title').html('Tambah Data Informasi Kategori Produk');
+      $('#myModal .modal-body').html(data);
+      $('#myModal').modal('show');
+      getTinymce();
+    },'html');
+  });
+  $(document).on('submit', 'form#add', function(e) {
     e.preventDefault();    
     var formData = new FormData(this);
-
     $.ajax({
         url: $(this).attr("action"),
         type: 'POST',
         data: formData,
         success: function (data) {
-            alert( (data=='1') ? 'Data Berhasil Disimpan' : 'Data Gagal Disimpan' )
+          if ( data.stats==1 ) {
+            alert( data.msg )
             location.reload()
+          } else {
+            alert( data.msg );
+          }
+          // console.log(data);
         },
         cache: false,
         contentType: false,
         processData: false,
         dataType: 'json'
-
     });
-  })
-
+  });
   $('.edit').on('click', function(e){
     e.preventDefault(); 
     $.get( $(this).attr('href'), function(data){
-      $('#myModal .modal-title').html('Edit Kategori Produk');
+      $('#myModal .modal-title').html('Edit Informasi Kategori Produk');
       $('#myModal .modal-body').html(data);
+      getTinymce();
       $('#myModal').modal('show');
     } ,'html');
-  })
+  });
   
   $('.delete').on('click', function(e){
     e.preventDefault(); 
     $.get( $(this).attr('href'), function(data){
-      alert( (data=='1') ? 'Data Berhasil Dihapus' : 'Data Gagal Dihapus' )
+      alert( (data.stats=='1') ? data.msg : data.msg )
       location.reload()
     } ,'json');
-  })
-
-  $(document).on('submit','form#editKategori',function(e){
+  });
+  $(document).on('submit','form#edit',function(e){
     e.preventDefault();    
     var formData = new FormData(this);
-
     $.ajax({
         url: $(this).attr("action"),
         type: 'POST',
         data: formData,
         success: function (data) {
-            alert( (data=='1') ? 'Data Berhasil Diupdate' : 'Data Gagal Diupdate' )
+          // console.log(data)
+            alert( (data.stats=='1') ? data.msg : data.msg )
             location.reload()
         },
         cache: false,
         contentType: false,
         processData: false,
         dataType: 'json'
-
     });
-  })
+  });
 </script>

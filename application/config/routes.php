@@ -49,6 +49,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'website';
+$route['ukhwah-store'] = 'website';
+$route['profil'] = 'website/profil';
+$route['produk'] = 'website/produk';
+$route['produk/kategori/(:num)/(:any)'] = 'website/kategori';
+$route['produk/detail/(:num)/(:any)'] = 'website/produk_detail';
+$route['cara-pemesanan'] = 'website/cara_pemesanan';
+$route['kontak-kami'] = 'website/kontak_kami';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = TRUE;

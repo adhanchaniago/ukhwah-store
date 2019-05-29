@@ -24,5 +24,14 @@ class MY_Controller extends CI_Controller{
                 break;
         }
     }
+    public function render_websites()
+    {
+        $this->load->model('m_website');
+        $this->aside['kategori']= $this->m_website->kategori();
+        $this->load->view('website/header');
+        $this->load->view('website/nav', (empty($this->aside)? [] : $this->aside ));
+        $this->load->view($this->view, (empty($this->content)? [] : $this->content ) );
+        $this->load->view('website/footer');
+    }
 }
     

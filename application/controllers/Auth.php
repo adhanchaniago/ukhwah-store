@@ -1,9 +1,9 @@
 <?php
-class Login extends CI_Controller{
+class Auth extends CI_Controller{
  
     function __construct(){
         parent::__construct();		
-        $this->load->model('m_login');
+        $this->load->model('m_auth');
 
     }
 
@@ -11,7 +11,7 @@ class Login extends CI_Controller{
         $this->load->view('log_in/admin');
     }
 
-    function aksi_login(){
+    function process(){
         $username = $this->input->post('username');
         $password = $this->input->post('password');
         
@@ -20,24 +20,14 @@ class Login extends CI_Controller{
             'password' => $password
         );
 
-        $where_pelanggan = array(
-            'username' => $username,
-            'password' => $password
-        );
-
-        $where_supplier = array(
-            'username' => $username,
-            'password' => $password
-        );
-
-        $cek_admin      = $this->m_login->cek_login("tb_admin",$where_admin)->num_rows();
-        $cek_pelanggan  = $this->m_login->cek_login("tb_pelanggan",$where_pelanggan)->num_rows();
-        // $cek_supplier   = $this->m_login->cek_login("tb_supplier",$where_supplier)->num_rows();
+        $cek_admin  = $this->m_auth->cek_login("tb_admin",$where_admin)->num_rows();
 
         if ( $cek_admin > 0 ) {
             # code...
+            $row= $this->m_auth->cek_login("tb_admin",$where_admin)->row();
             $data_session = array(
-                'nama' => $username,
+                'id' => $row->id_admin,
+                'username' => $username,
                 'status' => "login",
                 'level' => 'admin'
             );
@@ -75,13 +65,13 @@ class Login extends CI_Controller{
 
         else{
             // login error
-            // redirect(base_url("login-error"));
-            $this->load->view('login_error');
+            $this->session->set_flashdata('msg', 'Maaf! Username atau Password anda salah!');
+            redirect(base_url("auth"));
         }
     }
 
     function logout(){
         $this->session->sess_destroy();
-        redirect(base_url('login'));
+        redirect(base_url('auth'));
     }
 }
