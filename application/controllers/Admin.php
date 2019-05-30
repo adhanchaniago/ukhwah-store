@@ -15,67 +15,30 @@ class Admin extends MY_Controller{
 		$json= null;
 	}
 
-	// beranda controller
+/* ==================== Start Beranda ==================== */
 	function beranda(){
 		$this->view= 'admin/beranda';
 		$this->render_pages();
 	}
-	// beranda controller
+/* ==================== End Beranda ==================== */
 
-	// profil:administrator,guru,siswa controller
-	function profil(){
-		switch ($_SESSION['level']) {
-			case 'admin':
-				# profil admin
-				$this->view= 'admin_profil';
-				$this->render_pages();
-				break;
-			
-			case 'guru':
-				# profil guru
-				$this->view= 'admin_guru_profil';
-				$this->render_pages();
-				break;
-
-			case 'siswa':
-				# profil siswa
-				$this->view= 'admin_siswa_profil';
-				$this->render_pages();
-				break;
-			
-			default:
-				# code...
-				break;
-		}
-	}
-	// profil:administrator,guru,siswa controller
-
-	// data_pemesanan_produk controller
+/* ==================== Start Transaksi: Pemesanan Produk ==================== */
 	function data_pemesanan_produk()
 	{
-		switch ($_SESSION['level']) {
-			case 'admin':
-				# code...
-				$this->view= 'admin/pemesanan_produk';
-				$this->render_pages();
-				break;
-			
-			default:
-				# code...
-				break;
-		}
+		$this->view= 'admin/pemesanan_produk';
+		$this->render_pages();
 	}
-	// data_pemesanan_produk controller
-
-	// data_konfirmasi_pembayaran controller
+/* ==================== End Transaksi: Pemesanan Produk ==================== *
+/
+/* ==================== Start Transaksi: Konfirmasi Pembayaran ==================== */
 	function data_konfirmasi_pembayaran()
 	{
 		$this->view= 'admin/konfirmasi_pembayaran';
 		$this->render_pages();
 	}
-	// data_konfirmasi_pembayaran controller
+/* ==================== End Transaksi: Konfirmasi Pembayaran ==================== */
 
-	// data_admin controller
+/* ==================== Start Master Data: Admin ==================== */
 	function data_admin()
 	{
 		$this->view= 'admin/admin';
@@ -195,9 +158,12 @@ class Admin extends MY_Controller{
 	}
 	public function delete_data_admin()
 	{
-		
+
 	} 
-	// data_admin controller
+/* ==================== End Master Data: Admin ==================== */
+
+/* ==================== Start Master Data: Supplier ==================== */	
+/* ==================== End Master Data: Supplier ==================== */	
 
 	// data_supplier controller
 	function data_supplier()
