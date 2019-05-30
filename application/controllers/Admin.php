@@ -371,132 +371,9 @@ class Admin extends MY_Controller{
 /* ==================== End Master Data : Kategori Produk ==================== */
 
 /* ==================== Start Master Data : Produk ==================== */
-/* ==================== End Master Data : Produk ==================== */
-
-/* ==================== Start Master Data : Ongkir ==================== */
-	function data_ongkir()
-	{
-		$this->load->helper('currency');
-		$this->content['rows']= $this->m_admin->data_ongkir();
-		$this->view= 'admin/ongkir';
-		$this->render_pages();
-	}
-	public function form_data_ongkir()
-	{
-		$this->html= '
-        <form action="'.base_url().'admin/store-data-ongkir" role="form" id="add" method="post" enctype="multipart/form-data">
-			<div class="form-group">
-				<label>Provinsi</label>
-				<input name="provinsi" type="text" class="form-control" placeholder="*) masukan provinsi" required="">
-			</div>
-			<div class="form-group">
-				<label>Kabupaten</label>
-				<input name="kabupaten" type="text" class="form-control" placeholder="*) masukan kabupaten" required="">
-			</div>
-			<div class="form-group">
-				<label>Kota</label>
-				<input name="kota" type="text" class="form-control" placeholder="*) masukan kota" required="">
-			</div>
-			<div class="form-group">
-				<label>Biaya</label>
-				<div class="input-group mb-3">
-					<input name="biaya" type="number" min="10000" class="form-control" placeholder="*) masukan biaya" required="">
-					<div class="input-group-append">
-						<span class="input-group-text">Per Kilo Gram</span>
-					</div>
-				</div>
-			</div>
-            <button type="submit" class="btn btn-primary">Publish</button>
-        </form>
-        ';
-		echo $this->html;
-	}
-	public function form_data_ongkir_edit()
-	{
-		$this->m_admin->post['id_ongkir']= $this->uri->segment(3);
-		$row= $this->m_admin->edit_data_ongkir();
-		$this->html= '
-        <form action="'.base_url().'admin/update-data-ongkir" role="form" id="edit" method="post" enctype="multipart/form-data">
-			<div class="form-group">
-				<label>Provinsi</label>
-				<input value="'.$row->provinsi.'" name="provinsi" type="text" class="form-control" placeholder="*) masukan provinsi" required="">
-			</div>
-			<div class="form-group">
-				<label>Kabupaten</label>
-				<input value="'.$row->kabupaten.'" name="kabupaten" type="text" class="form-control" placeholder="*) masukan kabupaten" required="">
-			</div>
-			<div class="form-group">
-				<label>Kota</label>
-				<input value="'.$row->kota.'" name="kota" type="text" class="form-control" placeholder="*) masukan kota" required="">
-			</div>
-			<div class="form-group">
-				<label>Biaya</label>
-				<div class="input-group mb-3">
-					<input value="'.$row->biaya.'" name="biaya" type="number" min="10000" class="form-control" placeholder="*) masukan biaya" required="">
-					<div class="input-group-append">
-						<span class="input-group-text">Per Kilo Gram</span>
-					</div>
-				</div>
-			</div>
-			<input value="'.$row->id_ongkir.'" name="id_ongkir" type="hidden">
-            <button type="submit" class="btn btn-primary">Publish</button>
-        </form>
-        ';
-		echo $this->html;
-	}
-	public function store_data_ongkir()
-	{
-		$this->m_admin->post= $this->input->post();
-		if ( $this->m_admin->store_data_ongkir() ) {
-			$this->msg= [
-				"stats" => 1,
-				"msg" 	=> 'Data Berhasil Disimpan'
-			];
-		} else {
-			$this->msg= [
-				"stats" => 0,
-				"msg" 	=> 'Data Gagal Disimpan'
-			];
-		}
-		echo json_encode($this->msg);
-		
-	}
-	public function update_data_ongkir()
-	{
-		$this->m_admin->post= $this->input->post();
-		if ( $this->m_admin->update_data_ongkir() ) {
-			$this->msg= [
-				"stats" => 1,
-				"msg" 	=> 'Data Berhasil Diupdate'
-			];
-		} else {
-			$this->msg= [
-				"stats" => 0,
-				"msg" 	=> 'Data Gagal Diupdate'
-			];
-		}
-		echo json_encode($this->msg);
-	}
-	public function delete_data_ongkir()
-	{
-		$this->m_admin->post['id_ongkir']= $this->uri->segment(3);
-		if ( $this->m_admin->delete_data_ongkir() ) {
-			$this->msg= [
-				"stats" => 1,
-				"msg" 	=> 'Data Berhasil Dihapus'
-			];
-		} else {
-			$this->msg= [
-				"stats" => 0,
-				"msg" 	=> 'Data Gagal Dihapus'
-			];
-		}
-		echo json_encode($this->msg);
-	} 
-/* ==================== End Master Data : Ongkir ==================== */
-	// data_produk controller
 	function data_produk()
 	{
+		$this->load->helper('currency');
 		$this->view= 'admin/produk';
 		$this->content['rows']= $this->m_admin->produk();
 		$this->render_pages();
@@ -506,6 +383,10 @@ class Admin extends MY_Controller{
 		$this->kategori= "";
 		foreach ($this->m_admin->data_kategori() as $key => $value) {
 			$this->kategori .= "<option value='{$value->id_kategori}'>{$value->kategori}</option>";
+		}
+		$this->supplier= "";
+		foreach ($this->m_admin->data_supplier() as $key => $value) {
+			$this->supplier .= "<option value='{$value->id_supplier}'>{$value->nama}</option>";
 		}
 		$this->html= '
         <form action="'.base_url().'admin/store-produk" role="form" id="add" method="post" enctype="multipart/form-data">
@@ -521,6 +402,13 @@ class Admin extends MY_Controller{
 				</select>
             </div>
             <div class="form-group">
+                <label>Nama Supplier</label>
+				<select name="id_supplier" class="form-control" required="">
+					<option value="" selected disabled> -- Pilih Supplier -- </option>
+					'.$this->supplier.'
+				</select>
+            </div>
+            <div class="form-group">
                 <label>Keterangan</label>
                 <textarea id="mytextarea" name="deskripsi" class="form-control"></textarea>
 			</div>
@@ -531,14 +419,12 @@ class Admin extends MY_Controller{
 			<div class="form-group">
 				<label>Berat Produk</label>
 				<div class="input-group">
-					<div class="input-group-append">
+					<div class="input-group-prepend">
 						<span class="input-group-text" id="">Per 1 Pcs</span>
 					</div>
-					<div class="custom-file">
-						<input name="berat" type="number" min="1" class="form-control" placeholder="*) Ex: 100000" required="">
-					</div>
+					<input name="berat" type="number" min="1" class="form-control" placeholder="*) Ex: 500" required="">
 					<div class="input-group-append">
-						<span class="input-group-text" id="">Per 1 Pcs</span>
+						<span class="input-group-text" id="">Gram</span>
 					</div>
 				</div>
 			</div>
@@ -563,6 +449,10 @@ class Admin extends MY_Controller{
 		foreach ($this->m_admin->data_kategori() as $key => $value) {
 			$this->kategori .= "<option ".($row->id_kategori==$value->id_kategori? 'selected' : null)." value='{$value->id_kategori}'>{$value->kategori}</option>";
 		}
+		$this->supplier= "";
+		foreach ($this->m_admin->data_supplier() as $key => $value) {
+			$this->supplier .= "<option ".($row->id_supplier==$value->id_supplier? 'selected' : null)." value='{$value->id_supplier}'>{$value->nama}</option>";
+		}
 		$this->html= '
         <form action="'.base_url().'admin/update-produk" role="form" id="add" method="post" enctype="multipart/form-data">
             <div class="form-group">
@@ -577,13 +467,32 @@ class Admin extends MY_Controller{
 				</select>
             </div>
             <div class="form-group">
+                <label>Nama Supplier</label>
+				<select name="id_supplier" class="form-control" required="">
+					<option value="" disabled> -- Pilih Nama Suppplier -- </option>
+					'.$this->supplier.'
+				</select>
+            </div>
+            <div class="form-group">
                 <label>Keterangan</label>
                 <textarea id="mytextarea" name="deskripsi" class="form-control">'.$row->deskripsi.'</textarea>
 			</div>
 			<div class="form-group">
                 <label>Harga</label>
                 <input value="'.$row->harga.'" name="harga" type="number" min="1" class="form-control" placeholder="*) Ex: 100000" required="">
-            </div>
+			</div>
+			<div class="form-group">
+				<label>Berat Produk</label>
+				<div class="input-group">
+					<div class="input-group-prepend">
+						<span class="input-group-text" id="">Per 1 Pcs</span>
+					</div>
+					<input value="'.$row->berat.'" name="berat" type="number" min="1" class="form-control" placeholder="*) Ex: 500" required="">
+					<div class="input-group-append">
+						<span class="input-group-text" id="">Gram</span>
+					</div>
+				</div>
+			</div>
 			<div class="form-group">
                 <label>Stok</label>
                 <input value="'.$row->stok.'" name="stok" type="number" min="1" class="form-control" placeholder="*) Ex: 10" required="">
@@ -765,6 +674,130 @@ class Admin extends MY_Controller{
         }
         echo json_encode($this->msg);
 	}
+/* ==================== End Master Data : Produk ==================== */
+
+/* ==================== Start Master Data : Ongkir ==================== */
+	function data_ongkir()
+	{
+		$this->load->helper('currency');
+		$this->content['rows']= $this->m_admin->data_ongkir();
+		$this->view= 'admin/ongkir';
+		$this->render_pages();
+	}
+	public function form_data_ongkir()
+	{
+		$this->html= '
+        <form action="'.base_url().'admin/store-data-ongkir" role="form" id="add" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label>Provinsi</label>
+				<input name="provinsi" type="text" class="form-control" placeholder="*) masukan provinsi" required="">
+			</div>
+			<div class="form-group">
+				<label>Kabupaten</label>
+				<input name="kabupaten" type="text" class="form-control" placeholder="*) masukan kabupaten" required="">
+			</div>
+			<div class="form-group">
+				<label>Kota</label>
+				<input name="kota" type="text" class="form-control" placeholder="*) masukan kota" required="">
+			</div>
+			<div class="form-group">
+				<label>Biaya</label>
+				<div class="input-group mb-3">
+					<input name="biaya" type="number" min="10000" class="form-control" placeholder="*) masukan biaya" required="">
+					<div class="input-group-append">
+						<span class="input-group-text">Per Kilo Gram</span>
+					</div>
+				</div>
+			</div>
+            <button type="submit" class="btn btn-primary">Publish</button>
+        </form>
+        ';
+		echo $this->html;
+	}
+	public function form_data_ongkir_edit()
+	{
+		$this->m_admin->post['id_ongkir']= $this->uri->segment(3);
+		$row= $this->m_admin->edit_data_ongkir();
+		$this->html= '
+        <form action="'.base_url().'admin/update-data-ongkir" role="form" id="edit" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label>Provinsi</label>
+				<input value="'.$row->provinsi.'" name="provinsi" type="text" class="form-control" placeholder="*) masukan provinsi" required="">
+			</div>
+			<div class="form-group">
+				<label>Kabupaten</label>
+				<input value="'.$row->kabupaten.'" name="kabupaten" type="text" class="form-control" placeholder="*) masukan kabupaten" required="">
+			</div>
+			<div class="form-group">
+				<label>Kota</label>
+				<input value="'.$row->kota.'" name="kota" type="text" class="form-control" placeholder="*) masukan kota" required="">
+			</div>
+			<div class="form-group">
+				<label>Biaya</label>
+				<div class="input-group mb-3">
+					<input value="'.$row->biaya.'" name="biaya" type="number" min="10000" class="form-control" placeholder="*) masukan biaya" required="">
+					<div class="input-group-append">
+						<span class="input-group-text">Per Kilo Gram</span>
+					</div>
+				</div>
+			</div>
+			<input value="'.$row->id_ongkir.'" name="id_ongkir" type="hidden">
+            <button type="submit" class="btn btn-primary">Publish</button>
+        </form>
+        ';
+		echo $this->html;
+	}
+	public function store_data_ongkir()
+	{
+		$this->m_admin->post= $this->input->post();
+		if ( $this->m_admin->store_data_ongkir() ) {
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Data Berhasil Disimpan'
+			];
+		} else {
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Data Gagal Disimpan'
+			];
+		}
+		echo json_encode($this->msg);
+		
+	}
+	public function update_data_ongkir()
+	{
+		$this->m_admin->post= $this->input->post();
+		if ( $this->m_admin->update_data_ongkir() ) {
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Data Berhasil Diupdate'
+			];
+		} else {
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Data Gagal Diupdate'
+			];
+		}
+		echo json_encode($this->msg);
+	}
+	public function delete_data_ongkir()
+	{
+		$this->m_admin->post['id_ongkir']= $this->uri->segment(3);
+		if ( $this->m_admin->delete_data_ongkir() ) {
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Data Berhasil Dihapus'
+			];
+		} else {
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Data Gagal Dihapus'
+			];
+		}
+		echo json_encode($this->msg);
+	} 
+/* ==================== End Master Data : Ongkir ==================== */
+	
 	// data_produk controller
 
 	// data_pelanggan controller

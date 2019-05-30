@@ -39,6 +39,7 @@
                   <th>Gambar</th>
                   <th>Nama Produk</th>
                   <th>Kategori</th>
+                  <th>Supplier</th>
                   <th>Harga</th>
                   <th>Stok</th>
                   <th></th>
@@ -54,7 +55,8 @@
                         <td><img class='img-size-64' src='".base_url("./src/produk/128/{$value->gambar}")."'></td>
                         <td>{$value->nama_produk}</td>
                         <td>{$value->kategori}</td>
-                        <td>{$value->harga}</td>
+                        <td>{$value->nama}</td>
+                        <td>".idr($value->harga)."</td>
                         <td>{$value->stok}</td>
                         <td>
                           <div class='btn-group'>

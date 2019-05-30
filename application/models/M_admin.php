@@ -3,61 +3,6 @@
 class M_admin extends CI_Model{	
 	public $post= null;
 
-	// model produk
-	function produk(){		
-		return $this->db->query("
-		SELECT * FROM tb_produk
-			LEFT JOIN tb_kategori
-				ON tb_produk.id_kategori=tb_kategori.id_kategori
-		ORDER BY tb_produk.id_produk DESC
-		")->result_object();
-	}
-	
-	function store_produk()
-	{
-		return $this->db->insert('tb_produk', [
-			'nama_produk'=> $this->post['nama_produk'],
-			'deskripsi'=> $this->post['deskripsi'],
-			'id_kategori'=> $this->post['id_kategori'],
-			'harga'=> $this->post['harga'],
-			'stok'=> $this->post['stok'],
-			'gambar'=> $this->post['gambar']
-		] );
-	}
-	
-	function edit_produk(){		
-		return $this->db->query("
-		SELECT * FROM tb_produk
-			LEFT JOIN tb_kategori
-				ON tb_produk.id_kategori=tb_kategori.id_kategori
-		WHERE tb_produk.id_produk='{$this->post["id_produk"]}'
-		")->row();
-	}
-
-	function update_produk()
-	{
-		$this->data= [
-			'nama_produk'=> $this->post['nama_produk'],
-			'deskripsi'=> $this->post['deskripsi'],
-			'id_kategori'=> $this->post['id_kategori'],
-			'harga'=> $this->post['harga'],
-			'stok'=> $this->post['stok']
-		];
-		$this->where= [
-			'id_produk'=> $this->post['id_produk']
-		];
-		if ( ! empty($this->post['gambar']) ) {
-			$this->post['gambar']= $this->post['gambar'];
-		}
-		return $this->db->update('tb_produk',$this->data, $this->where);
-	}
-
-	function delete_produk()
-	{
-		return $this->db->delete('tb_produk', [ 'id_produk'=>$this->post["id_produk"] ]);
-	}
-	/* end produk model */
-
 /* ==================== Start Master Data : Admin ==================== */
 	public function data_admin()
 	{
@@ -171,6 +116,64 @@ class M_admin extends CI_Model{
 /* ==================== End Master Data : Kategori Produk ==================== */
 
 /* ==================== Start Master Data : Produk ==================== */
+	function produk(){		
+		return $this->db->query("
+		SELECT * FROM tb_produk
+			LEFT JOIN tb_kategori
+				ON tb_produk.id_kategori=tb_kategori.id_kategori
+			LEFT JOIN tb_supplier
+				ON tb_produk.id_supplier=tb_supplier.id_supplier
+		ORDER BY tb_produk.id_produk DESC
+		")->result_object();
+	}
+
+	function store_produk()
+	{
+		return $this->db->insert('tb_produk', [
+			'nama_produk'=> $this->post['nama_produk'],
+			'deskripsi'=> $this->post['deskripsi'],
+			'id_kategori'=> $this->post['id_kategori'],
+			'id_supplier'=> $this->post['id_supplier'],
+			'harga'=> $this->post['harga'],
+			'stok'=> $this->post['stok'],
+			'gambar'=> $this->post['gambar'],
+			'berat'=> $this->post['berat'],
+		] );
+	}
+
+	function edit_produk(){		
+		return $this->db->query("
+		SELECT * FROM tb_produk
+			LEFT JOIN tb_kategori
+				ON tb_produk.id_kategori=tb_kategori.id_kategori
+		WHERE tb_produk.id_produk='{$this->post["id_produk"]}'
+		")->row();
+	}
+
+	function update_produk()
+	{
+		$this->data= [
+			'nama_produk'=> $this->post['nama_produk'],
+			'deskripsi'=> $this->post['deskripsi'],
+			'id_kategori'=> $this->post['id_kategori'],
+			'id_supplier'=> $this->post['id_supplier'],
+			'harga'=> $this->post['harga'],
+			'stok'=> $this->post['stok'],
+			'berat'=> $this->post['berat'],
+		];
+		$this->where= [
+			'id_produk'=> $this->post['id_produk']
+		];
+		if ( ! empty($this->post['gambar']) ) {
+			$this->post['gambar']= $this->post['gambar'];
+		}
+		return $this->db->update('tb_produk',$this->data, $this->where);
+	}
+
+	function delete_produk()
+	{
+		return $this->db->delete('tb_produk', [ 'id_produk'=>$this->post["id_produk"] ]);
+	}
 /* ==================== End Master Data : Produk ==================== */
 
 /* ==================== Start Master Data : Pelanggan ==================== */
