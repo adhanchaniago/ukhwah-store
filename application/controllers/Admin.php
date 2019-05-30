@@ -279,8 +279,6 @@ class Admin extends MY_Controller{
 /* ==================== End Master Data: Supplier ==================== */
 
 /* ==================== Start Master Data : Kategori Produk ==================== */
-/* ==================== End Master Data : Kategori Produk ==================== */
-	// data_kategori controller
 	function data_kategori()
 	{
 		$this->view= 'admin/kategori';
@@ -291,15 +289,15 @@ class Admin extends MY_Controller{
 	public function form_add_kategori()
 	{
 		$this->html= '
-        <form action="'.base_url().'admin/add-data-kategori" role="form" id="add" method="post" enctype="multipart/form-data">
+		<form action="'.base_url().'admin/add-data-kategori" role="form" id="add" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label for="inputKategoriProduk">Nama Kategori Produk</label>
 				<input name="kategori" type="text" class="form-control" id="inputKategoriProduk" placeholder="*) Nama Kategori Produk Baru" required="">
 			</div>
-            <button type="submit" class="btn btn-primary">Publish</button>
-        </form>
-        ';
-        echo $this->html;
+			<button type="submit" class="btn btn-primary">Publish</button>
+		</form>
+		';
+		echo $this->html;
 	}
 
 	function add_data_kategori()
@@ -336,7 +334,6 @@ class Admin extends MY_Controller{
 		';
 
 	}
-
 	function update_data_kategori(){
 		$this->m_admin->post= $this->input->post();
 		if ( $this->m_admin->update_data_kategori() ) {
@@ -371,8 +368,10 @@ class Admin extends MY_Controller{
 		echo json_encode($this->msg);
 		
 	}
-	// data_kategori controller
+/* ==================== End Master Data : Kategori Produk ==================== */
 
+/* ==================== Start Master Data : Produk ==================== */
+/* ==================== End Master Data : Produk ==================== */
 	// data_produk controller
 	function data_produk()
 	{

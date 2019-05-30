@@ -2,30 +2,6 @@
 
 class M_admin extends CI_Model{	
 	public $post= null;
-	// model data_kategori
-	function data_kategori(){		
-		return $this->db->query("SELECT * FROM tb_kategori")->result_object();
-	}
-	
-	function add_data_kategori()
-	{
-		return $this->db->insert('tb_kategori', ['kategori'=> $this->post['kategori'] ] );
-	}
-	
-	function edit_data_kategori(){		
-		return $this->db->query("SELECT * FROM tb_kategori WHERE id_kategori='{$this->post["id_kategori"]}' ")->result_object();
-	}
-
-	function update_data_kategori()
-	{
-		return $this->db->update('tb_kategori',['kategori'=>$this->post['kategori']], ['id_kategori'=>$this->post['id_kategori']]);
-	}
-
-	function delete_data_kategori()
-	{
-		return $this->db->delete('tb_kategori', [ 'id_kategori'=>$this->post["id_kategori"] ]);
-	}
-	/* end kategori produk model */
 
 	// model produk
 	function produk(){		
@@ -168,6 +144,31 @@ class M_admin extends CI_Model{
 		return $this->db->delete('tb_supplier',$where);
 	}
 /* ==================== Start Master Data : Supplier ==================== */
+
+/* ==================== Start Master Data : Kategori Produk ==================== */
+	function data_kategori(){		
+		return $this->db->query("SELECT * FROM tb_kategori")->result_object();
+	}
+
+	function add_data_kategori()
+	{
+		return $this->db->insert('tb_kategori', ['kategori'=> $this->post['kategori'] ] );
+	}
+
+	function edit_data_kategori(){		
+		return $this->db->query("SELECT * FROM tb_kategori WHERE id_kategori='{$this->post["id_kategori"]}' ")->result_object();
+	}
+
+	function update_data_kategori()
+	{
+		return $this->db->update('tb_kategori',['kategori'=>$this->post['kategori']], ['id_kategori'=>$this->post['id_kategori']]);
+	}
+
+	function delete_data_kategori()
+	{
+		return $this->db->delete('tb_kategori', [ 'id_kategori'=>$this->post["id_kategori"] ]);
+	}
+/* ==================== End Master Data : Kategori Produk ==================== */
 
 	public function data_ongkir()
 	{
