@@ -170,9 +170,16 @@ class M_admin extends CI_Model{
 	}
 /* ==================== End Master Data : Kategori Produk ==================== */
 
+/* ==================== Start Master Data : Produk ==================== */
+/* ==================== End Master Data : Produk ==================== */
+
+/* ==================== Start Master Data : Pelanggan ==================== */
+/* ==================== End Master Data : Pelanggan ==================== */
+
+/* ==================== Start Master Data : Ongkir ==================== */
 	public function data_ongkir()
 	{
-		// $this->db->order_by('nama','ASC');
+		$this->db->order_by('provinsi','ASC');
 		return $this->db->get('tb_ongkir')->result_object();
 	}
 	public function store_data_ongkir()
@@ -206,6 +213,6 @@ class M_admin extends CI_Model{
 		$where=['id_ongkir'=>$this->post['id_ongkir']];
 		return $this->db->delete('tb_ongkir',$where);
 	}
-	/* end data supplier model */
+/* ==================== End Master Data : Ongkir ==================== */
 	
 }

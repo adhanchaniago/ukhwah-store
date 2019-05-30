@@ -372,6 +372,128 @@ class Admin extends MY_Controller{
 
 /* ==================== Start Master Data : Produk ==================== */
 /* ==================== End Master Data : Produk ==================== */
+
+/* ==================== Start Master Data : Ongkir ==================== */
+	function data_ongkir()
+	{
+		$this->load->helper('currency');
+		$this->content['rows']= $this->m_admin->data_ongkir();
+		$this->view= 'admin/ongkir';
+		$this->render_pages();
+	}
+	public function form_data_ongkir()
+	{
+		$this->html= '
+        <form action="'.base_url().'admin/store-data-ongkir" role="form" id="add" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label>Provinsi</label>
+				<input name="provinsi" type="text" class="form-control" placeholder="*) masukan provinsi" required="">
+			</div>
+			<div class="form-group">
+				<label>Kabupaten</label>
+				<input name="kabupaten" type="text" class="form-control" placeholder="*) masukan kabupaten" required="">
+			</div>
+			<div class="form-group">
+				<label>Kota</label>
+				<input name="kota" type="text" class="form-control" placeholder="*) masukan kota" required="">
+			</div>
+			<div class="form-group">
+				<label>Biaya</label>
+				<div class="input-group mb-3">
+					<input name="biaya" type="number" min="10000" class="form-control" placeholder="*) masukan biaya" required="">
+					<div class="input-group-append">
+						<span class="input-group-text">Per Kilo Gram</span>
+					</div>
+				</div>
+			</div>
+            <button type="submit" class="btn btn-primary">Publish</button>
+        </form>
+        ';
+		echo $this->html;
+	}
+	public function form_data_ongkir_edit()
+	{
+		$this->m_admin->post['id_ongkir']= $this->uri->segment(3);
+		$row= $this->m_admin->edit_data_ongkir();
+		$this->html= '
+        <form action="'.base_url().'admin/update-data-ongkir" role="form" id="edit" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label>Provinsi</label>
+				<input value="'.$row->provinsi.'" name="provinsi" type="text" class="form-control" placeholder="*) masukan provinsi" required="">
+			</div>
+			<div class="form-group">
+				<label>Kabupaten</label>
+				<input value="'.$row->kabupaten.'" name="kabupaten" type="text" class="form-control" placeholder="*) masukan kabupaten" required="">
+			</div>
+			<div class="form-group">
+				<label>Kota</label>
+				<input value="'.$row->kota.'" name="kota" type="text" class="form-control" placeholder="*) masukan kota" required="">
+			</div>
+			<div class="form-group">
+				<label>Biaya</label>
+				<div class="input-group mb-3">
+					<input value="'.$row->biaya.'" name="biaya" type="number" min="10000" class="form-control" placeholder="*) masukan biaya" required="">
+					<div class="input-group-append">
+						<span class="input-group-text">Per Kilo Gram</span>
+					</div>
+				</div>
+			</div>
+			<input value="'.$row->id_ongkir.'" name="id_ongkir" type="hidden">
+            <button type="submit" class="btn btn-primary">Publish</button>
+        </form>
+        ';
+		echo $this->html;
+	}
+	public function store_data_ongkir()
+	{
+		$this->m_admin->post= $this->input->post();
+		if ( $this->m_admin->store_data_ongkir() ) {
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Data Berhasil Disimpan'
+			];
+		} else {
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Data Gagal Disimpan'
+			];
+		}
+		echo json_encode($this->msg);
+		
+	}
+	public function update_data_ongkir()
+	{
+		$this->m_admin->post= $this->input->post();
+		if ( $this->m_admin->update_data_ongkir() ) {
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Data Berhasil Diupdate'
+			];
+		} else {
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Data Gagal Diupdate'
+			];
+		}
+		echo json_encode($this->msg);
+	}
+	public function delete_data_ongkir()
+	{
+		$this->m_admin->post['id_ongkir']= $this->uri->segment(3);
+		if ( $this->m_admin->delete_data_ongkir() ) {
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Data Berhasil Dihapus'
+			];
+		} else {
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Data Gagal Dihapus'
+			];
+		}
+		echo json_encode($this->msg);
+	} 
+/* ==================== End Master Data : Ongkir ==================== */
 	// data_produk controller
 	function data_produk()
 	{
@@ -653,116 +775,5 @@ class Admin extends MY_Controller{
 		$this->render_pages();
 	}
 	// data_pelanggan controller
-
-	// data_ongkir controller
-	function data_ongkir()
-	{
-		$this->content['rows']= $this->m_admin->data_ongkir();
-		$this->view= 'admin/ongkir';
-		$this->render_pages();
-	}
-	public function form_data_ongkir()
-	{
-		$this->html= '
-        <form action="'.base_url().'admin/store-data-ongkir" role="form" id="add" method="post" enctype="multipart/form-data">
-			<div class="form-group">
-				<label>Provinsi</label>
-				<input name="provinsi" type="text" class="form-control" placeholder="*) masukan provinsi" required="">
-			</div>
-			<div class="form-group">
-				<label>Kabupaten</label>
-				<input name="kabupaten" type="text" class="form-control" placeholder="*) masukan kabupaten" required="">
-			</div>
-			<div class="form-group">
-				<label>Kota</label>
-				<input name="kota" type="text" class="form-control" placeholder="*) masukan kota" required="">
-			</div>
-			<div class="form-group">
-				<label>Biaya</label>
-				<input name="biaya" type="number" min="1" class="form-control" placeholder="*) masukan biaya" required="">
-			</div>
-            <button type="submit" class="btn btn-primary">Publish</button>
-        </form>
-        ';
-		echo $this->html;
-	}
-	public function form_data_ongkir_edit()
-	{
-		$this->m_admin->post['id_ongkir']= $this->uri->segment(3);
-		$row= $this->m_admin->edit_data_ongkir();
-		$this->html= '
-        <form action="'.base_url().'admin/update-data-ongkir" role="form" id="edit" method="post" enctype="multipart/form-data">
-			<div class="form-group">
-				<label>Provinsi</label>
-				<input value="'.$row->provinsi.'" name="provinsi" type="text" class="form-control" placeholder="*) masukan provinsi" required="">
-			</div>
-			<div class="form-group">
-				<label>Kabupaten</label>
-				<input value="'.$row->kabupaten.'" name="kabupaten" type="text" class="form-control" placeholder="*) masukan kabupaten" required="">
-			</div>
-			<div class="form-group">
-				<label>Kota</label>
-				<input value="'.$row->kota.'" name="kota" type="text" class="form-control" placeholder="*) masukan kota" required="">
-			</div>
-			<div class="form-group">
-				<label>Biaya</label>
-				<input value="'.$row->biaya.'" name="biaya" type="number" min="1" class="form-control" placeholder="*) masukan biaya" required="">
-			</div>
-			<input value="'.$row->id_ongkir.'" name="id_ongkir" type="hidden">
-            <button type="submit" class="btn btn-primary">Publish</button>
-        </form>
-        ';
-		echo $this->html;
-	}
-	public function store_data_ongkir()
-	{
-		$this->m_admin->post= $this->input->post();
-		if ( $this->m_admin->store_data_ongkir() ) {
-			$this->msg= [
-				"stats" => 1,
-				"msg" 	=> 'Data Berhasil Disimpan'
-			];
-		} else {
-			$this->msg= [
-				"stats" => 0,
-				"msg" 	=> 'Data Gagal Disimpan'
-			];
-		}
-		echo json_encode($this->msg);
-		
-	}
-	public function update_data_ongkir()
-	{
-		$this->m_admin->post= $this->input->post();
-		if ( $this->m_admin->update_data_ongkir() ) {
-			$this->msg= [
-				"stats" => 1,
-				"msg" 	=> 'Data Berhasil Diupdate'
-			];
-		} else {
-			$this->msg= [
-				"stats" => 0,
-				"msg" 	=> 'Data Gagal Diupdate'
-			];
-		}
-		echo json_encode($this->msg);
-	}
-	public function delete_data_ongkir()
-	{
-		$this->m_admin->post['id_ongkir']= $this->uri->segment(3);
-		if ( $this->m_admin->delete_data_ongkir() ) {
-			$this->msg= [
-				"stats" => 1,
-				"msg" 	=> 'Data Berhasil Dihapus'
-			];
-		} else {
-			$this->msg= [
-				"stats" => 0,
-				"msg" 	=> 'Data Gagal Dihapus'
-			];
-		}
-		echo json_encode($this->msg);
-	} 
-	// data_ongkir controller
 	
 }

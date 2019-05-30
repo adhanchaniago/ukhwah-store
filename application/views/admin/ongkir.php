@@ -38,7 +38,7 @@
                   <th>Provinsi</th>
                   <th>Kabupaten</th>
                   <th>Kota</th>
-                  <th>Biaya</th>
+                  <th>Biaya/Kg</th>
                   <th></th>
                 </tr>
                 </thead>
@@ -47,10 +47,10 @@
                   foreach ($rows as $key => $value) {
                     echo "
                       <tr>
-                        <td>{$value}</td>
-                        <td>{$value}</td>
-                        <td>{$value}</td>
-                        <td>{$value}</td>
+                        <td>{$value->provinsi}</td>
+                        <td>{$value->kabupaten}</td>
+                        <td>{$value->kota}</td>
+                        <td>".idr($value->biaya)."</td>
                         <td>
                           <div class='btn-group'>
                             <button type='button' class='btn btn-default'>Action</button>
@@ -59,8 +59,8 @@
                               <span class='sr-only'>Toggle Dropdown</span>
                             </button>
                             <div class='dropdown-menu' role='menu' x-placement='top-start' style='position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, -165px, 0px);'>
-                              <a class='dropdown-item edit' href='".base_url('admin/form-data-ongkir-edit/')."'>Edit</a>
-                              <a class='dropdown-item delete' href='".base_url('admin/data-ongkir-delete/')."'>Delete</a>
+                              <a class='dropdown-item edit' href='".base_url('admin/form-data-ongkir-edit/' .$value->id_ongkir)."'>Edit</a>
+                              <a class='dropdown-item delete' href='".base_url('admin/delete-data-ongkir/' .$value->id_ongkir)."'>Delete</a>
                             </div>
                           </div>
                         </td>
