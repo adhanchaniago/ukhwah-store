@@ -263,16 +263,24 @@ class Admin extends MY_Controller{
 	public function delete_data_supplier()
 	{
 		$this->m_admin->post['id_supplier']= $this->uri->segment(3);
-		if ( $this->m_admin->delete_data_supplier() ) {
-			$this->msg= [
-				"stats" => 1,
-				"msg" 	=> 'Data Berhasil Dihapus'
-			];
-		} else {
+		if ( $this->m_admin->cek_supplier() > 0 ) {
 			$this->msg= [
 				"stats" => 0,
-				"msg" 	=> 'Data Gagal Dihapus'
+				"msg" 	=> 'Maaf Nama Supplier Sedang Digunakan'
 			];
+		} else {
+			if ( $this->m_admin->delete_data_supplier() ) {
+				$this->msg= [
+					"stats" => 1,
+					"msg" 	=> 'Data Berhasil Dihapus'
+				];
+			} else {
+				$this->msg= [
+					"stats" => 0,
+					"msg" 	=> 'Data Gagal Dihapus'
+				];
+			}
+
 		}
 		echo json_encode($this->msg);
 	} 
@@ -354,16 +362,24 @@ class Admin extends MY_Controller{
 	function delete_data_kategori()
 	{
 		$this->m_admin->post['id_kategori']= $this->uri->segment(3);
-		if ( $this->m_admin->delete_data_kategori() ) {
+		if ( $this->m_admin->cek_data_kategori() > 0 ) {
 			$this->msg= [
-				'stats'=>1,
-				'msg'=> 'Data Berhasil Diubah'
+				"stats" => 0,
+				"msg" 	=> 'Maaf Nama Kategori Sedang Digunakan'
 			];
 		} else {
-			$this->msg= [
-				'stats'=>1,
-				'msg'=> 'Data Gagal Diubah'
-			];
+			if ( $this->m_admin->delete_data_kategori() ) {
+				$this->msg= [
+					'stats'=>1,
+					'msg'=> 'Data Berhasil Diubah'
+				];
+			} else {
+				$this->msg= [
+					'stats'=>1,
+					'msg'=> 'Data Gagal Diubah'
+				];
+			}
+
 		}
 		echo json_encode($this->msg);
 		

@@ -88,6 +88,11 @@ class M_admin extends CI_Model{
 		$where=['id_supplier'=>$this->post['id_supplier']];
 		return $this->db->delete('tb_supplier',$where);
 	}
+	public function cek_supplier()
+	{
+		$this->db->where('id_supplier', $this->post['id_supplier']);
+		return $this->db->get('tb_produk')->num_rows();
+	}
 /* ==================== Start Master Data : Supplier ==================== */
 
 /* ==================== Start Master Data : Kategori Produk ==================== */
@@ -112,6 +117,11 @@ class M_admin extends CI_Model{
 	function delete_data_kategori()
 	{
 		return $this->db->delete('tb_kategori', [ 'id_kategori'=>$this->post["id_kategori"] ]);
+	}
+	public function cek_data_kategori()
+	{
+		$this->db->where('id_kategori', $this->post['id_kategori']);
+		return $this->db->get('tb_produk')->num_rows();
 	}
 /* ==================== End Master Data : Kategori Produk ==================== */
 
