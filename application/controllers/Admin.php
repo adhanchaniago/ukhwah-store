@@ -174,10 +174,7 @@ class Admin extends MY_Controller{
 	} 
 /* ==================== End Master Data: Admin ==================== */
 
-/* ==================== Start Master Data: Supplier ==================== */	
-/* ==================== End Master Data: Supplier ==================== */	
-
-	// data_supplier controller
+/* ==================== Start Master Data: Supplier ==================== */
 	function data_supplier()
 	{
 		$this->content['rows']= $this->m_admin->data_supplier();
@@ -279,8 +276,10 @@ class Admin extends MY_Controller{
 		}
 		echo json_encode($this->msg);
 	} 
-	// data_supplier controller
+/* ==================== End Master Data: Supplier ==================== */
 
+/* ==================== Start Master Data : Kategori Produk ==================== */
+/* ==================== End Master Data : Kategori Produk ==================== */
 	// data_kategori controller
 	function data_kategori()
 	{

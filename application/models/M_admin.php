@@ -132,6 +132,7 @@ class M_admin extends CI_Model{
 	}
 /* ==================== End Master Data : Admin ==================== */
 
+/* ==================== Start Master Data : Supplier ==================== */
 	public function data_supplier()
 	{
 		$this->db->order_by('nama','ASC');
@@ -166,7 +167,7 @@ class M_admin extends CI_Model{
 		$where=['id_supplier'=>$this->post['id_supplier']];
 		return $this->db->delete('tb_supplier',$where);
 	}
-	/* end data supplier model */
+/* ==================== Start Master Data : Supplier ==================== */
 
 	public function data_ongkir()
 	{
