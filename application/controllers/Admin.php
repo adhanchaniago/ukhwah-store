@@ -135,7 +135,7 @@ class Admin extends MY_Controller{
 	public function update_data_admin()
 	{
 		$this->m_admin->post= $this->input->post();
-		if ( $this->m_admin->cek_user_update() > 0 ) {
+		if ( $this->m_admin->cek_user() > 0 ) {
 			$this->msg= [
 				"stats" => 0,
 				"msg" 	=> 'Maaf User Sudah Digunakan'
@@ -158,7 +158,19 @@ class Admin extends MY_Controller{
 	}
 	public function delete_data_admin()
 	{
-
+		$this->m_admin->post['id_admin']= $this->uri->segment(3);
+		if ( $this->m_admin->delete_data_admin() ) {
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Data Berhasil Dihapus'
+			];
+		} else {
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Data Gagal Dihapus'
+			];
+		}
+		echo json_encode($this->msg);
 	} 
 /* ==================== End Master Data: Admin ==================== */
 

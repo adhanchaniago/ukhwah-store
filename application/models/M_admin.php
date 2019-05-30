@@ -82,7 +82,7 @@ class M_admin extends CI_Model{
 	}
 	/* end produk model */
 
-	/* start data admin model */
+/* ==================== Start Master Data : Admin ==================== */
 	public function data_admin()
 	{
 		return $this->db->query("
@@ -114,14 +114,23 @@ class M_admin extends CI_Model{
 		if ( ! empty($this->post['password']) ) {
 			$data['password']= $this->post['password'];
 		}
-		$where= ['id'=>$this->post['id_admin'] ];
+		$where= ['id_admin'=>$this->post['id_admin'] ];
 		return $this->db->update('tb_admin',$data,$where);
 	}
 	public function delete_data_admin()
 	{
-		$this->db->delete('tb_admin',['id_admin'=>$this->post['id_admin'] ]);
+		return $this->db->delete('tb_admin',['id_admin'=>$this->post['id_admin'] ]);
 	}
-	/* end data admin model */
+	public function cek_user()
+	{
+		$this->db->where('username',$this->post['username']);
+		if ( ! empty( $this->post['id_admin'] ) ) {
+			$this->db->where('id_admin !=',$this->post['id_admin']);
+		}
+		$admin= $this->db->get('tb_admin')->num_rows();
+		return $admin;
+	}
+/* ==================== End Master Data : Admin ==================== */
 
 	public function data_supplier()
 	{
@@ -196,18 +205,5 @@ class M_admin extends CI_Model{
 		return $this->db->delete('tb_ongkir',$where);
 	}
 	/* end data supplier model */
-	public function cek_user()
-	{
-		$username= $this->post['username'];
-		$admin= $this->db->get_where('tb_admin',['username'=>$username])->num_rows();
-		$pelanggan= $this->db->get_where('tb_pelanggan',['username'=>$username])->num_rows();
-		return ($admin +$pelanggan);
-	}
-	public function cek_user_update()
-	{
-		$username= $this->post['username'];
-		$admin= $this->db->get_where('tb_admin',['username'=>$username])->num_rows();
-		$pelanggan= $this->db->get_where('tb_pelanggan',['username'=>$username])->num_rows();
-		return ($admin +$pelanggan);
-	}
+	
 }
