@@ -19,7 +19,7 @@
                     <div>
                       <div class="caption">
                         <h4><a href="'.base_url('produk/detail/' .$value->id_produk .'/' .$value->nama_produk).'"><strong>'.$value->nama_produk.'</strong></a></h4>
-                        <p class="price"> Rp. 156.000,00 </p>
+                        <p class="price"> '.idr($value->harga).' </p>
                       </div>
                     </div>
                   </div>

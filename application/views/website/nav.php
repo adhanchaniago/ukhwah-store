@@ -11,10 +11,50 @@
           <div id="cart" class="pull-right">
             <button type="button" data-toggle="dropdown" data-loading-text="Loading..." class="heading dropdown-toggle">
               <span class="cart-icon pull-left flip"></span>
-              <span id="cart-total">0 item(s)</span>
+              <span id="cart-total"><?php echo count( $this->cart->contents() ) ?> item(s)</span>
             </button>
             <ul class="dropdown-menu"  style="text-align: center;">
-              <li><span> Keranjang Belanja Masih Kosong</span></li>
+              <?php
+                if ( count( $this->cart->contents() ) > 1 ) {
+                  ?>
+      <li>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td>Thumbnail</td>
+              <td>Model</td>
+              <td>Warna</td>
+              <td>Ukuran</td>
+              <td>Jumlah</td>
+              <td>Total</td>
+            </tr>
+            
+              <tr>
+                <td class="text-center"><a href="#"><img width="50px" class="img-thumbnail" title="Medali SJ118" alt="Medali SJ118" src="http://localhost/kantor/hasbuna-mbs-master/assets/img/produk/thumb/sepatu_pria_hasbuna_medali_sj118_hitam.jpg"></a></td>
+                <td class="text-left"><a href="product.html">Medali SJ118</a></td>
+                <td class="text-left"><a>Hitam</a></td>
+                <td class="text-left"><a>40</a></td>
+                <td class="text-right">x 1</td>
+                <td class="text-right">Rp. 175.000,00</td>
+                <td class="text-center"><button data-id="61679f30c5be1a3b1d021b561e1e3b1b" id="remove-product" class="btn btn-danger btn-xs remove" title="Remove" type="button"><i class="fa fa-times"></i></button></td>
+              </tr>
+            
+          </tbody>
+        </table>
+        <p class="checkout">
+          <a href="cart" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> View Cart </a>&nbsp;&nbsp;&nbsp;
+          <a href="checkout" class="btn btn-primary"><i class="fa fa-share"></i> Checkout</a>
+        </p>
+      </li>
+                  <?php
+                } else {
+                  ?>
+                    <li><span> Keranjang Belanja Masih Kosong</span></li>
+                  <?php
+                }
+                
+              ?>
+              
             </ul>
           </div>
         </div>
@@ -69,7 +109,7 @@
           <ul id="cat_accordion">
             <?php
               foreach ($kategori as $key => $value) {
-                echo "<li><a href='".base_url()."produk/kategori/{$value->id_kategori}/{$value->kategori}'>{$value->kategori}</a></span><li>";
+                echo "<li><a href='".base_url()."produk/kategori/{$value->kategori}/?q={$value->id_kategori}'>{$value->kategori}</a></span><li>";
               }
             ?>
           </ul>
@@ -81,7 +121,7 @@
             <div class="image-bank"><img src="<?php echo base_url() ?>src/bank/Logo_Bank_Mandiri_Syariah_kecil.png" alt="MANDIRI SYARIAH" title="MANDIRI SYARIAH" class="img-responsive" /></div>
             <div class="caption">
               <p class="price">No. Rek : 711 488 1141 </p>
-              <div class="rating"> A/N : Tri Astuti</div>
+              <div class="rating"> A/N : Ukhwah Store</div>
             </div>
           </div>
         </div>

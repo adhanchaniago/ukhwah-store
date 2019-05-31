@@ -10,6 +10,7 @@ class Website extends MY_Controller{
     
     public function index()
     {
+        $this->load->helper('currency');
         $this->view= 'website/home';
         $this->content['produk']= $this->m_website->produk_home();
         $this->render_websites();
@@ -20,29 +21,46 @@ class Website extends MY_Controller{
         $this->view= 'website/profil';
         $this->render_websites();
     }
-    
+/* ==================== Start Kategori Produk ==================== */
     public function kategori()
     {
-        $this->content['kategori']= $this->uri->segment(4);
+        if ( ! empty( $this->input->get('short') ) ) {
+            $this->m_website->get['short']= $this->input->get('short');
+        }
+        $this->load->helper(['currency','text']);
+        $this->m_website->get['id_kategori']= $this->input->get('q');
+        $this->content['kategori']= $this->m_website->nama_kategori();
+        $this->content['id_kategori']= $this->input->get('q');
+        $this->content['rows']= $this->m_website->produk_by_kategori();
         $this->view= 'website/kategori';
         $this->render_websites();
     }
+/* ==================== End Kategori Produk ==================== */
     
+/* ==================== End Produk ==================== */
     public function produk()
     {
+        if ( ! empty( $this->input->get('short') ) ) {
+            $this->m_website->get['short']= $this->input->get('short');
+        }
+        $this->load->helper(['currency','text']);
+        $this->content['rows']= $this->m_website->produk();
         $this->view= 'website/produk';
         $this->render_websites();
         
     }
-    
     public function produk_detail()
     {
+        $this->load->helper(['currency']);
         $this->m_website->get['id_produk']= $this->uri->segment(3);
         $this->content['row']= $this->m_website->produk_detail();
         $this->view= 'website/produk_detail';
         $this->render_websites();
         
     }
+/* ==================== End Produk ==================== */
+    
+    
     
     public function cara_pemesanan()
     {

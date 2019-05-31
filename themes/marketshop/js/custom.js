@@ -248,9 +248,13 @@ $('.drop-icon').on("click", function() {
 ----------------------------------------------------- */
 $(".qtyBtn").on("click", function() {
 		if($(this).hasClass("plus")){
-			var qty = $(".qty #input-quantity").val();
-			qty++;
-			$(".qty #input-quantity").val(qty);
+            if ( $(".qty #input-quantity").val() < parseInt($('.instock').html()) ) {
+                var qty = $(".qty #input-quantity").val();
+                qty++;
+                $(".qty #input-quantity").val(qty);
+            } else {
+                toastr["warning"]( "Maaf Stok Sudah Limit" );
+            }
 		}else{
 			var qty = $(".qty #input-quantity").val();
 			qty--;

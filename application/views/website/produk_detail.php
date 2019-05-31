@@ -16,16 +16,13 @@
       <div class="col-sm-6">
           <!-- <h4 class="title" style="margin: 0px 0px 10px 0px;">{model}</h4> -->
         <form method="post" class="addtocart">
-          <input type="hidden" name="id" value="33">
-          <input type="hidden" name="image" value="gamis_arab_hitam.jpg">
-          <input type="hidden" name="price" value="169000">
-          <input type="hidden" name="model" value="Gamis Arab">
+          <input type="hidden" name="id_produk" id="id_produk" value="<?php echo $row->id_produk ?>">
           <ul class="list-unstyled description">
             <li><b>Kategori :</b> <span itemprop="mpn"><?php echo $row->kategori ?></span></li>
             <li><b>Stok :</b> <span class="instock"> <?php echo $row->stok ?></span></li>
           </ul>
           <ul class="price-box">
-            <li class="price"><!-- <span class="price-old">Rp 350.000</span>  --><span itemprop="price">Rp 169.000,00</span></li>
+            <li class="price"><span itemprop="price"><?php echo idr($row->harga)?></span></li>
           </ul>
           <div id="product">            
             <div class="cart">
@@ -37,8 +34,8 @@
                   <a class="qtyBtn mines" href="javascript:void(0);">-</a>
                   <div class="clear"></div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-lg" id="btn-cart"><i class="fa fa-shopping-cart"></i> Beli</button>
-                <button type="submit" class="btn btn-primary btn-sm" id="btn-loading-cart"><img src="image/progress.gif"></button>
+                <button class="btn btn-primary btn-lg" id="btn-cart"><i class="fa fa-shopping-cart"></i> Beli</button>
+                <button class="btn btn-primary btn-sm" id="btn-loading-cart"><img src="image/progress.gif"></button>
               </div>
             
             </div>

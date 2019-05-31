@@ -18,9 +18,7 @@
             <ul>
               <li class="address">
                 
-                  <p>Kompleks Pondok Pesantren Modern Muhammadiyah Boarding School (PPM MBS) Yogyakarta</p>
-<p>Jl. Prambanan &ndash; Piyungan KM 02, Marangan, Bokoharjo, Sleman, Yogyakarta 55572</p>
-<p>Phone/WA : 0813 9048 8821</p>
+                  <p>Ukhwah Store</p>
                 
               </li>
               <li class="email"><i class="fa fa-envelope"></i>Send email via our <a href="kontak-kami">Kontak Kami</a>
@@ -51,7 +49,7 @@
                 <div class="image-bank"><img src="<?php echo base_url() ?>src/bank/Logo_Bank_Mandiri_Syariah_kecil.png" alt="MANDIRI SYARIAH" title="MANDIRI SYARIAH" class="img-responsive" /></div>
                 <div class="caption">
                   <p class="price">No. Rek : 711 488 1141 </p>
-                   <div class="rating"> A/N : Tri Astuti</div>
+                   <div class="rating"> A/N : Ukhwah Store</div>
                 </div>
               </div>
             	
@@ -68,13 +66,9 @@
             <p>Ukhwah Store © <?php echo date('Y')?> </p>
           </div>
           <div class="social pull-right flip">
-          	
-	          	<a href="www.pinterest.com" target="_blank"> <img data-toggle="tooltip" src="<?php echo base_url() ?>assets/img/sosial_media/pinterest.png" alt="Facebook" title="Facebook"></a>
-          	
-	          	<a href="www.twitter.com" target="_blank"> <img data-toggle="tooltip" src="<?php echo base_url() ?>assets/img/sosial_media/twitter.png" alt="Facebook" title="Facebook"></a>
-          	
-	          	<a href="www.facebook.com" target="_blank"> <img data-toggle="tooltip" src="<?php echo base_url() ?>assets/img/sosial_media/facebook.png" alt="Facebook" title="Facebook"></a>
-          	
+	          	<a href="www.twitter.com" target="_blank"> <img data-toggle="tooltip" src="https://img.icons8.com/color/48/000000/twitter.png" alt="Twitter" title="Twitter"></a>
+	          	<a href="www.instagram.com" target="_blank"> <img data-toggle="tooltip" src="https://img.icons8.com/color/48/000000/instagram-new.png" alt="Instagram" title="Instagram"></a>
+	          	<a href="www.facebook.com" target="_blank"> <img data-toggle="tooltip" src="https://img.icons8.com/color/48/000000/facebook.png" alt="Facebook" title="Facebook"></a>
           </div>
         </div>
       </div>
@@ -121,7 +115,37 @@
 <!-- JS Part End-->
 <script type="text/javascript">
 (function(j){
-  // remove product
+  /* start Cart Js */
+  j('.instock').html(function(){
+    if( parseInt(j(this).html()) < 1 )
+      j('#btn-cart').css("display","none");
+  })
+  j('#btn-cart').on('click',function(e){
+    e.preventDefault();
+    if ( cek_input_cart().stats==0 ) {
+      toastr["warning"]( cek_input_cart().msg );
+    } else {
+      var _post= {};
+      _post['id']= j('#id_produk').val();
+      _post['quantity']= j('#input-quantity').val();
+
+      j.post('<?php echo base_url() ?>cart/add',_post,function(data){
+        toastr["success"]( data );
+        // console.log(data);
+        // location.reload();
+      })  
+    }
+  })
+  function cek_input_cart(){
+    var quantity= j('#input-quantity').val();
+    
+    return {
+      "stats" :( quantity > 0 ) ? 1: 0,
+      "msg" :( quantity > 0 ) ? '': 'Maaf Anda Belum Memasukan Jumlah',
+      "quantity" :quantity,
+    };
+  }
+  /* End Cart Js */
   j('[id=remove-product]').on("click",function(e) {
     // console.log(j(this).attr('data-id'));
     var rowid = j(this).attr('data-id');

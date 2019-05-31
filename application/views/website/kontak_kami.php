@@ -4,7 +4,7 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="map-responsive">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d3953.0854984065104!2d110.48457936477807!3d-7.7807592943926345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sKompleks+Pondok+Pesantren+Modern+Muhammadiyah+Boarding+School+Yogyakarta++Jl.+Prambanan+%E2%80%93+Piyungan+KM+02%2C+Marangan%2C+Bokoharjo%2C+Sleman%2C+Yogyakarta+55572!5e0!3m2!1sen!2sid!4v1514970053939" frameborder="0" style="border:0" allowfullscreen></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63245.97077191126!2d110.33982534474266!3d-7.803249010409012!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5787bd5b6bc5%3A0x21723fd4d3684f71!2sYogyakarta%2C+Kota+Yogyakarta%2C+Daerah+Istimewa+Yogyakarta!5e0!3m2!1sid!2sid!4v1559183754978!5m2!1sid!2sid" frameborder="0" style="border:0" allowfullscreen></iframe>
       </div>
     </div>
   </div>
@@ -18,9 +18,7 @@
           <h4>Lokasi Kami</h4>
           <address>
 
-            <p>Kompleks Pondok Pesantren Modern Muhammadiyah Boarding School (PPM MBS) Yogyakarta</p>
-            <p>Jl. Prambanan &ndash; Piyungan KM 02, Marangan, Bokoharjo, Sleman, Yogyakarta 55572</p>
-            <p>Phone/WA : 0813 9048 8821</p>
+            <p>Ukhwah Store</p>
 
           </address>
         </div>
