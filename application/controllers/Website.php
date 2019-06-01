@@ -73,4 +73,20 @@ class Website extends MY_Controller{
         $this->view= 'website/kontak_kami';
         $this->render_websites();
     }
+
+/* ==================== Start Cart / Keranjang Belanja ==================== */
+    public function view_cart()
+    {
+        $this->load->helper('currency');
+        $this->load->library('cart');
+        $this->content['rows']= $this->cart->contents();
+        $this->view= 'website/view_cart';
+        $this->render_websites();
+    }
+    public function checkout()
+    {
+        $this->view= 'website/checkout';
+        $this->render_websites();
+    }
+/* ==================== End Cart / Keranjang Belanja ==================== */
 }

@@ -116,10 +116,16 @@
 <script type="text/javascript">
 (function(j){
   /* start Cart Js */
+
+  /* update keranjang belanja */
+  items_nav()
+
   j('.instock').html(function(){
     if( parseInt(j(this).html()) < 1 )
       j('#btn-cart').css("display","none");
   })
+
+  /* masukan produk kedalam keranjang */
   j('#btn-cart').on('click',function(e){
     e.preventDefault();
     if ( cek_input_cart().stats==0 ) {
@@ -131,11 +137,71 @@
 
       j.post('<?php echo base_url() ?>cart/add',_post,function(data){
         toastr["success"]( data );
-        // console.log(data);
-        // location.reload();
+
+        /* update keranjang belanja */
+        items_nav()
+
       })  
     }
   })
+
+  /* hapus produk */
+  j(document).on('click','.removeItemNav', function(e){
+    e.preventDefault()
+    j.post('<?php echo base_url() ?>cart/remove', { "rowid": $(this).attr('rowid') }, function(data){
+      /* update keranjang belanja */
+      items_nav()
+      // console.log(data)
+
+    })
+  })
+
+  /* update keranjang belanja */
+  j(document).on( "click" ,".qtyBtnViewCart" ,function() {
+    var quantity= $(this).closest('tr').find('.input-quantity');
+    var stock= $(this).closest('tr').find('.stock');
+    var rowid= $(this).closest('tr').find('.rowid').val();
+		if($(this).hasClass("plus")){
+      if ( quantity.val() < parseInt( stock.val() ) ) {
+          var qty = quantity.val();
+          qty++;
+          quantity.val(qty);
+          updateViewCart({
+            "rowid" :rowid,
+            "qty" :qty,
+          })
+      } else {
+          toastr["warning"]( "Maaf Stok Sudah Limit" );
+      }
+		}else{
+			var qty = quantity.val();
+			qty--;
+			if(qty>0){
+        quantity.val(qty);
+        updateViewCart({
+          "rowid" :rowid,
+          "qty" :qty,
+        })
+			}else {
+        toastr["warning"]( "Maaf Jumlah Tidak Boleh lebih kecil dari 1" );
+      }
+    }
+    
+
+		return false;
+  });
+  
+  /* update keranjang belanja */
+  j(document).on('click','.removeItemViewCart', function(){
+    var rowid= $(this).closest('tr').find('.rowid').val();
+    updateViewCart({
+      "rowid" :rowid,
+      "qty" :0,
+    })
+
+  })
+
+  /* cek produk sebelum disimpan keranjang */
   function cek_input_cart(){
     var quantity= j('#input-quantity').val();
     
@@ -145,47 +211,36 @@
       "quantity" :quantity,
     };
   }
-  /* End Cart Js */
-  j('[id=remove-product]').on("click",function(e) {
-    // console.log(j(this).attr('data-id'));
-    var rowid = j(this).attr('data-id');
-    j.ajax({
-        type: "POST",
-        url: "<?php echo base_url() ?>/cart/remove",
-        data: {id: rowid},
-        success: function(data) {
-          location.reload();
-          // j('#cart').reload(location.href + " #cart");
-          console.log(rowid);
-        },
-    });
-  });
-  // remove product
 
-  // update product
-  j('.update-product').on("click",function(e) {
-    var rowid   = j(this).attr('data-id'),
-        valueid = j(this).closest('tr').find('input').val();
-    
-    if (valueid!=0) {
-      j.ajax(
-        {
-          type: "POST",
-          url: "<?php echo base_url() ?>/cart/update",
-          data: {id: rowid, value: valueid},
-          success: function(data){
-            location.reload();
-          },
-        }
-      );
+  /* ambil data produk untuk keranjang navbar */
+  function items_nav()
+  {
+    j.get('<?php echo base_url() ?>cart/items_nav',function(data){
+      j('#cartTotal').html(data.items_total)
+      j('#itemsNav').html(data.items)
+      console.log(data)
+    },'json')
+  }
 
-    }else{
-      toastr["warning"]("Jumlah Tidak Boleh Kosong");
-
+  /* update data Harga, Total, Sub total di keranjang belanja */
+  function updateViewCart(get)
+  {
+    if (get.qty==0) {
+      var _sub_total= j("input[value='"+get.rowid+"']").closest('tr').remove()
+      
+    } else {
+      var _sub_total= j("input[value='"+get.rowid+"']").closest('tr').find('.subtotal');
+      
     }
-    
-  });
-  // update product
+    var _total= j('.total');
+    j.post('<?php echo base_url() ?>cart/update',get,function(data){
+      _sub_total.html( data.subtotal )
+      _total.html(  data.total )
+    },'json')
+    console.log(items_nav())
+  }
+
+  /* End Cart Js */
 
   // payment confirm
   j('.payment-confirm').on("click",function(e){

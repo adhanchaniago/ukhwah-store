@@ -21,56 +21,106 @@ class Cart extends CI_Controller
 		$row= $this->m_website->produk_detail();
 
 		#tampung data yang akan dimasukan ke dalam cart
-		$data= array(
+		$data= [
 			'id' => $row->id_produk,
 			'name' => $row->nama_produk,
 			'qty' => $this->input->post('quantity'),
 			'price' => $row->harga,
-			'options' => array(
+			'options' => [
 				'image' => $row->gambar,
-			),
-		);
+				'category' => $row->kategori,
+				'stock' => $row->stok,
+			],
+		];
 
 		# masukan ke cart
 		$this->cart->insert($data);
-		
-		# generate content
-		// $this->load->helper('string');
-		// $contents_temp = $this->cart->contents();
 
-		// $contents_in_array = array();
-		// foreach ($contents_temp as $key => $value) {
-		// 	$contents_in_array[]=array(
-		// 		'id' 		=> $value['id'],
-		// 		'name' 		=> $value['name'],
-		// 		'qty' 		=> $value['qty'],
-		// 		'price_idr' => rupiah($value['price']),
-		// 		'size' 		=> $value['options']['size'],
-		// 		'color' 	=> $value['options']['color'],
-		// 		'image' 	=> base_url().'assets/img/produk/thumb/'.$value['options']['image'],
-		// 		'rowid' 	=> $value['rowid'],
-		// 		'subtotal' 	=> rupiah($value['subtotal']),
-		// 	);
-		// }
-		// generate content
-		// $data_content= array(
-		// 	'countrow' => count($this->cart->contents()),
-		// 	'content'  => $contents_in_array,
-		// );
-		// $this->parser->parse('cart/addcart.php',$data_content);
 		echo 'Produk Berhasil Ditambahkan';
+	}
+
+	# update satu item dalam cart
+	public function update()
+	{
+		$this->load->helper('currency');
+		$data= [
+			'rowid' => $this->input->post('rowid'),
+			'qty' => $this->input->post('qty'),
+		];
+		$this->cart->update($data);
+		if ( ! empty( $this->cart->contents()[ $this->input->post('rowid') ] ) ) {
+			# code...
+			$row= $this->cart->contents()[ $this->input->post('rowid') ];
+			$row['subtotal']= idr($row['subtotal']);
+			$row['total']= idr( $this->cart->total() );
+		} else {
+			# code...
+			$row= [];
+			$row['subtotal']= idr( 0 );
+			$row['total']= idr( $this->cart->total() );
+		}
+		
+		echo json_encode($row);
 	}
 
 	# remove satu item dalam cart
 	public function remove()
 	{
-		$data= array(
-			// 'rowid' => '89dbad9766943616b26a90c76eb37e6b',
-			'rowid' => $_POST['id'],
+		$data= [
+			'rowid' => $this->input->post('rowid'),
 			'qty' => 0,
-		);
+		];
 		$this->cart->update($data);
+		print_r($data);
 	}
+
+	# items navbar
+	public function items_nav()
+	{
+		$this->load->helper('currency');
+		$rows= [
+			'items_total'=> count( $this->cart->contents() ) .' item(s)',
+			'items'=>'',
+		];
+		if ( count( $this->cart->contents() ) > 0 ) {
+			$rows['items'] .= '
+			<li>
+				<table class="table">
+					<tbody>
+						<tr>
+						<td>Thumbnail</td>
+						<td>Produk</td>
+						<td>Jumlah</td>
+						<td>Sub-Total</td>
+						</tr>
+			';
+			foreach ( $this->cart->contents() as $key => $value ) {
+				$rows['items'] .= '
+					<tr>
+						<td class="text-center"><a href="'.base_url( 'produk/detail/' .$value['id'] .'/' .$value['name'] ).'"><img width="50px" class="img-thumbnail" title="Medali SJ118" alt="Medali SJ118" src="'.base_url('src/produk/128/' .$value['options']['image']).'"></a></td>
+						<td class="text-left"><a href="'.base_url( 'produk/detail/' .$value['id'] .'/' .$value['name'] ).'">'.$value['name'].'</a></td>
+						<td class="text-right">x '.$value['qty'].'</td>
+						<td class="text-right">'.idr($value['subtotal']).'</td>
+						<td class="text-center"><button rowid="'.$value['rowid'].'" class="btn btn-danger btn-xs removeItemNav" title="Hapus Produk '.$value['name'].'" type="button"><i class="fa fa-times"></i></button></td>
+					</tr>
+				';
+			}
+			$rows['items'] .= '
+						</tbody>
+					</table>
+					<p class="checkout">
+						<a href="'.base_url('view-cart').'" class="btn btn-primary"><i class="fa fa-shopping-cart"></i> View Cart </a>&nbsp;&nbsp;&nbsp;
+						<a href="'.base_url('checkout').'" class="btn btn-primary"><i class="fa fa-share"></i> Checkout</a>
+					</p>
+				</li>
+			';
+		} else {
+			$rows['items'] .='<li><span> Keranjang Belanja Masih Kosong</span></li>';
+		}
+		
+		
+		echo json_encode($rows);
+	} 
 
 	# tampilkan cart
 	public function show()
@@ -260,17 +310,6 @@ class Cart extends CI_Controller
 		// echo "<pre>";
 		// print_r($data);
 		// echo "</pre>";
-	}
-
-	# update satu item dalam cart
-	public function update()
-	{
-		$data= array(
-			// 'rowid' => '89dbad9766943616b26a90c76eb37e6b',
-			'rowid' => $this->input->post('id'),
-			'qty' 	=> $this->input->post('value'),
-		);
-		$this->cart->update($data);
 	}
 
 	# payment confirm

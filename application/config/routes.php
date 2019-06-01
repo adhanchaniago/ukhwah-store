@@ -57,5 +57,7 @@ $route['produk/kategori/(:any)'] = 'website/kategori';
 $route['produk/detail/(:num)/(:any)'] = 'website/produk_detail';
 $route['cara-pemesanan'] = 'website/cara_pemesanan';
 $route['kontak-kami'] = 'website/kontak_kami';
+$route['view-cart'] = 'website/view_cart';
+$route['checkout'] = 'website/checkout';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = TRUE;
