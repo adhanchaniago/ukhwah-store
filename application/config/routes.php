@@ -59,5 +59,15 @@ $route['cara-pemesanan'] = 'website/cara_pemesanan';
 $route['kontak-kami'] = 'website/kontak_kami';
 $route['view-cart'] = 'website/view_cart';
 $route['checkout'] = 'website/checkout';
+
+# Pelanggan
+$route['login'] = 'pelanggan/login';
+$route['login-check'] = 'pelanggan/check';
+$route['users'] = 'pelanggan/users';
+$route['daftar'] = 'pelanggan/daftar';
+$route['logout'] = 'pelanggan/logout';
+$route['register'] = 'pelanggan/register';
+
+
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = TRUE;

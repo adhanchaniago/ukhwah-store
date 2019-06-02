@@ -57,7 +57,7 @@
       <!-- action -->
       <div class="buttons">
         <div class="pull-left"><a href="<?php echo base_url('produk') ?>" class="btn btn-default">Belanja Lagi</a></div>
-        <div class="pull-right"><a href="<?php echo base_url('checkout') ?>" class="btn btn-primary">Pemesanan</a></div>
+        <div class="pull-right"><a href="<?php echo base_url('checkout') ?>" class="btn btn-primary btnCheckout">Pemesanan</a></div>
       </div>
       <!-- end action -->
     </div>

@@ -813,16 +813,13 @@ class Admin extends MY_Controller{
 		echo json_encode($this->msg);
 	} 
 /* ==================== End Master Data : Ongkir ==================== */
-	
-	// data_produk controller
 
-	// data_pelanggan controller
+/* ==================== Start Master Data : Pelanggan ==================== */
 	function data_pelanggan()
 	{
-		
+		$this->content['rows']= $this->m_admin->data_pelanggan();
 		$this->view= 'admin/pelanggan';
 		$this->render_pages();
 	}
-	// data_pelanggan controller
-	
+/* ==================== End Master Data : Pelanggan ==================== */	
 }

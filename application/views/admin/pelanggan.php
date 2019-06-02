@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2 text-capitalize">
           <div class="col-sm-6">
-            <h1>Data Informasi akademik</h1>
+            <h1>Data Informasi Pelanggan</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="<?php echo base_url() ?>admin">Beranda</a></li>
-              <li class="breadcrumb-item active">Informasi akademik</li>
+              <li class="breadcrumb-item active">Informasi Pelanggan</li>
             </ol>
           </div>
         </div>
@@ -26,18 +26,16 @@
       <div class="row">
         <div class="col-12">
           <div class="card">
-            <div class="card-header">
-              <!-- <h3 class="card-title">Daftar Informasi Kelas</h3> -->
-              <a href="<?php echo base_url() ?>admin/form-add-akademik" class="btn btn-default float-right form-add-new"><i class="fa fa-plus"></i> Add New</a>
-            </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                  <th>Gambar</th>
-                  <th>Nama akademik</th>
-                  <th>Action</th>
+                  <th>Nama Pelanggan</th>
+                  <th>Username</th>
+                  <th>No Telpon</th>
+                  <th>Alamat</th>
+                  <!-- <th>Action</th> -->
                 </tr>
                 </thead>
                 <tbody>
@@ -45,10 +43,11 @@
                   foreach ($rows as $key => $value) {
                     echo "
                       <tr>
-                        <td>
-                        <img class='img-size-64' src='".base_url("../src/akademik/128/{$value->file_name}")."'></td>
-                        <td>{$value->name}</td>
-                        <td>
+                        <td>{$value->nama}</td>
+                        <td>{$value->username}</td>
+                        <td>{$value->no_handphone}</td>
+                        <td>{$value->alamat}</td>
+                        <!--<td>
                           <div class='btn-group'>
                             <button type='button' class='btn btn-default'>Action</button>
                             <button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>
@@ -56,11 +55,12 @@
                               <span class='sr-only'>Toggle Dropdown</span>
                             </button>
                             <div class='dropdown-menu' role='menu' x-placement='top-start' style='position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, -165px, 0px);'>
-                              <a class='dropdown-item edit' href='".base_url('admin/form-edit-akademik/'.$value->id)."'>Edit</a>
-                              <a class='dropdown-item delete' href='".base_url('admin/delete-akademik/'.$value->id)."'>Delete</a>
+                              <a class='dropdown-item edit' href='".base_url(/* 'admin/form-edit-akademik/'.$value->id */)."'>Edit</a>
+                              <a class='dropdown-item delete' href='".base_url(/* 'admin/delete-akademik/'.$value->id */)."'>Delete</a>
                             </div>
                           </div>
                         </td>
+                        -->
                       </tr>
                     ";
                   }

@@ -201,6 +201,14 @@
 
   })
 
+  j(document).on('click','.btnCheckout',function(e){
+    e.preventDefault()
+    if( j('.users').attr('stats')=='0' )
+      toastr["warning"]( "Untuk Melanjutkan Pemesanan Silahkan Melakukan Login Terlebih Dahulu Jika Belum Punya Akun Bisa Memilih Menu Daftar" );
+    else
+    window.location.replace( j(this).attr('href') )
+  })
+
   /* cek produk sebelum disimpan keranjang */
   function cek_input_cart(){
     var quantity= j('#input-quantity').val();
@@ -242,57 +250,85 @@
 
   /* End Cart Js */
 
-  // payment confirm
-  j('.payment-confirm').on("click",function(e){
-    var fullname    = j('#input-payment-fullname').val(),
-        email       = j('#input-payment-email').val(),
-        telephone   = j('#input-payment-telephone').val(),
-        postcode    = j('#input-payment-postcode').val(),
-        fulladdress = j('#input-payment-full-address').val();
+  /* Start Pelanggan Js */
+    /* users */
+    users()
 
-    if (fullname=='') {
-      toastr["warning"]("Maaf Nama Lengkap Tidak Boleh Kosong");
+    /* form login */
+    j(document).on('click','.btnLogin',function(){
+      j.get('<?php echo base_url() ?>login',function(data){
+        j('#myModal').find('.modal-title').html(data.title)
+        j('#myModal').find('.modal-body').html(data.form)
+      },'json')
+    })
 
-    }else if(email==''){
-      toastr["warning"]("Maaf Email Tidak Boleh Kosong");
+    /* form daftar */
+    j(document).on('click','.btnDaftar',function(){
+      j.get('<?php echo base_url() ?>daftar',function(data){
+        j('#myModal').find('.modal-title').html(data.title)
+        j('#myModal').find('.modal-body').html(data.form)
+      },'json')
+    })
 
-    }else if(telephone==''){
-      toastr["warning"]("Maaf Nomor Telepon Tidak Boleh Kosong");
-
-    }else if(postcode==''){
-      toastr["warning"]("Maaf Kode Pos Tidak Boleh Kosong");
-
-    }else if(fulladdress==''){
-      toastr["warning"]("Maaf Alamat Tidak Boleh Kosong");
-
-    }
-
-    if (fullname!='' && email!='' && telephone!='' && postcode!='' && fulladdress!='') {
-      if (j('#confirm_comment').val()!='')
-      {
-        var comment = j('#confirm_comment').val();
-
-      }else{
-        var comment = '';
-
-      }
-      // console.log('sukses');
-
-      j.ajax(
-        {
-          type: "POST",
-          url: "<?php echo base_url() ?>/cart/confirm",
-          data: {payment_fullname: fullname, payment_email: email, payment_telephone: telephone, payment_postcode: postcode, payment_fulladdress: fulladdress, payment_comment: comment},
-          success: function(data){
-            window.location.href= "<?php echo base_url() ?>hasbuna-group?success=1";
+    /* cek login pelanggan */
+    j(document).on('submit','#formLogin',function(e){
+      e.preventDefault()
+      var formData = new FormData(this);
+      $.ajax({
+          url: $(this).attr("action"),
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            if ( data.stats==1 ) {
+              toastr["success"]( data.msg );
+              $("#myModal").modal("hide");
+              $('.users').attr('stats','1');
+              users()
+            } else {
+              toastr["warning"]( data.msg );
+            }
           },
-        }
-      );
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json'
+      });
+    })
 
+    /* Register pelanggan */
+    j(document).on('submit','#formDaftar',function(e){
+      e.preventDefault()
+      var formData = new FormData(this);
+      $.ajax({
+          url: $(this).attr("action"),
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            if ( data.stats==1 ) {
+              toastr["success"]( data.msg );
+              $("#myModal").modal("hide");
+              $('.users').attr('stats','1');
+              users()
+            } else {
+              toastr["warning"]( data.msg );
+            }
+          },
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json'
+      });
+    })
+
+    function users()
+    {
+      j.get('<?php echo base_url() ?>users',function(data){
+        j('.users').html(data.html)
+      },'json')
     }
-
-  });
-  // payment confirm
+  /* End Pelanggan Js */
+  
+  /* config toastr */
   toastr.options = {
     "closeButton": true,
     "debug": false,
@@ -310,49 +346,7 @@
     "showMethod": "fadeIn",
     "hideMethod": "fadeOut"
   }
-  // toastr config
-
-  var url_string = window.location.href;
-  var url = new URL(url_string);
-  var c = url.searchParams.get("success");
-  if (c==1) {
-    checkout_success();
-  }
-  function checkout_success(){
-    toastr["success"]("Pemesanan Telah Berhasil Dikirim Silahkan Cek Email Anda Untuk Melakukan Pembayaran .<br /><br /><button type='button' class='btn clear'>Ok</button>", 'Info');
-  }
-
-  // confirm contact
-  j(".confirm-contact").on("submit", function(e) {
-    var fullname  = j('#input-fullname').val(),
-        email     = j('#input-email').val(),
-        enquiry   = j('#input-enquiry').val();
-
-    if (fullname=='') {
-      toastr["warning"]("Maaf Nama Lengkap Tidak Boleh Kosong");
-    }else if(email==''){
-      toastr["warning"]("Maaf Email Tidak Boleh Kosong");
-    }else if(enquiry==''){
-      toastr["warning"]("Maaf Isi Pesan Tidak Boleh Kosong");
-    }
-
-    if (fullname!='' && email!='' && enquiry!='') {
-      e.preventDefault();
-      j.ajax({
-          type: "POST",
-          url: "<?php echo base_url() ?>kontak-kami/message",
-          data: j(this).serialize(),
-          success: function(data) {
-            j('#contact-form').load(location.href+' #contact-form');
-            toastr["success"]("Pesan Telah Dikirim, Terimakasih Telah Menghubungi kami.");
-            // console.log(data);
-          },
-      });
-
-    }
-     
-  }); 
-  // confirm contact
+  /* config toastr */
 
 })(jQuery);
 

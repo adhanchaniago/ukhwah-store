@@ -187,6 +187,10 @@ class M_admin extends CI_Model{
 /* ==================== End Master Data : Produk ==================== */
 
 /* ==================== Start Master Data : Pelanggan ==================== */
+	public function data_pelanggan()
+	{
+		return $this->db->get('tb_pelanggan')->result_object();
+	}
 /* ==================== End Master Data : Pelanggan ==================== */
 
 /* ==================== Start Master Data : Ongkir ==================== */
