@@ -67,6 +67,11 @@ $route['users'] = 'pelanggan/users';
 $route['daftar'] = 'pelanggan/daftar';
 $route['logout'] = 'pelanggan/logout';
 $route['register'] = 'pelanggan/register';
+$route['provinsi'] = 'cart/provinsi';
+$route['kabupaten'] = 'cart/kabupaten';
+$route['kota'] = 'cart/kota';
+$route['checkout-process'] = 'cart/checkout_process';
+
 
 
 $route['404_override'] = '';

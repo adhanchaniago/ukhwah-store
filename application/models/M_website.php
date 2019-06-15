@@ -66,4 +66,23 @@ class M_website extends CI_Model{
 		")->row();
 	}
 /* ==================== End Produk ==================== */
+
+/* ==================== Start Pilih Data Alamat ==================== */
+	public function provinsi()
+	{
+		$this->db->order_by('provinsi','ASC');
+		$this->db->group_by('provinsi');
+		return $this->db->get('tb_ongkir')->result_object();
+	}
+	public function kabupaten()
+	{
+		$this->db->order_by('kabupaten','ASC');
+		return $this->db->get_where('tb_ongkir',['provinsi'=>$this->get['provinsi']])->result_object();
+	}
+	public function kota()
+	{
+		$this->db->order_by('kota','ASC');
+		return $this->db->get_where('tb_ongkir',['kabupaten'=>$this->get['kabupaten']])->result_object();
+	}
+/* ==================== End Pilih Data Alamat ==================== */
 }

@@ -231,5 +231,84 @@ class M_admin extends CI_Model{
 		return $this->db->delete('tb_ongkir',$where);
 	}
 /* ==================== End Master Data : Ongkir ==================== */
+
+/* ==================== Start Transaksi : Konfirmasi Pembayaran ==================== */
+	public function konfirmasi_pembayaran()
+	{
+		$status= $this->post['status']=='true'? '1' : '0' ;
+		if( empty($this->post['id_pemesanan']) ){
+			return $this->db->query("
+			SELECT * FROM tb_pemesanan
+				LEFT JOIN tb_konfirmasi
+					ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+				LEFT JOIN tb_pelanggan
+					ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
+			WHERE tb_konfirmasi.status ='{$status}'
+			ORDER BY tb_pemesanan.id_pemesanan DESC
+			")->result_object();
+			
+		}else {
+			return $this->db->query("
+			SELECT * FROM tb_pemesanan
+				LEFT JOIN tb_konfirmasi
+					ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+				LEFT JOIN tb_pelanggan
+					ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
+			WHERE tb_konfirmasi.status ='{$status}' AND tb_pemesanan.id_pemesanan ={$this->post["id_pemesanan"]}
+			ORDER BY tb_pemesanan.id_pemesanan DESC
+			")->row();
+
+		}
+	}
+	public function detail_pemesanan()
+	{
+		if( empty($this->post['id_pemesanan']) ){
+			return 'id_pemesanan tidak boleh kosong';
+			
+		}else {
+			return $this->db->query("
+			SELECT * FROM det_pemesanan
+				LEFT JOIN tb_pemesanan
+					ON det_pemesanan.id_pemesanan=tb_pemesanan.id_pemesanan
+			WHERE tb_pemesanan.id_pemesanan ={$this->post["id_pemesanan"]}
+			ORDER BY det_pemesanan.id_det_pemesanan DESC
+			")->result_object();
+
+		}
+	}
+	public function konfirmasi_pemesanan()
+	{
+		return $this->db->update('tb_konfirmasi',['status'=>'1'],['id_pemesanan'=>$this->post['id_pemesanan'] ]);
+	}
+/* ==================== End Transaksi : Konfirmasi Pembayaran ==================== */
+
+/* ==================== Start Transaksi : Pemesanan Produk ==================== */
+	public function pemesanan_produk()
+	{
+		if( empty($this->post['id_pemesanan']) ){
+			return $this->db->query("
+			SELECT * FROM tb_pemesanan
+				LEFT JOIN tb_konfirmasi
+					ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+				LEFT JOIN tb_pelanggan
+					ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
+			WHERE tb_konfirmasi.status ='1'
+			ORDER BY tb_pemesanan.id_pemesanan DESC
+			")->result_object();
+			
+		}else {
+			return $this->db->query("
+			SELECT * FROM tb_pemesanan
+				LEFT JOIN tb_konfirmasi
+					ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+				LEFT JOIN tb_pelanggan
+					ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
+			WHERE tb_konfirmasi.status ='0' AND tb_pemesanan.id_pemesanan ={$this->post["id_pemesanan"]}
+			ORDER BY tb_pemesanan.id_pemesanan DESC
+			")->row();
+
+		}
+	}
+/* ==================== End Transaksi : Pemesanan Produk ==================== */
 	
 }

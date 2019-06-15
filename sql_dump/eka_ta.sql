@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2019 at 10:49 AM
+-- Generation Time: Jun 15, 2019 at 08:31 PM
 -- Server version: 10.1.38-MariaDB
 -- PHP Version: 7.3.2
 
@@ -29,13 +29,25 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `det_pemesanan` (
-  `no_pemesanan` int(10) NOT NULL,
+  `id_det_pemesanan` int(10) NOT NULL,
   `id_pemesanan` int(10) DEFAULT NULL,
-  `id_produk` int(10) DEFAULT NULL,
-  `jumlah` int(10) DEFAULT NULL,
-  `id_ongkir` int(10) DEFAULT NULL,
-  `total` float DEFAULT NULL
+  `nama_produk` varchar(255) DEFAULT NULL,
+  `kategori` varchar(255) DEFAULT NULL,
+  `harga` int(11) DEFAULT NULL,
+  `berat` float DEFAULT NULL,
+  `jumlah` int(11) DEFAULT NULL,
+  `gambar` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `det_pemesanan`
+--
+
+INSERT INTO `det_pemesanan` (`id_det_pemesanan`, `id_pemesanan`, `nama_produk`, `kategori`, `harga`, `berat`, `jumlah`, `gambar`) VALUES
+(1, 1, 'Produk Tiga Jilbab', 'Jilbab', 30000, 500, 2, '768x76811.png'),
+(2, 1, 'Produk Dua Jilbab', 'Jilbab', 20000, 710, 2, '768x76810.png'),
+(3, 2, 'Produk Satu Kemeja', 'Kemeja', 250000, 500, 1, '768x7686.png'),
+(4, 2, 'Produk Satu Aksesoris', 'Aksesoris', 100000, 500, 1, '768x768.png');
 
 -- --------------------------------------------------------
 
@@ -90,10 +102,19 @@ INSERT INTO `tb_kategori` (`id_kategori`, `kategori`) VALUES
 
 CREATE TABLE `tb_konfirmasi` (
   `id_konfirmasi` int(10) NOT NULL,
-  `no_pemesanan` int(10) DEFAULT NULL,
+  `id_pemesanan` int(10) DEFAULT NULL,
   `tanggal` date DEFAULT NULL,
-  `bukti_pembayaran` varchar(30) DEFAULT NULL
+  `bukti_pembayaran` varchar(30) DEFAULT NULL,
+  `status` enum('0','1') NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tb_konfirmasi`
+--
+
+INSERT INTO `tb_konfirmasi` (`id_konfirmasi`, `id_pemesanan`, `tanggal`, `bukti_pembayaran`, `status`) VALUES
+(1, 1, '2019-06-15', '1024x7681.jpg', '1'),
+(2, 2, '2019-06-15', '2000_2d1j_small.jpg', '0');
 
 -- --------------------------------------------------------
 
@@ -115,7 +136,8 @@ CREATE TABLE `tb_ongkir` (
 
 INSERT INTO `tb_ongkir` (`id_ongkir`, `provinsi`, `kabupaten`, `kota`, `biaya`) VALUES
 (1, 'DI YOGYAKARTA', 'kotagede', 'kotagede', 15000),
-(2, 'DI YOGYAKARTA', 'Kota Yogyakarta', 'Kota Yogyakarta', 10000);
+(2, 'DI YOGYAKARTA', 'Kota Yogyakarta', 'Kota Yogyakarta', 10000),
+(3, 'Jawa Tengah', 'Kebumen', 'Kebumen', 20000);
 
 -- --------------------------------------------------------
 
@@ -149,8 +171,20 @@ INSERT INTO `tb_pelanggan` (`id_pelanggan`, `username`, `password`, `nama`, `ala
 CREATE TABLE `tb_pemesanan` (
   `id_pemesanan` int(10) NOT NULL,
   `tanggal` date DEFAULT NULL,
-  `id_pelanggan` int(10) DEFAULT NULL
+  `id_pelanggan` int(10) DEFAULT NULL,
+  `kode_unik` int(5) DEFAULT NULL,
+  `biaya_ongkir` int(11) DEFAULT NULL,
+  `komentar_pesanan` text,
+  `alamat_pengiriman` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tb_pemesanan`
+--
+
+INSERT INTO `tb_pemesanan` (`id_pemesanan`, `tanggal`, `id_pelanggan`, `kode_unik`, `biaya_ongkir`, `komentar_pesanan`, `alamat_pengiriman`) VALUES
+(1, '2019-06-15', 1, 827, 10000, '', 'jogja (Kota Yogyakarta,Kota Yogyakarta,DI YOGYAKARTA)'),
+(2, '2019-06-15', 2, 789, 20000, 'test comment', 'rt rw no rumah jalan (Kebumen,Kebumen,Jawa Tengah)');
 
 -- --------------------------------------------------------
 
@@ -175,18 +209,18 @@ CREATE TABLE `tb_produk` (
 --
 
 INSERT INTO `tb_produk` (`id_produk`, `nama_produk`, `deskripsi`, `id_kategori`, `id_supplier`, `harga`, `stok`, `gambar`, `berat`) VALUES
-(4, 'Produk Satu Aksesoris', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 1, 2, 100000, 10, '768x768.png', 500),
+(4, 'Produk Satu Aksesoris', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 1, 2, 100000, 9, '768x768.png', 500),
 (5, 'Produk Dua Aksesoris', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 1, 2, 150000, 20, '768x7681.png', 600),
 (6, 'Produk Tiga Aksesoris', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 1, 2, 120000, 30, '768x7682.png', 700),
 (7, 'Produk Satu T-Shirt', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 2, 2, 200000, 10, '768x7683.png', 400),
 (8, 'Produk Dua T-Shirt', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 2, 2, 175000, 20, '768x7684.png', 300),
 (9, 'Produk Tiga T-Shirt', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 2, 2, 150000, 30, '768x7685.png', 250),
-(10, 'Produk Satu Kemeja', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 3, 2, 250000, 10, '768x7686.png', 500),
+(10, 'Produk Satu Kemeja', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 3, 2, 250000, 9, '768x7686.png', 500),
 (11, 'Produk Tiga Kemeja', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 3, 2, 75000, 30, '768x7687.png', 250),
 (12, 'Produk Dua Kemeja', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 3, 2, 175000, 20, '768x7688.png', 750),
 (13, 'Produk Satu Jilbab', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 4, 2, 10000, 10, '768x7689.png', 1000),
-(14, 'Produk Dua Jilbab', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 4, 2, 20000, 20, '768x76810.png', 710),
-(15, 'Produk Tiga Jilbab', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 4, 2, 30000, 30, '768x76811.png', 500);
+(14, 'Produk Dua Jilbab', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 4, 2, 20000, 0, '768x76810.png', 710),
+(15, 'Produk Tiga Jilbab', '<p>\r\n\r\n</p><h2>Why do we use it?</h2><p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for \'lorem ipsum\' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).</p>\r\n\r\n<br><p></p>', 4, 2, 30000, 7, '768x76811.png', 500);
 
 -- --------------------------------------------------------
 
@@ -218,7 +252,7 @@ INSERT INTO `tb_supplier` (`id_supplier`, `nama`, `alamat`, `no_telp`) VALUES
 -- Indexes for table `det_pemesanan`
 --
 ALTER TABLE `det_pemesanan`
-  ADD PRIMARY KEY (`no_pemesanan`);
+  ADD PRIMARY KEY (`id_det_pemesanan`);
 
 --
 -- Indexes for table `tb_admin`
@@ -276,7 +310,7 @@ ALTER TABLE `tb_supplier`
 -- AUTO_INCREMENT for table `det_pemesanan`
 --
 ALTER TABLE `det_pemesanan`
-  MODIFY `no_pemesanan` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_det_pemesanan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tb_admin`
@@ -294,13 +328,13 @@ ALTER TABLE `tb_kategori`
 -- AUTO_INCREMENT for table `tb_konfirmasi`
 --
 ALTER TABLE `tb_konfirmasi`
-  MODIFY `id_konfirmasi` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_konfirmasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tb_ongkir`
 --
 ALTER TABLE `tb_ongkir`
-  MODIFY `id_ongkir` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_ongkir` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tb_pelanggan`
@@ -312,7 +346,7 @@ ALTER TABLE `tb_pelanggan`
 -- AUTO_INCREMENT for table `tb_pemesanan`
 --
 ALTER TABLE `tb_pemesanan`
-  MODIFY `id_pemesanan` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pemesanan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tb_produk`

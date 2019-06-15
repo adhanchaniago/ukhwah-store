@@ -17,6 +17,8 @@ class Admin extends MY_Controller{
 
 /* ==================== Start Beranda ==================== */
 	function beranda(){
+		$this->content['total_konfirmasi_pembayaran']= count($this->m_admin->konfirmasi_pembayaran());
+		$this->content['total_pelanggan']= count($this->m_admin->data_pelanggan());
 		$this->view= 'admin/beranda';
 		$this->render_pages();
 	}
@@ -25,16 +27,153 @@ class Admin extends MY_Controller{
 /* ==================== Start Transaksi: Pemesanan Produk ==================== */
 	function data_pemesanan_produk()
 	{
+		$this->load->helper('dates');
+		$this->content['rows']= $this->m_admin->pemesanan_produk();
 		$this->view= 'admin/pemesanan_produk';
 		$this->render_pages();
 	}
+	
 /* ==================== End Transaksi: Pemesanan Produk ==================== *
 /
 /* ==================== Start Transaksi: Konfirmasi Pembayaran ==================== */
 	function data_konfirmasi_pembayaran()
 	{
+		$this->load->helper('dates');
+		$this->content['rows']= $this->m_admin->konfirmasi_pembayaran();
 		$this->view= 'admin/konfirmasi_pembayaran';
 		$this->render_pages();
+	}
+	function detail_konfirmasi_pembayaran()
+	{
+		$this->load->helper(['currency','dates']);
+		$this->m_admin->post['id_pemesanan']= $this->uri->segment(3);
+		$this->m_admin->post['status']= $this->uri->segment(4);
+		$pemesanan= $this->m_admin->konfirmasi_pembayaran();
+		$this->html= '
+		<div class="row">
+			<div class="col-12">
+				<h4>
+					<i class="fa fa-globe"></i> Ukhwah Store.
+					<small class="float-right">Tanggal: '.tgl_indo($pemesanan->tanggal).'</small>
+				</h4>
+			</div>
+			<!-- /.col -->
+		</div>
+		<div class="row invoice-info">
+			<div class="col-sm-4 invoice-col">
+			Pelanggan :
+			<address>
+				<strong class="text-capitalize">Nama: '.$pemesanan->nama.'</strong><br>
+				<strong class="text-capitalize">Telpon: '.$pemesanan->no_handphone.'</strong><br>
+
+			</address>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-4 invoice-col">
+			Alamat Pengiriman :
+			<address>
+				<strong>'.$pemesanan->alamat_pengiriman.'</strong><br>
+			</address>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-4 invoice-col">
+			Catatan :
+			<address>
+				<strong>'.($pemesanan->komentar_pesanan==''? 'Tidak Ada Catatan' : $pemesanan->komentar_pesanan ).'</strong><br>
+			</address>
+			</div>
+			<!-- /.col -->
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Gambar</th>
+						<th>Nama Produk</th>
+						<th>Kategori</th>
+						<th>Jumlah</th>
+						<th>Berat(Kg)</th>
+						<th>Harga</th>
+						<th>Sub-Total</th>
+					</tr>
+				</thead>
+				<tbody>';
+				$total= 0;
+				$total_berat= 0;
+				foreach ($this->m_admin->detail_pemesanan() as $key => $value) {
+					$this->html .= '
+					<tr>
+						<td><img class="img-size-64" src="'.base_url('src/produk/128/' .$value->gambar).'"></td>
+						<td>'.$value->nama_produk.'</td>
+						<td>'.$value->kategori.'</td>
+						<td>'.$value->jumlah.'</td>
+						<td>'.( ($value->jumlah*$value->berat) /1000 ).'</td>
+						<td>'.idr($value->harga).'</td>
+						<td>'.idr( ($value->jumlah*$value->harga) ).'</td>
+					</tr>
+					';
+					$total += ($value->jumlah*$value->harga);
+					$total_berat += ceil( ($value->jumlah*$value->berat) /1000 );
+				}
+				
+				$this->html .='
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Total:</strong></td>
+						<td class="text-right total">'.idr($total).'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Kode Unik:</strong></td>
+						<td class="text-right kode-unik">'.$pemesanan->kode_unik.'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Biaya Kirim ('.($total_berat).' Kg):</strong></td>
+						<td class="text-right biaya-kirim" data-biaya="0" data-weight="1210">'.idr($total_berat*$pemesanan->biaya_ongkir).'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Total Pembayaran:</strong></td>
+						<td class="text-right total-pembayaran">'.idr( $total +$pemesanan->kode_unik +($total_berat*$pemesanan->biaya_ongkir) ).'</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				<label>Bukti Pembayaran</label>
+				<img class="img-thumbnail" src="'.base_url('src/bukti_pembayaran/768/' .$pemesanan->bukti_pembayaran).'">
+			</div>
+		</div>
+		<hr>
+		<div>
+			<a id="konfirmasi" href="'.base_url('admin/konfirmasi-pemesanan/' .$pemesanan->id_pemesanan).'" class="btn btn-block btn-primary '.($this->uri->segment(4)=='true'? 'd-none' : null ).'">Konfirmasi Pembayaran</a>
+		</div>
+		';
+		echo $this->html;
+		
+		echo '<pre>';
+		// print_r($this->m_admin->detail_pemesanan());
+		// print_r($pemesanan);
+		// print_r($this->m_admin);
+		// echo '</pre>';
+	}
+	public function konfirmasi_pemesanan()
+	{
+		$this->m_admin->post['id_pemesanan']= $this->uri->segment(3);
+		if ( $this->m_admin->konfirmasi_pemesanan() ) {
+			# code...
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Konfirmasi Pembayaran Berhasil'
+			];
+		} else {
+			# code...
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Konfirmasi Pembayaran Gagal'
+			];
+		}
+		echo json_encode($this->msg);
 	}
 /* ==================== End Transaksi: Konfirmasi Pembayaran ==================== */
 

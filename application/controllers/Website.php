@@ -85,8 +85,30 @@ class Website extends MY_Controller{
     }
     public function checkout()
     {
+        $this->session->set_userdata( ['kode_unik'=>random_int(100,999)] );
+        $this->load->helper('currency');
+        $this->load->library('cart');
+        $this->content['rows']= $this->cart->contents();
         $this->view= 'website/checkout';
         $this->render_websites();
     }
 /* ==================== End Cart / Keranjang Belanja ==================== */
+
+/* ==================== Start Pilih Data Alamat ==================== */
+    public function provinsi()
+    {
+        $this->db->order_by('provinsi','ASC');
+        return $this->db->get('tb_ongkir')->result_object();
+    }
+    public function kabupaten()
+    {
+        $this->db->order_by('kabupaten','ASC');
+        return $this->db->get_where('tb_ongkir',['provinsi'=>$this->post['provinsi']])->result_object();
+    }
+    public function kota()
+    {
+        $this->db->order_by('kota','ASC');
+        return $this->db->get_where('tb_ongkir',['kabupaten'=>$this->post['kabupaten']])->result_object();
+    }
+/* ==================== End Pilih Data Alamat ==================== */
 }

@@ -27,18 +27,18 @@
             <!-- small box -->
             <div class="small-box bg-info">
               <div class="inner">
-                <h3>150</h3>
+                <h3><?php echo $total_konfirmasi_pembayaran ?></h3>
 
-                <p>New Orders</p>
+                <p>Pemesanan Belum Dikonfirmasi</p>
               </div>
               <div class="icon">
                 <i class="ion ion-bag"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="<?php echo base_url('admin/data-konfirmasi-pembayaran') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-3 col-6 d-none">
             <!-- small box -->
             <div class="small-box bg-success">
               <div class="inner">
@@ -57,18 +57,18 @@
             <!-- small box -->
             <div class="small-box bg-warning">
               <div class="inner">
-                <h3>44</h3>
+                <h3><?php echo $total_pelanggan ?></h3>
 
-                <p>User Registrations</p>
+                <p>Pelanggan Terdaftar</p>
               </div>
               <div class="icon">
                 <i class="ion ion-person-add"></i>
               </div>
-              <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+              <a href="<?php echo base_url('admin/data-pelanggan') ?>" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-6">
+          <div class="col-lg-3 col-6 d-none">
             <!-- small box -->
             <div class="small-box bg-danger">
               <div class="inner">

@@ -5,11 +5,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 class Cart extends CI_Controller
 {
-	
+	public $msg= null;
 	public function __construct()
 	{
 		parent::__construct();
 		$this->load->model('m_website');
+		$this->load->model('m_pelanggan');
 		$this->load->library('cart');
 	}
 
@@ -30,11 +31,13 @@ class Cart extends CI_Controller
 				'image' => $row->gambar,
 				'category' => $row->kategori,
 				'stock' => $row->stok,
+				'weight' => $row->berat,
 			],
 		];
 
 		# masukan ke cart
 		$this->cart->insert($data);
+		$this->weight();
 
 		echo 'Produk Berhasil Ditambahkan';
 	}
@@ -52,6 +55,7 @@ class Cart extends CI_Controller
 			# code...
 			$row= $this->cart->contents()[ $this->input->post('rowid') ];
 			$row['subtotal']= idr($row['subtotal']);
+			$row['weight']= ( ($row['qty']*$row['options']['weight']) / 1000 );
 			$row['total']= idr( $this->cart->total() );
 		} else {
 			# code...
@@ -61,6 +65,7 @@ class Cart extends CI_Controller
 		}
 		
 		echo json_encode($row);
+		$this->weight();
 	}
 
 	# remove satu item dalam cart
@@ -71,6 +76,7 @@ class Cart extends CI_Controller
 			'qty' => 0,
 		];
 		$this->cart->update($data);
+		$this->weight();
 		print_r($data);
 	}
 
@@ -143,5 +149,156 @@ class Cart extends CI_Controller
 
 
 		$this->cart->destroy();
+	}
+
+	# payment weight
+	public function weight()
+	{
+		if ( ! empty( $this->cart->contents() ) ) {
+			$weight= 0;
+			foreach ($this->cart->contents() as $key => $value) {
+				$weight += $value['qty'] * $value['options']['weight'];
+			}
+			$this->session->set_userdata('weight' ,$weight );
+		}
+	}
+
+	# option provinsi
+	public function provinsi()
+	{
+		$rows=[];
+		if ( empty($this->input->get('provinsi')) ) {
+			# code...
+			$rows['html']= '<option value="" selected disabled> -- Pilih Provinsi -- </option>';
+			foreach ($this->m_website->provinsi() as $key => $value) {
+				$rows['html'] .= '<option value="'.$value->provinsi.'">'.$value->provinsi.'</option>';
+			}
+		} else {
+			# code...
+			$rows['html']= '<option value="" disabled> -- Pilih Kabupaten -- </option>';
+			foreach ($this->m_website->provinsi() as $key => $value) {
+				$rows['html'] .= '<option value="'.$value->provinsi.'" '.($value->provinsi==$this->input->get('provinsi')? 'selected' : null ).'>'.$value->provinsi.'</option>';
+			}
+		}
+		
+		echo json_encode( $rows );
+	}
+	# option kabupaten
+	public function kabupaten()
+	{
+		$this->m_website->get['provinsi']= $this->input->get('provinsi');
+		$rows=[];
+		if ( empty($this->input->get('kabupaten')) ) {
+			# code...
+			$rows['html']= '<option value="" selected disabled> -- Pilih Kabupaten -- </option>';
+			foreach ($this->m_website->kabupaten() as $key => $value) {
+				$rows['html'] .= '<option value="'.$value->kabupaten.'">'.$value->kabupaten.'</option>';
+			}
+		} else {
+			# code...
+			$rows['html']= '<option value="" disabled> -- Pilih Kabupaten -- </option>';
+			foreach ($this->m_website->kabupaten() as $key => $value) {
+				$rows['html'] .= '<option value="'.$value->kabupaten.'" '.($value->kabupaten==$this->input->get('kabupaten')? 'selected' : null ).'>'.$value->kabupaten.'</option>';
+			}
+		}
+		
+		echo json_encode( $rows );
+	}
+	# option kote
+	public function kota()
+	{
+		$rows=[];
+		if ( empty($this->input->get('kabupaten')) ) {
+			# code...
+			$rows['html']= '<option value="" selected disabled> -- Pilih Kota -- </option>';
+			$rows['html'].= '<option value="" disabled> Maaf Anda Belum Memilih Kabupaten </option>';
+			
+		} else {
+			# code...
+			$this->m_website->get['kabupaten']= $this->input->get('kabupaten');
+			if ( empty($this->input->get('kota')) ) {
+				# code...
+				$rows['html']= '<option value="" selected disabled> -- Pilih Kota -- </option>';
+				foreach ($this->m_website->kota() as $key => $value) {
+					$rows['html'] .= '<option value="'.$value->kota.'">'.$value->kota.'</option>';
+				}
+			} else {
+				# code...
+				$rows['html']= '<option value="" disabled> -- Pilih Kota -- </option>';
+				foreach ($this->m_website->kota() as $key => $value) {
+					if ( $value->kota==$this->input->get('kota') ) {
+						# code...
+						$rows['html'] .= '<option value="'.$value->kota.'" selected>'.$value->kota.'</option>';
+						$rows['biaya'] = $value->biaya;
+					} else {
+						# code...
+						$rows['html'] .= '<option value="'.$value->kota.'" >'.$value->kota.'</option>';
+					}
+					
+				}
+			}
+		}
+		
+		
+		echo json_encode( $rows );
+	}
+
+	# proses pemesanan
+	public function checkout_process()
+	{
+		$this->m_pelanggan->post= $this->input->post();
+		if ( empty($_FILES['fupload']['tmp_name']) ) {
+            # code...without upload file
+			$this->msg= [
+				'stats'=>1,
+				'msg'=> 'Maaf Anda Belum Memilih File'
+			];
+        } else {
+            # code...with upload file
+            $config['upload_path']          = './src/bukti_pembayaran/';
+            $config['allowed_types']        = 'jpg|png';
+
+            $this->load->library('upload', $config);
+            if ( ! $this->upload->do_upload('fupload'))
+            {
+                $this->msg= [
+                    'stats'=>0,
+                    'msg'=> $this->upload->display_errors(),
+                ];
+            }
+            else
+            {
+                $this->m_pelanggan->post['gambar']= $this->upload->data()['file_name'];
+
+                /* start image resize */
+                $this->load->helper('img');
+                $this->load->library('image_lib');
+                $sizes = [768,320,128];
+                foreach ($sizes as $size) {
+                    $this->image_lib->clear();
+                    $this->image_lib->initialize( resize($size, $config['upload_path'], $this->m_pelanggan->post['gambar']) );
+                    $this->image_lib->resize();
+                }
+                /* end image resize */
+
+                
+				# store tb pemesanan and return id pemesanan
+				$this->m_pelanggan->post['id_pemesanan']= $this->m_pelanggan->store_pemesanan();
+				# store tb konfirmasi
+				$this->m_pelanggan->store_konfirmasi();
+				# store tb detail p  emesanan
+				$this->m_pelanggan->store_det_pemesanan();
+				# update stok produk
+				$this->m_pelanggan->update_stok_produk();
+				# set empty cart
+				$this->cart->destroy();
+				$this->msg= [
+					'stats'=>1,
+					'msg'=> 'Terimakasih, Pemesanan Anda Segera Kami Proses',
+				];
+            }
+        }
+		echo json_encode($this->msg);
+
 	}
 }

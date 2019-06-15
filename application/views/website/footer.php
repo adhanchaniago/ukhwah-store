@@ -89,8 +89,8 @@
 <script type="text/javascript" src="<?php echo base_url() ?>themes/marketshop/js/swipebox/src/js/jquery.swipebox.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>themes/marketshop/js/custom.js?v=02"></script>
 <!-- toaster -->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+<script type="text/javascript" src="<?php echo base_url() ?>libs/toastr/toastr.min.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo base_url() ?>libs/toastr/toastr.min.css">
 <!-- toaster -->
 <script type="text/javascript">
 // Elevate Zoom for Product Page image
@@ -226,7 +226,7 @@
     j.get('<?php echo base_url() ?>cart/items_nav',function(data){
       j('#cartTotal').html(data.items_total)
       j('#itemsNav').html(data.items)
-      console.log(data)
+      // console.log(data)
     },'json')
   }
 
@@ -238,14 +238,39 @@
       
     } else {
       var _sub_total= j("input[value='"+get.rowid+"']").closest('tr').find('.subtotal');
+      var _weight= j("input[value='"+get.rowid+"']").closest('tr').find('.weight');
+      var _total= j('.total');
+      j.post('<?php echo base_url() ?>cart/update',get,function(data){
+        _sub_total.html( data.subtotal )
+        _weight.html(  data.weight )
+        _total.html(  data.total )
+        _weight_total= j('.biaya-kirim').attr('data-weight',Math.ceil(getWeightTotal()))
+        // console.log(get)
+        if ( _weight_total.attr('data-biaya')==0 ) {
+          _weight_total.html('?')
+          var _kode_unik= (j('.kode-unik').html()*1);
+          j('.total-pembayaran').html('Rp. '+formatRupiah(idrToNumber(_total.html())+_kode_unik ) )
+        } else {
+          // var _total= (idrToNumber(j('.total').html()));
+          var _kode_unik= (j('.kode-unik').html()*1);
+          var _biaya_kirim= _weight_total.html('Rp. '+formatRupiah(_weight_total.attr('data-biaya')*_weight_total.attr('data-weight')*1));
+          j('.total-pembayaran').html('Rp. '+formatRupiah(idrToNumber(_total.html())+_kode_unik+idrToNumber(_biaya_kirim.html() ) ) )
+          // alert(_weight_total.attr('data-biaya'))
+        }
+        
+      },'json')
       
     }
-    var _total= j('.total');
-    j.post('<?php echo base_url() ?>cart/update',get,function(data){
-      _sub_total.html( data.subtotal )
-      _total.html(  data.total )
-    },'json')
-    console.log(items_nav())
+    // console.log(items_nav())
+    // console.log(get)
+  }
+  function getWeightTotal()
+  {
+    var a=0;
+    j.each(j('.weight'),function(i,item){
+      a +=(j(item).html()*1)
+    })
+    return (a)
   }
 
   /* End Cart Js */
@@ -327,7 +352,11 @@
       },'json')
     }
   /* End Pelanggan Js */
-  
+  // toastr["success"]( 'data.msg' );
+/*   toastr.options.onShown = function() { console.log('hello'); }
+toastr.options.onHidden = function() { console.log('goodbye'); }
+toastr.options.onclick = function() { console.log('clicked'); }
+toastr.options.onCloseClick = function() { console.log('close button clicked'); } */
   /* config toastr */
   toastr.options = {
     "closeButton": true,
@@ -347,6 +376,163 @@
     "hideMethod": "fadeOut"
   }
   /* config toastr */
+
+  /* form */
+      /* proses pemesanan */
+      j(document).on('submit','#formCheckout',function(e){
+      e.preventDefault()
+      var formData = new FormData(this);
+      $.ajax({
+          url: $(this).attr("action"),
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            if ( data.stats==1 ) {
+              toastr.options.onHidden = function(){
+                // this will be executed after fadeout, i.e. 2secs after notification has been show
+                window.location.replace('<?php echo base_url() ?>')
+              };
+              toastr["success"]( data.msg );
+            } else {
+              toastr["warning"]( data.msg );
+            }
+          },
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json'
+      });
+    })
+  selProvinsi()
+  $(document).on('change','#selProvinsi',function(){
+    selProvinsi(j(this).val())
+    selKabupaten({"provinsi":j(this).val()})
+    selKota()
+  })
+  $(document).on('change','#selKabupaten',function(){
+    selKabupaten({"provinsi":j('#selProvinsi').val(),"kabupaten":j(this).val()})
+    selKota({"kabupaten":j(this).val()})
+  })
+  $(document).on('change','#selKota',function(){
+    selKota({"kabupaten":j('#selKabupaten').val(),"kota":j(this).val()})
+  })
+  function selProvinsi(option=null){
+    if (option==null) {
+      j.get('<?php echo base_url() ?>provinsi',function(data){
+        var _selProvinsi= j('#selProvinsi').html(data.html);      
+        _selProvinsi.html(data.html);      
+        _selProvinsi.attr('data-provinsi',null);      
+      },'json')  
+      
+    } else {
+      j.get('<?php echo base_url() ?>provinsi',{"provinsi":option},function(data){
+        var _selProvinsi= j('#selProvinsi').html(data.html);      
+        _selProvinsi.html(data.html);      
+        _selProvinsi.attr('data-provinsi',option);      
+      },'json')  
+      
+    }
+  }
+  function selKabupaten(option=null){
+    if (option==null) {
+      j.get('<?php echo base_url() ?>kabupaten',function(data){
+        var _selKabupaten= j('#selKabupaten').html(data.html);      
+        _selKabupaten.html(data.html);      
+        _selKabupaten.attr('data-kabupaten','');      
+      },'json')  
+      
+    } else {
+      if ( option.kabupaten==undefined ) {
+        j.get('<?php echo base_url() ?>kabupaten',{"provinsi":option.provinsi},function(data){
+          var _selKabupaten= j('#selKabupaten').html(data.html);      
+          _selKabupaten.html(data.html);      
+          _selKabupaten.attr('data-kabupaten','');      
+        },'json')  
+        
+      } else {
+          j.get('<?php echo base_url() ?>kabupaten',{"provinsi":option.provinsi,"kabupaten":option.kabupaten},function(data){
+            var _selKabupaten= j('#selKabupaten').html(data.html);      
+            _selKabupaten.html(data.html);      
+            _selKabupaten.attr('data-kabupaten',option.kabupaten);      
+          },'json')  
+        
+      }
+      
+    }
+  }
+  function selKota(option=null){
+    if (option==null) {
+      j.get('<?php echo base_url() ?>kota',function(data){
+        var _selKota= j('#selKota').html(data.html);      
+        _selKota.html(data.html);      
+        _selKota.attr({
+          "data-kota":'',
+          "data-biaya":'',
+        });      
+      },'json')  
+      
+    } else {
+      if ( option.kota==undefined ) {
+        j.get('<?php echo base_url() ?>kota',{"kabupaten":option.kabupaten},function(data){
+          var _selKota= j('#selKota').html(data.html);      
+          _selKota.html(data.html);      
+          _selKota.attr({
+            "data-kota":'',
+            "data-biaya":'',
+          });      
+        },'json')  
+        
+      } else {
+          j.get('<?php echo base_url() ?>kota',{"kabupaten":option.kabupaten,"kota":option.kota},function(data){
+            var _selKota= j('#selKota').html(data.html);      
+            _selKota.html(data.html);      
+            _selKota.attr({
+              "data-kota":option.kota,
+              "data-biaya":data.biaya,
+            });       
+            biayaKirim()  
+          },'json')
+        
+      }
+      
+    }
+    // console.log(option)
+  }
+  /* form */
+
+  /* update biaya kirim */
+  // biayaKirim()
+  function biayaKirim()
+  {
+    $('.biaya-kirim').attr('data-biaya',$('#selKota').attr('data-biaya'));
+    _weight_total= j('.biaya-kirim').attr('data-weight',Math.ceil(getWeightTotal()))
+    var _total= (idrToNumber(j('.total').html()));
+    var _kode_unik= (j('.kode-unik').html()*1);
+    var _biaya_kirim= _weight_total.html('Rp. '+formatRupiah(_weight_total.attr('data-biaya')*_weight_total.attr('data-weight')*1));
+    j('.total-pembayaran').html('Rp. '+formatRupiah(_total+_kode_unik+idrToNumber(_biaya_kirim.html() ) ) )
+    j('#formKodeUnik').val(_kode_unik)
+    j('#formBiayaOngkir').val(j('#selKota').attr('data-biaya')*1)
+  }
+
+  /* Fungsi formatRupiah */
+  function formatRupiah(bilangan){
+    var	number_string = bilangan.toString(),
+      sisa 	= number_string.length % 3,
+      rupiah 	= number_string.substr(0, sisa),
+      ribuan 	= number_string.substr(sisa).match(/\d{3}/g);
+        
+    if (ribuan) {
+      separator = sisa ? '.' : '';
+      rupiah += separator + ribuan.join('.');
+    }
+    return rupiah;
+  }
+
+  /* fungsi rupiah to number */
+  function idrToNumber(str)
+  {
+    return parseInt(str.replace(/Rp|\.|/g,''))
+  }
 
 })(jQuery);
 
