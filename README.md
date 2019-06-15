@@ -15,4 +15,4 @@
 - Importt database, sql file : "{project_path}/sql_dump/eka_ta.sql"
 
 # SS Front Website:
-![alt text](https://raw.githubusercontent.com/csynoers/ukhwah-store/branch/master/to/demo-website.png)
+![alt text](https://raw.githubusercontent.com/csynoers/ukhwah-store/master/demo-website.png)
