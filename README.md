@@ -13,3 +13,6 @@
 - extract zip and move or copy to your xampp directory
 - create new database on your phpmyadmin or sqlYog  with name "eka_sql"
 - Importt database, sql file : "{project_path}/sql_dump/eka_ta.sql"
+
+# SS Front Website:
+![alt text](https://raw.githubusercontent.com/csynoers/ukhwah-store/branch/master/to/demo-website.png)
