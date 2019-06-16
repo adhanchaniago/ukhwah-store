@@ -43,6 +43,9 @@ class Website extends MY_Controller{
         if ( ! empty( $this->input->get('short') ) ) {
             $this->m_website->get['short']= $this->input->get('short');
         }
+        if ( ! empty( $this->input->get('q') ) ) {
+            $this->m_website->get['q']= $this->input->get('q');
+        }
         $this->load->helper(['currency','text']);
         $this->content['rows']= $this->m_website->produk();
         $this->view= 'website/produk';

@@ -15,7 +15,7 @@
                 <label class="control-label">Urutkan:</label>
               </div>
               <div class=" col-sm-4 col-xs-5 text-right">
-                <form method="GET" action="<?php echo base_url() ?>produk">
+                <form method="GET" action="<?php echo base_url('produk' .( empty( $this->input->get('q') ) ? null : '/?q='.$this->input->get('q') ) ) ?>">
                   <select id="input-sort" class="form-control col-sm-5" onchange="return this.form.submit()" name="short">
                     <option value="default" selected="">Default</option>
                     <option value="terbaru">Terbaru</option>

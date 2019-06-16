@@ -41,6 +41,9 @@ class M_website extends CI_Model{
 
 /* ==================== Start Produk ==================== */
 	public function produk(){
+		if ( ! empty( $this->get['q'] ) ) {
+			$this->db->like('nama_produk' ,$this->get['q'] );
+		}
 		switch ( empty( $this->get['short'] ) || $this->get['short']=='default' || $this->get['short']=='terbaru' ? null : $this->get['short']) {
 			case 'harga-terendah':
 				# code...

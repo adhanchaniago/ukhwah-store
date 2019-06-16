@@ -29,8 +29,8 @@ echo '</pre>'; */
 
          <div class="col-table-cell col-lg-4 col-md-4 col-sm-5 col-xs-12  pull-right">
           <div id="search" class="input-group">
-            <form method="POST" action="<?php echo base_url() ?>katalog-produk/search">
-              <input id="filter_name" type="text" name="search" value="" placeholder="Search" class="form-control input-lg" required="" />
+            <form method="get" action="<?php echo base_url() ?>produk">
+              <input id="filter_name" type="text" name="q" value="" placeholder="Search" class="form-control input-lg" required="" />
               <button type="submit" class="button-search"><i class="fa fa-search"></i></button>
             </form>
           </div>
