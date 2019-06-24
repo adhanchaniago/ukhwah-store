@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Transaksi Pemesanan Produk</h1>
+            <h1>Transaksi Pembelian Produk</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Beranda</a></li>
-              <li class="breadcrumb-item active">Informasi Pemesanan Produk</li>
+              <li class="breadcrumb-item active">Informasi Pembelian Produk</li>
             </ol>
           </div>
         </div>
@@ -31,8 +31,11 @@
               <div class="alert alert-info fade in alert-dismissible show">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true" style="font-size:20px">×</span>
-                </button>    <strong>Info!</strong> Pilih Menu Action ->Detail Pemesanan, Untuk Melihat Detail Pemesanan.
+                </button>    <strong>Info!</strong> Pilih Menu Action ->Detail Pembelian, Untuk Melihat Detail Pembelian.
               </div>
+            </div>
+            <div class="card-header">
+              <a href="<?php echo base_url() ?>pemilik/form-add-kategori" class="btn btn-default float-right form-add-new"><i class="fa fa-plus"></i> Add New</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -59,7 +62,7 @@
                               <span class='sr-only'>Toggle Dropdown</span>
                             </button>
                             <div class='dropdown-menu' role='menu' x-placement='top-start' style='position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, -165px, 0px);'>
-                              <a class='dropdown-item detail' href='".base_url('admin/detail-konfirmasi-pembayaran/' .$value->id_pemesanan .'/true')."'>Detail Pemesanan</a>
+                              <a class='dropdown-item detail' href='".base_url('pemilik/detail-pembelian/' .$value->id_pemesanan .'/true')."'>Detail Pembelian</a>
                             </div>
                           </div>
                         </td>

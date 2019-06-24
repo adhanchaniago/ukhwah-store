@@ -159,4 +159,16 @@ class Pemilik extends MY_Controller{
 		echo json_encode($this->msg);	
 	} 
 /* ==================== End Data Admin ==================== */
+
+/* ==================== Start Laporan: Pembelian Produk ==================== */
+	public function pembelian_produk(){
+		$this->load->helper('dates');
+		$this->content['rows']= $this->m_pemilik->pembelian_produk();
+		$this->view= 'pemilik/pembelian_produk';
+		$this->render_pages();
+	}
+	public function detail_pembelian(){
+		
+	}
+/* ==================== End Laporan: Pembelian Produk ==================== */
 }

@@ -283,8 +283,8 @@ class M_pemilik extends CI_Model{
 	}
 /* ==================== End Transaksi : Konfirmasi Pembayaran ==================== */
 
-/* ==================== Start Transaksi : Pemesanan Produk ==================== */
-	public function pemesanan_produk()
+/* ==================== Start Laporan : Pembelian Produk ==================== */
+	public function pembelian_produk()
 	{
 		if( empty($this->post['id_pemesanan']) ){
 			return $this->db->query("
@@ -310,6 +310,6 @@ class M_pemilik extends CI_Model{
 
 		}
 	}
-/* ==================== End Transaksi : Pemesanan Produk ==================== */
+/* ==================== End Laporan : Pembelian Produk ==================== */
 	
 }
