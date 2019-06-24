@@ -24,12 +24,12 @@ class Admin extends MY_Controller{
 	}
 /* ==================== End Beranda ==================== */
 
-/* ==================== Start Transaksi: Pemesanan Produk ==================== */
+/* ==================== Start Transaksi: Pembelian Produk ==================== */
 	function data_pemesanan_produk()
 	{
 		$this->load->helper('dates');
-		$this->content['rows']= $this->m_admin->pemesanan_produk();
-		$this->view= 'admin/pemesanan_produk';
+		$this->content['rows']= $this->m_admin->pembelian_produk();
+		$this->view= 'admin/pembelian_produk';
 		$this->render_pages();
 	}
 	

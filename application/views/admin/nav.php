@@ -60,7 +60,7 @@
               <li class="nav-item">
                 <a href="<?php echo base_url() ?>admin/data-pemesanan-produk" class="nav-link <?php echo ($this->uri->segment(2)=='data-pemesanan-produk') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
-                  <p>Pemesanan Produk</p>
+                  <p>Pembelian Produk</p>
                 </a>
               </li>
               <li class="nav-item">

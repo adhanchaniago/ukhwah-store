@@ -12,7 +12,7 @@
 
     <!-- Right navbar links -->
     <div class="navbar-nav ml-auto">
-      <a href="<?php echo base_url() ?>pemilik/data-admin" class="btn btn-default mr-2">Pemilik</a>
+      <a href="<?php echo base_url('pemilik/form-edit-admin/' .$this->session->userdata('id')) ?>" class="btn btn-default mr-2 edit" title="Informasi Pemilik">Pemilik</a>
       <a href="<?php echo base_url('auth/logout'); ?>" class="btn btn-default">Logout</a>
       
       <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#">

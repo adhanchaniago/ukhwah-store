@@ -282,8 +282,8 @@ class M_admin extends CI_Model{
 	}
 /* ==================== End Transaksi : Konfirmasi Pembayaran ==================== */
 
-/* ==================== Start Transaksi : Pemesanan Produk ==================== */
-	public function pemesanan_produk()
+/* ==================== Start Transaksi : Pmbelian Produk ==================== */
+	public function pembelian_produk()
 	{
 		if( empty($this->post['id_pemesanan']) ){
 			return $this->db->query("
@@ -309,6 +309,6 @@ class M_admin extends CI_Model{
 
 		}
 	}
-/* ==================== End Transaksi : Pemesanan Produk ==================== */
+/* ==================== End Transaksi : Pembelian Produk ==================== */
 	
 }

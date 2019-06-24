@@ -9,12 +9,12 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Transaksi Pemesanan Produk</h1>
+            <h1>Transaksi Pembelian Produk</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="#">Beranda</a></li>
-              <li class="breadcrumb-item active">Informasi Pemesanan Produk</li>
+              <li class="breadcrumb-item active">Informasi Pembelian Produk</li>
             </ol>
           </div>
         </div>
@@ -31,7 +31,7 @@
               <div class="alert alert-info fade in alert-dismissible show">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true" style="font-size:20px">×</span>
-                </button>    <strong>Info!</strong> Pilih Menu Action ->Detail Pemesanan, Untuk Melihat Detail Pemesanan.
+                </button>    <strong>Info!</strong> Pilih Menu Action ->Detail Pembelian, Untuk Melihat Detail Pembelian.
               </div>
             </div>
             <!-- /.card-header -->
