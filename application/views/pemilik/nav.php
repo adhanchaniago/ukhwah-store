@@ -48,6 +48,14 @@
               </p>
             </a>
           </li>
+          <li class="nav-item">
+            <a href="<?php echo base_url() ?>pemilik/admin" class="nav-link <?php echo ($this->uri->segment(2)=='admin') ? 'active' : null ?>">
+              <i class="nav-icon fa fa-user-circle-o"></i>
+              <p>
+                Data Admin
+              </p>
+            </a>
+          </li>
           <li class="nav-item has-treeview <?php echo ($this->uri->segment(2)=='data-pemesanan-produk' || $this->uri->segment(2)=='data-konfirmasi-pembayaran') ? 'menu-open' : null ?>">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-user"></i>

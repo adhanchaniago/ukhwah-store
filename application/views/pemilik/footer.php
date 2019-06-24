@@ -77,6 +77,15 @@
       toolbar: { fa: true }
     })
   }
+  $(document).on('click', '.add', function(e){
+    e.preventDefault()
+    var title= $(this).attr('title')
+    $.get($(this).attr('href'), function(data){
+      $('#myModal .modal-title').html(title);
+      $('#myModal .modal-body').html(data);
+      $('#myModal').modal('show');
+    },'html');
+  });
   $('.edit').on('click', function(e){
     e.preventDefault();
     var title= $(this).attr('title')
@@ -86,7 +95,35 @@
       $('#myModal').modal('show');
     } ,'html');
   });
-  
+  $('.delete').on('click', function(e){
+    e.preventDefault(); 
+    $.get( $(this).attr('href'), function(data){
+      alert( (data.stats=='1') ? data.msg : data.msg )
+      location.reload()
+    } ,'json');
+  });
+  $(document).on('submit', 'form#add', function(e) {
+    e.preventDefault();    
+    var formData = new FormData(this);
+    $.ajax({
+        url: $(this).attr("action"),
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+          if ( data.stats==1 ) {
+            alert( data.msg )
+            location.reload()
+          } else {
+            alert( data.msg );
+          }
+          // console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: 'json'
+    });
+  });
   $(document).on('submit','form#edit',function(e){
     e.preventDefault();    
     var formData = new FormData(this);

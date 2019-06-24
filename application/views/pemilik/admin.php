@@ -28,7 +28,7 @@
           <div class="card">
             <div class="card-header">
               <!-- <h3 class="card-title">Daftar Informasi Kelas</h3> -->
-              <a href="<?php echo base_url() ?>admin/form-data-admin" class="btn btn-default float-right form-add-new"><i class="fa fa-plus"></i> Add New</a>
+              <a href="<?php echo base_url() ?>pemilik/form-add-admin" class="btn btn-default float-right add" title="Tambah Informasi Admin"><i class="fa fa-plus"></i> Add New</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -59,8 +59,8 @@
                               <span class='sr-only'>Toggle Dropdown</span>
                             </button>
                             <div class='dropdown-menu' role='menu' x-placement='top-start' style='position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, -165px, 0px);'>
-                              <a class='dropdown-item edit' href='".base_url('admin/form-data-admin-edit/' .$value->id_admin)."'>Edit</a>
-                              <a class='dropdown-item delete ".($this->session->userdata('id')==$value->id_admin? 'd-none' : null )."' href='".base_url('admin/delete-data-admin/' .$value->id_admin)."'>Delete</a>
+                              <a class='dropdown-item edit' href='".base_url('pemilik/form-edit-admin/' .$value->id_admin)."' title='Edit Informasi Admin'>Edit</a>
+                              <a class='dropdown-item delete ".($this->session->userdata('id')==$value->id_admin? 'd-none' : null )."' href='".base_url('pemilik/delete-data-admin/' .$value->id_admin)."'>Delete</a>
                             </div>
                           </div>
                         </td>
@@ -92,101 +92,11 @@
   </div>
   <!-- /.content-wrapper -->
 
-    <!-- The Modal -->
-    <div class="modal fade" id="myModal">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-      
-        <!-- Modal Header -->
-        <div class="modal-header">
-          <h4 class="modal-title">Modal Heading</h4>
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-        </div>
-        
-        <!-- Modal body -->
-        <div class="modal-body">
-          Modal body..
-        </div>
-        
-        <!-- Modal footer -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  <!-- /.modal -->
-
 <!-- DataTables -->
 <script src="<?php echo base_url()?>/themes/adminlte/adminlte.io/themes/dev/adminlte/plugins/datatables/jquery.dataTables.js"></script>
 <script src="<?php echo base_url()?>/themes/adminlte/adminlte.io/themes/dev/adminlte/plugins/datatables/dataTables.bootstrap4.js"></script>
 <script>
   $(function () {
     $("#example1").DataTable();
-  });
-  $(document).on('click', '.form-add-new', function(e){
-    e.preventDefault();
-    $.get($(this).attr('href'), function(data){
-      $('#myModal .modal-title').html('Tambah Data Informasi admin');
-      $('#myModal .modal-body').html(data);
-      $('#myModal').modal('show');
-    },'html');
-  });
-  $(document).on('submit', 'form#add', function(e) {
-    e.preventDefault();    
-    var formData = new FormData(this);
-    $.ajax({
-        url: $(this).attr("action"),
-        type: 'POST',
-        data: formData,
-        success: function (data) {
-          if ( data.stats==1 ) {
-            alert( data.msg )
-            location.reload()
-          } else {
-            alert( data.msg );
-          }
-          // console.log(data);
-        },
-        cache: false,
-        contentType: false,
-        processData: false,
-        dataType: 'json'
-    });
-  });
-  $('.edit').on('click', function(e){
-    e.preventDefault(); 
-    $.get( $(this).attr('href'), function(data){
-      $('#myModal .modal-title').html('Edit Informasi admin');
-      $('#myModal .modal-body').html(data);
-      $('#myModal').modal('show');
-    } ,'html');
-  });
-  
-  $('.delete').on('click', function(e){
-    e.preventDefault(); 
-    $.get( $(this).attr('href'), function(data){
-      alert( (data.stats=='1') ? data.msg : data.msg )
-      location.reload()
-    } ,'json');
-  });
-  $(document).on('submit','form#edit',function(e){
-    e.preventDefault();    
-    var formData = new FormData(this);
-    $.ajax({
-        url: $(this).attr("action"),
-        type: 'POST',
-        data: formData,
-        success: function (data) {
-          // console.log(data)
-            alert( (data.stats=='1') ? data.msg : data.msg )
-            location.reload()
-        },
-        cache: false,
-        contentType: false,
-        processData: false,
-        dataType: 'json'
-    });
   });
 </script>

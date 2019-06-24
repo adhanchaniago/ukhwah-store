@@ -7,7 +7,7 @@ class M_pemilik extends CI_Model{
 	public function data_admin()
 	{
 		return $this->db->query("
-			SELECT * FROM tb_admin
+			SELECT * FROM tb_admin WHERE level='admin'
 		")->result_object();
 	}
 	public function store_data_admin()
@@ -18,6 +18,7 @@ class M_pemilik extends CI_Model{
 			'username'=> $this->post['username'],
 			'password'=> $this->post['password'],
 			'no_handphone'=> $this->post['no_handphone'],
+			'level'=> 'admin',
 		]);
 	}
 	public function edit_data_admin()
