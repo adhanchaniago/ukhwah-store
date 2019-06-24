@@ -13,6 +13,12 @@ class MY_Controller extends CI_Controller{
                 $this->load->view($this->view, (empty($this->content)? [] : $this->content ) );
                 $this->load->view('admin/footer');
                 break;
+            case 'pemilik':
+                $this->load->view('pemilik/header');
+                $this->load->view('pemilik/nav');
+                $this->load->view($this->view, (empty($this->content)? [] : $this->content ) );
+                $this->load->view('pemilik/footer');
+                break;
             case 'guru':
                 $this->load->view('admin_guru_nav');
                 break;

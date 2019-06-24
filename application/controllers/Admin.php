@@ -177,49 +177,14 @@ class Admin extends MY_Controller{
 	}
 /* ==================== End Transaksi: Konfirmasi Pembayaran ==================== */
 
-/* ==================== Start Master Data: Admin ==================== */
-	function data_admin()
-	{
-		$this->view= 'admin/admin';
-		$this->content['rows']= $this->m_admin->data_admin();
-		$this->render_pages();
-	}
-	public function form_data_admin()
-	{
-		$this->html= '
-        <form action="'.base_url().'admin/store-data-admin" role="form" id="add" method="post" enctype="multipart/form-data">
-			<div class="form-group">
-				<label>Nama</label>
-				<input name="nama" type="text" class="form-control" placeholder="*) masukan nama admin" required="">
-			</div>
-			<div class="form-group">
-				<label>No Telpon</label>
-				<input name="no_handphone" type="telp" class="form-control" placeholder="*) ex : 08123456789" required="">
-			</div>
-			<div class="form-group">
-				<label>Alamat</label>
-				<textarea name="alamat" class="form-control" rows="3" placeholder="masukan alamat disini ..." required=""></textarea>
-			</div>
-			<div class="form-group">
-				<label>Username</label>
-				<input name="username" type="text" class="form-control" placeholder="Masukan Username" required="">
-			</div>
-			<div class="form-group">
-				<label>Password</label>
-				<input name="password" type="password" class="form-control" placeholder="*******" required="">
-			</div>
-            <button type="submit" class="btn btn-primary">Publish</button>
-        </form>
-        ';
-		echo $this->html;
-	}
+/* ==================== Start Data Admin ==================== */
 	public function form_data_admin_edit()
 	{
 		$this->m_admin->post['id_admin']= $this->uri->segment(3);
 		$row= $this->m_admin->edit_data_admin();
 		
 		$this->html= '
-        <form action="'.base_url().'admin/update-data-admin" role="form" id="edit" method="post" enctype="multipart/form-data">
+        <form action="'.base_url().'admin/update-data-admin" role="form" id="edit-admin" method="post" enctype="multipart/form-data">
 			<div class="form-group">
 				<label>Nama</label>
 				<input value="'.$row->nama.'" name="nama" type="text" class="form-control" placeholder="*) masukan nama admin" required="">
@@ -246,31 +211,6 @@ class Admin extends MY_Controller{
         ';
         echo $this->html;
 	}
-	public function store_data_admin()
-	{
-		$this->m_admin->post= $this->input->post();
-		if ( $this->m_admin->cek_user() > 0 ) {
-			$this->msg= [
-				"stats" => 0,
-				"msg" 	=> 'Maaf User Sudah Digunakan'
-			];
-		} else {
-			if ( $this->m_admin->store_data_admin() ) {
-				$this->msg= [
-					"stats" => 1,
-					"msg" 	=> 'Data Berhasil Disimpan'
-				];
-			} else {
-				$this->msg= [
-					"stats" => 0,
-					"msg" 	=> 'Data Gagal Disimpan'
-				];
-			}
-			
-		}
-		echo json_encode($this->msg);
-		
-	}
 	public function update_data_admin()
 	{
 		$this->m_admin->post= $this->input->post();
@@ -295,23 +235,7 @@ class Admin extends MY_Controller{
 		}
 		echo json_encode($this->msg);
 	}
-	public function delete_data_admin()
-	{
-		$this->m_admin->post['id_admin']= $this->uri->segment(3);
-		if ( $this->m_admin->delete_data_admin() ) {
-			$this->msg= [
-				"stats" => 1,
-				"msg" 	=> 'Data Berhasil Dihapus'
-			];
-		} else {
-			$this->msg= [
-				"stats" => 0,
-				"msg" 	=> 'Data Gagal Dihapus'
-			];
-		}
-		echo json_encode($this->msg);
-	} 
-/* ==================== End Master Data: Admin ==================== */
+/* ==================== End Data Admin ==================== */
 
 /* ==================== Start Master Data: Supplier ==================== */
 	function data_supplier()

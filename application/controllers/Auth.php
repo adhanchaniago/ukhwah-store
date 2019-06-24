@@ -29,12 +29,12 @@ class Auth extends CI_Controller{
                 'id' => $row->id_admin,
                 'username' => $username,
                 'status' => "login",
-                'level' => 'admin'
+                'level' => $row->level
             );
         
             $this->session->set_userdata($data_session);
         
-            redirect(base_url("admin/beranda"));
+            redirect(base_url("{$row->level}/beranda"));
         }
 
         // elseif ( $cek_guru > 0 ) {
