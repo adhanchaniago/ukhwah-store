@@ -7,6 +7,13 @@
     - password    : admin
 *******************
 
+*******************
+# login pemilik
+    - link        : {url}/auth
+    - username    : pemilik
+    - password    : pemilik
+*******************
+
 # cara install:
 - clone or download
 - download zip
