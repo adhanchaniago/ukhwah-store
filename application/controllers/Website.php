@@ -13,6 +13,11 @@ class Website extends MY_Controller{
         $this->load->helper('currency');
         $this->view= 'website/home';
         $this->content['produk']= $this->m_website->produk_home();
+        $this->content['kategori']= $this->m_website->kategori();
+        // echo '<pre>';
+        // print_r($this->content);
+        // echo '</pre>';
+        // die();
         $this->render_websites();
     }
 
