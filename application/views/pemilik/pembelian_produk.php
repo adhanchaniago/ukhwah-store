@@ -35,7 +35,7 @@
               </div>
             </div>
             <div class="card-header">
-              <a href="<?php echo base_url() ?>pemilik/form-add-kategori" class="btn btn-default float-right form-add-new"><i class="fa fa-plus"></i> Add New</a>
+              <a target="_blank" href="<?php echo base_url() ?>pemilik/print-laporan-pembelian-produk" class="btn btn-default float-right form-add-new"><i class="fa fa-plus"></i> Print Laporan</a>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -62,7 +62,7 @@
                               <span class='sr-only'>Toggle Dropdown</span>
                             </button>
                             <div class='dropdown-menu' role='menu' x-placement='top-start' style='position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, -165px, 0px);'>
-                              <a class='dropdown-item detail' href='".base_url('pemilik/detail-pembelian/' .$value->id_pemesanan .'/true')."'>Detail Pembelian</a>
+                              <a title='Informasi Detail Pembelian' data-id='".$value->id_pemesanan."' data-status='true' class='dropdown-item detail-pembelian' href='".base_url('pemilik/detail-pembelian/' .$value->id_pemesanan .'/true')."'>Detail Pembelian</a>
                             </div>
                           </div>
                         </td>
@@ -126,13 +126,5 @@
 <script>
   $(function () {
     $("#example1").DataTable();
-  });
-  $(document).on('click', '.detail', function(e){
-    e.preventDefault();
-    $.get($(this).attr('href'), function(data){
-      $('#myModal .modal-title').html('Detail Pemesanan');
-      $('#myModal .modal-body').html(data);
-      $('#myModal').modal('show');
-    },'html');
   });
 </script>

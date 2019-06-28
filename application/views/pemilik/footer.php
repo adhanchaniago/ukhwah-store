@@ -144,6 +144,20 @@
         dataType: 'json'
     });
   });
+  /* Detail Pembelian */
+  $(document).on('click', '.detail-pembelian', function(e){
+    e.preventDefault();
+    var click_data= {
+      "title" : $(this).attr('title'),
+      "id" : $(this).attr('data-id'),
+      "status" : $(this).attr('data-status'),
+    };
+    $.get($(this).attr('href'), function(data){
+      $('#myModal .modal-title').html(click_data.title+'<a target="_blank" href="<?php echo base_url('pemilik/print-detail-pembelian/') ?>'+click_data.id+'/'+click_data.status+'" class="btn btn-info ml-3">Print</a>');
+      $('#myModal .modal-body').html(data);
+      $('#myModal').modal('show');
+    },'html');
+  });
 </script>
 </body>
 

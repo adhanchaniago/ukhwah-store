@@ -168,7 +168,125 @@ class Pemilik extends MY_Controller{
 		$this->render_pages();
 	}
 	public function detail_pembelian(){
-		
+		$this->load->helper(['currency','dates']);
+		$this->m_pemilik->post['id_pemesanan']= $this->uri->segment(3);
+		$this->m_pemilik->post['status']= $this->uri->segment(4);
+		$pemesanan= $this->m_pemilik->konfirmasi_pembayaran();
+		$this->html= '
+	<div id="DivIdToPrint">
+		<div class="row">
+			<div class="col-12">
+				<h4>
+					<i class="fa fa-globe"></i> Ukhwah Store.
+					<small class="float-right">Tanggal: '.tgl_indo($pemesanan->tanggal).'</small>
+				</h4>
+			</div>
+			<!-- /.col -->
+		</div>
+		<div class="row invoice-info">
+			<div class="col-sm-4 invoice-col">
+			Pelanggan :
+			<address>
+				<strong class="text-capitalize">Nama: '.$pemesanan->nama.'</strong><br>
+				<strong class="text-capitalize">Telpon: '.$pemesanan->no_handphone.'</strong><br>
+
+			</address>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-4 invoice-col">
+			Alamat Pengiriman :
+			<address>
+				<strong>'.$pemesanan->alamat_pengiriman.'</strong><br>
+			</address>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-4 invoice-col">
+			Catatan :
+			<address>
+				<strong>'.($pemesanan->komentar_pesanan==''? 'Tidak Ada Catatan' : $pemesanan->komentar_pesanan ).'</strong><br>
+			</address>
+			</div>
+			<!-- /.col -->
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Gambar</th>
+						<th>Nama Produk</th>
+						<th>Kategori</th>
+						<th>Jumlah</th>
+						<th>Berat(Kg)</th>
+						<th>Harga</th>
+						<th>Sub-Total</th>
+					</tr>
+				</thead>
+				<tbody>';
+				$total= 0;
+				$total_berat= 0;
+				foreach ($this->m_pemilik->detail_pemesanan() as $key => $value) {
+					$this->html .= '
+					<tr>
+						<td><img class="img-size-64" src="'.base_url('src/produk/128/' .$value->gambar).'"></td>
+						<td>'.$value->nama_produk.'</td>
+						<td>'.$value->kategori.'</td>
+						<td>'.$value->jumlah.'</td>
+						<td>'.( ($value->jumlah*$value->berat) /1000 ).'</td>
+						<td>'.idr($value->harga).'</td>
+						<td>'.idr( ($value->jumlah*$value->harga) ).'</td>
+					</tr>
+					';
+					$total += ($value->jumlah*$value->harga);
+					$total_berat += ceil( ($value->jumlah*$value->berat) /1000 );
+				}
+				
+				$this->html .='
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Total:</strong></td>
+						<td class="text-right total">'.idr($total).'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Kode Unik:</strong></td>
+						<td class="text-right kode-unik">'.$pemesanan->kode_unik.'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Biaya Kirim ('.($total_berat).' Kg):</strong></td>
+						<td class="text-right biaya-kirim" data-biaya="0" data-weight="1210">'.idr($total_berat*$pemesanan->biaya_ongkir).'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Total Pembayaran:</strong></td>
+						<td class="text-right total-pembayaran">'.idr( $total +$pemesanan->kode_unik +($total_berat*$pemesanan->biaya_ongkir) ).'</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				<label>Bukti Pembayaran</label>
+				<img class="img-thumbnail" src="'.base_url('src/bukti_pembayaran/768/' .$pemesanan->bukti_pembayaran).'">
+			</div>
+		</div>
+		<hr>
+		<div>
+			<a id="konfirmasi" href="'.base_url('admin/konfirmasi-pemesanan/' .$pemesanan->id_pemesanan).'" class="btn btn-block btn-primary '.($this->uri->segment(4)=='true'? 'd-none' : null ).'">Konfirmasi Pembayaran</a>
+		</div>
+	</div>
+		';
+		echo $this->html;
+	}
+	public function print_laporan_pembelian_produk()
+	{
+		$this->load->view('pemilik/print_pembelian',[]);
+	}
+	public function print_detail_pembelian()
+	{
+		$this->load->helper(['currency','dates']);
+		$this->m_pemilik->post['id_pemesanan']= $this->uri->segment(3);
+		$this->m_pemilik->post['status']= $this->uri->segment(4);
+		$pemesanan= $this->m_pemilik->konfirmasi_pembayaran();
+		$this->load->view('pemilik/print_detail_pembelian',['pemesanan'=>$pemesanan]);
 	}
 /* ==================== End Laporan: Pembelian Produk ==================== */
 }

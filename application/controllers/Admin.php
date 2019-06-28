@@ -151,7 +151,7 @@ class Admin extends MY_Controller{
 		';
 		echo $this->html;
 		
-		echo '<pre>';
+		// echo '<pre>';
 		// print_r($this->m_admin->detail_pemesanan());
 		// print_r($pemesanan);
 		// print_r($this->m_admin);
