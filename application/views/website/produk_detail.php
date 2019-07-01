@@ -25,35 +25,26 @@
             <li class="price"><span itemprop="price"><?php echo idr($row->harga)?></span></li>
           </ul>
           <div id="product">
-            <h3 class="subtitle">Produk Tersedia</h3>
-            <div class="form-group">
-              <label class="control-label">Pilih Warna</label> <br>
-              
-                
-                  <div class="pretty p-icon p-smooth">
-                      <input type="radio" value="Hitam" name="color">
-                      <div class="state p-success">
-                          <i class="icon fa fa-check"></i>
-                          <label> Hitam</label>
-                      </div>
+            <?php
+              if ( isset($row->ukuran) ) {
+                $html = '
+                <h3 class="subtitle">Produk Tersedia</h3>
+                <div class="form-group">
+                  <label class="control-label">Pilih Ukuran</label><br>
+                ';
+                foreach ( json_decode($row->ukuran) as $key => $value) {
+                  $html .= '
+                  <div class="form-check-inline">
+                    <label class="form-check-label">
+                      <input type="radio" class="form-check-input" name="product_size" value="'.$value.'"> '.$value.'
+                    </label>
                   </div>
-                
-              
-            </div>
-            <div class="form-group">
-              <label class="control-label">Pilih Ukuran</label><br>
-                
-                
-                  <div class="pretty p-icon p-smooth">
-                      <input type="radio" value="40" name="size">
-                      <div class="state p-success">
-                          <i class="icon fa fa-check"></i>
-                          <label> 40</label>
-                      </div>
-                  </div>
-                
-                
-            </div>          
+                  ';
+                }
+                $html .= '</div>';
+                echo $html;
+              }
+            ?>        
             <div class="cart">
               <div>
                 <div class="qty">

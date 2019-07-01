@@ -134,16 +134,46 @@
       var _post= {};
       _post['id']= j('#id_produk').val();
       _post['quantity']= j('#input-quantity').val();
+      
+      if ( cek_product_size().stats ) {
+        if ( ! cek_product_size().size ) {
+          toastr["warning"]( "Maaf Anda Belum Memilih Ukuran" );
+        } else {
+          _post['size']= cek_product_size().size;
+          j.post('<?php echo base_url() ?>cart/add',_post,function(data){
+            toastr["success"]( data );
 
-      j.post('<?php echo base_url() ?>cart/add',_post,function(data){
-        toastr["success"]( data );
+            /* update keranjang belanja */
+            items_nav()
 
-        /* update keranjang belanja */
-        items_nav()
+          })  
+          
+        }
 
-      })  
+      } else {
+        j.post('<?php echo base_url() ?>cart/add',_post,function(data){
+          toastr["success"]( data );
+
+          /* update keranjang belanja */
+          items_nav()
+
+        })  
+      }
+
     }
   })
+
+  /* jika ukuran produk tersedia maka hasus diilih terlebih dahulu */
+  function cek_product_size(){
+    var data={};
+    if ( ($('input[name=product_size]').length > 0) ) {
+      data['stats']= true
+      data['size']= ($('input[name=product_size]:checked').length > 0) ? $('input[name=product_size]:checked').val() : false
+    } else {
+      data['stats']= false
+    }
+    return data
+  }
 
   /* hapus produk */
   j(document).on('click','.removeItemNav', function(e){
