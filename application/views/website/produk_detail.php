@@ -24,7 +24,36 @@
           <ul class="price-box">
             <li class="price"><span itemprop="price"><?php echo idr($row->harga)?></span></li>
           </ul>
-          <div id="product">            
+          <div id="product">
+            <h3 class="subtitle">Produk Tersedia</h3>
+            <div class="form-group">
+              <label class="control-label">Pilih Warna</label> <br>
+              
+                
+                  <div class="pretty p-icon p-smooth">
+                      <input type="radio" value="Hitam" name="color">
+                      <div class="state p-success">
+                          <i class="icon fa fa-check"></i>
+                          <label> Hitam</label>
+                      </div>
+                  </div>
+                
+              
+            </div>
+            <div class="form-group">
+              <label class="control-label">Pilih Ukuran</label><br>
+                
+                
+                  <div class="pretty p-icon p-smooth">
+                      <input type="radio" value="40" name="size">
+                      <div class="state p-success">
+                          <i class="icon fa fa-check"></i>
+                          <label> 40</label>
+                      </div>
+                  </div>
+                
+                
+            </div>          
             <div class="cart">
               <div>
                 <div class="qty">

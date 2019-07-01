@@ -148,6 +148,7 @@ class M_admin extends CI_Model{
 			'stok'=> $this->post['stok'],
 			'gambar'=> $this->post['gambar'],
 			'berat'=> $this->post['berat'],
+			'ukuran'=> $this->post['ukuran_json'],
 		] );
 	}
 
@@ -170,6 +171,7 @@ class M_admin extends CI_Model{
 			'harga'=> $this->post['harga'],
 			'stok'=> $this->post['stok'],
 			'berat'=> $this->post['berat'],
+			'ukuran'=> $this->post['ukuran_json'],
 		];
 		$this->where= [
 			'id_produk'=> $this->post['id_produk']

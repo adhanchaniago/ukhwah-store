@@ -467,6 +467,17 @@ class Admin extends MY_Controller{
 		foreach ($this->m_admin->data_supplier() as $key => $value) {
 			$this->supplier .= "<option value='{$value->id_supplier}'>{$value->nama}</option>";
 		}
+		$this->ukuran= "";
+		$ukuran= ['S','M','L','XL'];
+		foreach ($ukuran as $key => $value) {
+			$this->ukuran .= '
+				<div class="form-check-inline">
+					<label class="form-check-label">
+						<input name="ukuran[]" type="checkbox" class="form-check-input" value="'.$value.'">'.$value.'
+					</label>
+				</div>
+			'; 
+		}
 		$this->html= '
         <form action="'.base_url().'admin/store-produk" role="form" id="add" method="post" enctype="multipart/form-data">
             <div class="form-group">
@@ -511,6 +522,10 @@ class Admin extends MY_Controller{
                 <label>Stok</label>
                 <input name="stok" type="number" min="1" class="form-control" placeholder="*) Ex: 10" required="">
             </div>
+			<div class="form-group">
+				<label>Pilih Ukuran</label><br>
+				'.$this->ukuran.'				
+			</div>
             <div class="form-group">
                 <label>Upload Foto <small class="badge badge-info">*) type: JPG atau PNG</small></label>
                 <input name="fupload" type="file" class="form-control"  required="">
@@ -531,6 +546,33 @@ class Admin extends MY_Controller{
 		$this->supplier= "";
 		foreach ($this->m_admin->data_supplier() as $key => $value) {
 			$this->supplier .= "<option ".($row->id_supplier==$value->id_supplier? 'selected' : null)." value='{$value->id_supplier}'>{$value->nama}</option>";
+		}
+		$this->ukuran= "";
+		$ukuran= ['S','M','L','XL'];
+		$ukuran_berbeda= []; #default
+		if ( isset($row->ukuran) ) { # if column not null 
+			$ukuran_berbeda= json_decode($row->ukuran);	
+		}
+		
+		foreach ($ukuran as $key => $value) {
+			if ( in_array($value ,$ukuran_berbeda) ) {
+				$this->ukuran .= '
+					<div class="form-check-inline">
+						<label class="form-check-label">
+							<input checked name="ukuran[]" type="checkbox" class="form-check-input" value="'.$value.'">'.$value.'
+						</label>
+					</div>
+				'; 
+			}else{
+				$this->ukuran .= '
+					<div class="form-check-inline">
+						<label class="form-check-label">
+							<input name="ukuran[]" type="checkbox" class="form-check-input" value="'.$value.'">'.$value.'
+						</label>
+					</div>
+				'; 
+			}		
+			
 		}
 		$this->html= '
         <form action="'.base_url().'admin/update-produk" role="form" id="add" method="post" enctype="multipart/form-data">
@@ -575,7 +617,11 @@ class Admin extends MY_Controller{
 			<div class="form-group">
                 <label>Stok</label>
                 <input value="'.$row->stok.'" name="stok" type="number" min="1" class="form-control" placeholder="*) Ex: 10" required="">
-            </div>
+			</div>
+			<div class="form-group">
+				<label>Pilih Ukuran</label><br>
+				'.$this->ukuran.'				
+			</div>
             <div class="form-group">
                 <label>Foto</label>
                 <img class="d-block img-thumbnail" src="'.base_url('./src/produk/320/'.$row->gambar).'">
@@ -593,6 +639,7 @@ class Admin extends MY_Controller{
 	public function store_produk()
 	{
 		$this->m_admin->post= $this->input->post();
+		$this->m_admin->post['ukuran_json']= empty($this->input->post('ukuran')) ? null : json_encode($this->input->post('ukuran'));
         if ( empty($_FILES['fupload']['tmp_name']) ) {
             # code...without upload file
             if ( $this->m_admin->store_produk() ) {
@@ -653,7 +700,8 @@ class Admin extends MY_Controller{
 	}
 	public function update_produk()
 	{
-        $this->m_admin->post= $this->input->post();
+		$this->m_admin->post= $this->input->post();
+		$this->m_admin->post['ukuran_json']= empty($this->input->post('ukuran')) ? null : json_encode($this->input->post('ukuran'));
         if ( empty($_FILES['fupload']['tmp_name']) ) {
             # code...without upload file
             if ( $this->m_admin->update_produk() ) {
