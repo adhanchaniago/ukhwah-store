@@ -78,6 +78,28 @@
   <!--Footer End-->
 </div>
 
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- ./ end modal -->
+
 <!-- JS Part Start-->
 <script type="text/javascript" src="<?php echo base_url() ?>themes/marketshop/js/jquery-2.1.1.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url() ?>themes/marketshop/js/bootstrap/js/bootstrap.min.js"></script>
@@ -381,6 +403,23 @@
         j('.users').html(data.html)
       },'json')
     }
+
+    /* setting User */
+    j(document).on('click','a#setting',function(e){
+      e.preventDefault()
+      settingUser( j(this).attr('title') )
+    })
+    function settingUser(title){
+      j("div#myModal.modal.fade").find('.modal-title').html( title )
+      j.get('<?php echo base_url() ?>setting',function(data){
+        j("div#myModal.modal.fade").find('.modal-body').html( data.html )
+      },'json')
+      j("div#myModal.modal.fade").modal("show");
+    }
+    j(document).on('click','a#formEditUser',function(e){
+      e.preventDefault()
+      console.log(this)
+    })
   /* End Pelanggan Js */
   // toastr["success"]( 'data.msg' );
 /*   toastr.options.onShown = function() { console.log('hello'); }

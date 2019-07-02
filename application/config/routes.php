@@ -64,6 +64,7 @@ $route['checkout'] = 'website/checkout';
 $route['login'] = 'pelanggan/login';
 $route['login-check'] = 'pelanggan/check';
 $route['users'] = 'pelanggan/users';
+$route['setting'] = 'pelanggan/setting';
 $route['daftar'] = 'pelanggan/daftar';
 $route['logout'] = 'pelanggan/logout';
 $route['register'] = 'pelanggan/register';

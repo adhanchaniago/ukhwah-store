@@ -115,6 +115,7 @@ class Pelanggan extends MY_Controller{
     }
     /* ==================== End Cek Login Pelanggan ==================== */
 
+    /* ==================== Start Navbar Pelanggan ==================== */
     public function users()
     {
         if ( ! empty($this->session->userdata('pelanggan')) ) {
@@ -123,6 +124,7 @@ class Pelanggan extends MY_Controller{
                 'html'=> '
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-user"></i> | '.$this->session->userdata('pelanggan')['username'].'</button>
                     <ul class="dropdown-menu users-dropdown" style="width:auto">
+                        <li><a href="'.base_url('setting').'" id="setting" title="Informasi Pengaturan Akun">Pengaturan</a></li>
                         <li><a href="'.base_url('logout').'">Logout</a></li>
                     </ul>
                 '
@@ -140,10 +142,16 @@ class Pelanggan extends MY_Controller{
 
         echo json_encode($this->html);
     }
+    /* ==================== End Navbar Pelanggan ==================== */
+
+    /* ==================== Start Logout Pelanggan ==================== */
     public function logout(){
         $this->session->unset_userdata('pelanggan');
         redirect(base_url());
     }
+    /* ==================== End Logout Pelanggan ==================== */
+
+    /* ==================== Start Proses Simpan Pelanggan ==================== */
     public function register()
     {
         $this->m_pelanggan->post= $this->input->post();
@@ -175,5 +183,102 @@ class Pelanggan extends MY_Controller{
 
         echo json_encode($this->msg);
 
+    }
+    /* ==================== End Proses Simpan Pelanggan ==================== */
+
+    /* ==================== Start Setting Pelanggan ==================== */
+    public function setting()
+    {
+        // $data_session = array(
+        //     'id' => $row->id_pelanggan,
+        //     'username' => $row->username,
+        //     'password' => $row->password,
+        //     'nama' => $row->nama,
+        //     'alamat' => $row->alamat,
+        //     'no_handphone' => $row->no_handphone,
+        //     'status' => 1,
+        //     'level' => 'pelanggan'
+        // );
+        $row_user= $this->session->userdata('pelanggan');
+        $this->html=[
+            'html'=> '
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs">
+                    <li class="active"><a data-toggle="tab" href="#home">Profil</a></li>
+                    <li><a data-toggle="tab" href="#menu1">Alamat</a></li>
+                </ul>
+
+                <div class="tab-content">
+                    <div id="home" class="tab-pane fade in active">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tbody>
+                                    <tr>
+                                        <td>Nama Lengkap</td>
+                                        <td>:</td>
+                                        <td>'.$row_user["nama"].'</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Username</td>
+                                        <td>:</td>
+                                        <td>'.$row_user["username"].'</td>
+                                    </tr>
+                                    <tr>
+                                        <td>No Telpon</td>
+                                        <td>:</td>
+                                        <td>'.$row_user["no_handphone"].'</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="buttons">
+                            <div class="pull-left"><a href="'.base_url('form-edit-user').'" id="formEditUser" class="btn btn-primary">Ubah Profil</a></div>
+                        </div>
+                    </div>
+                    <div id="menu1" class="tab-pane fade">
+                        <h3>Menu 1</h3>
+                        <p>Some content in menu 1.</p>
+                    </div>
+                </div>
+            '
+        ];   
+
+        echo json_encode($this->html);
+    }
+    /* ==================== End Setting Pelanggan ==================== */
+
+    public function form_edit_user()
+    {
+        $this->html=[
+            'html'=> '
+            <form method="POST" action="http://localhost/orders/2019-04/EKA/register" id="formDaftar">
+                <div class="form-group">
+                    <label for="name">Nama Lengkap:</label>
+                    <input name="name" type="text" class="form-control" id="name" placeholder="Masukan Nama Disini" required="">
+                </div>
+                <div class="form-group">
+                    <label for="address">Alamat:</label>
+                    <textarea name="address" class="form-control" rows="5" id="address" placeholder="Masukan Alamat Disini ..." required=""></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="phone">No Telpon:</label>
+                    <input name="phone" type="telp" class="form-control" id="phone" placeholder="+628123456789" required="">
+                </div>
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input name="username" type="text" class="form-control" id="username" placeholder="Masukan Username Disini" required="">
+                </div>
+                <div class="form-group">
+                    <label for="pwd">Password:</label>
+                    <input name="password" type="password" class="form-control" id="pwd" placeholder="********" required="">
+                </div>
+                <!--<div class="checkbox">
+                    <label><input type="checkbox"> Remember me</label>
+                </div>-->
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        ';
+        
+        echo json_encode($this->html);
     }
 }
