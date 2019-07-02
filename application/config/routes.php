@@ -67,6 +67,7 @@ $route['users'] = 'pelanggan/users';
 $route['setting'] = 'pelanggan/setting';
 $route['form-edit-user'] = 'pelanggan/form-edit-user';
 $route['update-user'] = 'pelanggan/update_user';
+$route['form-add-alamat'] = 'pelanggan/form_add_alamat';
 $route['daftar'] = 'pelanggan/daftar';
 $route['logout'] = 'pelanggan/logout';
 $route['register'] = 'pelanggan/register';

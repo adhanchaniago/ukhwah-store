@@ -200,6 +200,10 @@ class Pelanggan extends MY_Controller{
         //     'level' => 'pelanggan'
         // );
         $row_user= $this->session->userdata('pelanggan');
+        $alamat= "";
+        foreach ($this->m_pelanggan->alamat_user() as $key => $value) {
+            
+        }
         $this->html=[
             'html'=> '
                 <!-- Nav tabs -->
@@ -236,8 +240,10 @@ class Pelanggan extends MY_Controller{
                         </div>
                     </div>
                     <div id="menu1" class="tab-pane fade">
-                        <h3>Menu 1</h3>
-                        <p>Some content in menu 1.</p>
+                        <div class="buttons">
+                            <div class="pull-left"><a title="Tambah Alamat Baru" href="'.base_url('form-add-alamat').'" id="formAddAlamat" class="btn btn-primary">+ Tambah Alamat Baru</a></div>
+                        </div>
+                        '.$alamat.'
                     </div>
                 </div>
             '
@@ -246,7 +252,8 @@ class Pelanggan extends MY_Controller{
         echo json_encode($this->html);
     }
     /* ==================== End Setting Pelanggan ==================== */
-
+    
+    /* ==================== Start Form Edit Informasi Profil ==================== */
     public function form_edit_user()
     {
         $row_user= $this->session->userdata('pelanggan');
@@ -278,7 +285,9 @@ class Pelanggan extends MY_Controller{
 
         echo json_encode($this->html);
     }
+    /* ==================== End Form Edit Informasi Profil ==================== */
 
+    /* ==================== Start Proses Update Informasi Profil ==================== */
     public function update_user()
     {
         $this->m_pelanggan->post= $this->input->post();
@@ -312,4 +321,56 @@ class Pelanggan extends MY_Controller{
         
         echo json_encode($this->msg);
     }
+    /* ==================== End Proses Update Informasi Profil ==================== */
+
+    /* ==================== Start Form Add New Alamat ==================== */
+    public function form_add_alamat()
+    {
+        $row_user= $this->session->userdata('pelanggan');
+        $this->html=[
+            'html'=> '
+            <form method="POST" action="'.base_url('store-alamat').'" id="formStoreAlamat">
+                <div class="form-group">
+                    <label>Alamat Sebagai:</label>
+                    <input name="address_by" type="text" class="form-control" placeholder="Contoh: Kantor, Kos, Rumah, dll" required="">
+                </div>
+                <div class="form-group">
+                    <label>Nama Penerima:</label>
+                    <input name="name" type="text" class="form-control" placeholder="Isi Nama Lengkap" required="">
+                </div>
+                <div class="form-group">
+                    <label>No. Telepon:</label>
+                    <input max="15" name="phone" type="telp" class="form-control" placeholder="Contoh : 08123456789" required="">
+                </div>
+                <div class="form-group">
+                    <label>Pilih Provinsi</label>
+                    <select name="provinsi" id="selProvinsi" class="form-control" data-provinsi="" required>
+                        <option value="" selected disabled> -- Pilih Provinsi -- </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pilih Kota</label>
+                    <select name="kota" id="selKota" class="form-control" data-kota="" data-biaya="" required>
+                        <option value="" selected disabled> -- Pilih Kota -- </option>
+                        <option value="" disabled> Maaf Anda Belum Memilih Provinsi </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kode Pos:</label>
+                    <input name="postcode" type="number" class="form-control" placeholder="Isi Kode Pos" required="">
+                </div>
+                <div class="form-group">
+                    <label>Alamat Lengkap:</label>
+                    <textarea name="fulladdress" class="form-control" rows="5" placeholder="Isi nama jalan, nomor rumah, nama gedung, dsb" required=""></textarea>
+                </div>
+                <!--<div class="checkbox">
+                    <label><input type="checkbox"> Remember me</label>
+                </div>-->
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        '];
+
+        echo json_encode($this->html);
+    }
+    /* ==================== End Form Add New Alamat ==================== */
 }

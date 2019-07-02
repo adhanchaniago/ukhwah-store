@@ -446,6 +446,62 @@
           dataType: 'json'
       });
     })
+    /* Start alamat */
+    j(document).on('click','a#formAddAlamat',function(e){
+      e.preventDefault()
+      j("div#myModal.modal.fade").find('.modal-title').html( j(this).attr('title') )
+      j.get('<?php echo base_url() ?>form-add-alamat',function(data){
+        j("div#myModal.modal.fade").find('.modal-body').html( data.html )
+        selProvinsi()
+      },'json')
+      j("div#myModal.modal.fade").modal("show");
+    })
+    j(document).on('submit','#formStoreAlamat',function(e){
+      e.preventDefault()
+      var formData = new FormData(this);
+      $.ajax({
+          url: $(this).attr("action"),
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            if ( data.stats==1 ) {
+              toastr["success"]( data.msg );
+              settingUser('Informasi Pengaturan Akun')
+              users()
+            } else {
+              toastr["warning"]( data.msg );
+            }
+          },
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json'
+      });
+    })
+    j(document).on('change','select#selProvinsi.form-control',function(){
+      selKota( j(this).val() )
+    })
+    function selProvinsi(){
+      j.get('<?php echo base_url() ?>rajaongkir/province',function(data){
+        var html= `<option value="" selected disabled> -- Pilih Provinsi -- </option>`
+        j.each(data.rajaongkir.results, function(i,item){
+          html += `<option value="${item.province_id}">${item.province}</option>`
+        })
+        j('select#selProvinsi.form-control').html( html )
+        
+      },'json')
+    }
+    function selKota(province_id){
+      j.get('<?php echo base_url() ?>rajaongkir/city?province='+province_id,function(data){
+        var html= `<option value="" selected disabled> -- Pilih Kota -- </option>`
+        j.each(data.rajaongkir.results, function(i,item){
+          html += `<option value="${item.city_id}">${item.city_name}</option>`
+        })
+        j('select#selKota.form-control').html( html )
+        
+      },'json')
+    }
+    /* End alamat */
   /* End Pelanggan Js */
   // toastr["success"]( 'data.msg' );
 /*   toastr.options.onShown = function() { console.log('hello'); }
@@ -498,64 +554,9 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
           dataType: 'json'
       });
     })
-  selProvinsi()
-  $(document).on('change','#selProvinsi',function(){
-    selProvinsi(j(this).val())
-    selKabupaten({"provinsi":j(this).val()})
-    selKota()
-  })
-  $(document).on('change','#selKabupaten',function(){
-    selKabupaten({"provinsi":j('#selProvinsi').val(),"kabupaten":j(this).val()})
-    selKota({"kabupaten":j(this).val()})
-  })
-  $(document).on('change','#selKota',function(){
-    selKota({"kabupaten":j('#selKabupaten').val(),"kota":j(this).val()})
-  })
-  function selProvinsi(option=null){
-    if (option==null) {
-      j.get('<?php echo base_url() ?>provinsi',function(data){
-        var _selProvinsi= j('#selProvinsi').html(data.html);      
-        _selProvinsi.html(data.html);      
-        _selProvinsi.attr('data-provinsi',null);      
-      },'json')  
-      
-    } else {
-      j.get('<?php echo base_url() ?>provinsi',{"provinsi":option},function(data){
-        var _selProvinsi= j('#selProvinsi').html(data.html);      
-        _selProvinsi.html(data.html);      
-        _selProvinsi.attr('data-provinsi',option);      
-      },'json')  
-      
-    }
-  }
-  function selKabupaten(option=null){
-    if (option==null) {
-      j.get('<?php echo base_url() ?>kabupaten',function(data){
-        var _selKabupaten= j('#selKabupaten').html(data.html);      
-        _selKabupaten.html(data.html);      
-        _selKabupaten.attr('data-kabupaten','');      
-      },'json')  
-      
-    } else {
-      if ( option.kabupaten==undefined ) {
-        j.get('<?php echo base_url() ?>kabupaten',{"provinsi":option.provinsi},function(data){
-          var _selKabupaten= j('#selKabupaten').html(data.html);      
-          _selKabupaten.html(data.html);      
-          _selKabupaten.attr('data-kabupaten','');      
-        },'json')  
-        
-      } else {
-          j.get('<?php echo base_url() ?>kabupaten',{"provinsi":option.provinsi,"kabupaten":option.kabupaten},function(data){
-            var _selKabupaten= j('#selKabupaten').html(data.html);      
-            _selKabupaten.html(data.html);      
-            _selKabupaten.attr('data-kabupaten',option.kabupaten);      
-          },'json')  
-        
-      }
-      
-    }
-  }
-  function selKota(option=null){
+  
+  
+  /* function selKota(option=null){
     if (option==null) {
       j.get('<?php echo base_url() ?>kota',function(data){
         var _selKota= j('#selKota').html(data.html);      
@@ -592,7 +593,7 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
       
     }
     // console.log(option)
-  }
+  } */
   /* form */
 
   /* update biaya kirim */

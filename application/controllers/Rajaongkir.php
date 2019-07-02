@@ -32,24 +32,14 @@ class Rajaongkir extends CI_Controller {
 		if ($err) {
 		  echo "cURL Error #:" . $err;
 		} else {
-			echo '<pre>';
-			print_r(json_decode($response));
-			echo '</pre>';
+			echo $response;
 		}
 	}
 	public function city()
 	{
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
-		CURLOPT_URL => "https://api.rajaongkir.com/starter/city".(
-																	empty( $this->input->get('id') )
-																		? null
-																		: (
-																			empty( $this->input->get('province') )
-																			? '?id='.$this->input->get('id')
-																			: '?id='.$this->input->get('id') .'&province='.$this->input->get('province')
-																		)
-																),
+		CURLOPT_URL => "https://api.rajaongkir.com/starter/city?province=" .$this->input->get('province'),
 		CURLOPT_RETURNTRANSFER => true,
 		CURLOPT_ENCODING => "",
 		CURLOPT_MAXREDIRS => 10,
@@ -69,9 +59,7 @@ class Rajaongkir extends CI_Controller {
 		if ($err) {
 		echo "cURL Error #:" . $err;
 		} else {
-			echo '<pre>';
-			print_r(json_decode($response));
-			echo '</pre>';
+			echo $response;
 		}
 	}
 	public function cost()

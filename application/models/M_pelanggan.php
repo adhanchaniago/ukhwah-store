@@ -36,6 +36,10 @@ class M_pelanggan extends CI_Model{
     {
         return $this->db->get_where('tb_pelanggan',['id_pelanggan'=> $this->session->userdata('pelanggan')['id'] ])->row();
     }
+    public function alamat_user()
+    {
+        return $this->db->get_where('tb_alamat',['id_pelanggan'=> $this->session->userdata('pelanggan')['id'] ])->result_object();
+    }
 
     # store tb pemesanan
     public function store_pemesanan()
