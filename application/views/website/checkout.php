@@ -27,7 +27,7 @@
                 echo '
                   <tr>
                     <td class="text-center"><a href="'.base_url('produk/detail/' .$value['id'] .'/' .$value['name']).'" ><img width="75px" src="'.base_url('src/produk/128/' .$value['options']['image']).'" alt="'.$value['name'].'" title="'.$value['name'].'" class="img-thumbnail"></a></td>
-                    <td class="text-left"><a href="'.base_url('produk/detail/' .$value['id'] .'/' .$value['name']).'">'.$value['name'].'</a></td>
+                    <td class="text-left"><a href="'.base_url('produk/detail/' .$value['id'] .'/' .$value['name']).'">'.$value['name'].'</a>'.(!empty($value['options']['size'])? '<br><span class="badge badge-info">Ukuran : ('.$value['options']['size'].')</span>' : null ).'</td>
                     <td class="text-left">'.$value['options']['category'].'</td>
                     <td class="text-left">
                       <div class="qty">
