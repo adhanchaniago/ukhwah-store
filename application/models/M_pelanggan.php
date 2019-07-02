@@ -41,6 +41,22 @@ class M_pelanggan extends CI_Model{
         return $this->db->get_where('tb_alamat',['id_pelanggan'=> $this->session->userdata('pelanggan')['id'] ])->result_object();
     }
 
+    # store tb alamat
+    public function store_alamat()
+    {
+        $data=[
+            'id_pelanggan'=>$this->session->userdata('pelanggan')["id"],
+            'id_provinsi'=>$this->post['provinsi'],
+            'id_kota'=>$this->post['kota'],
+            'alamat_sebagai'=>$this->post['address_by'],
+            'nama_penerima'=>$this->post['name'],
+            'no_telepon'=>$this->post['phone'],
+            'kode_pos'=>$this->post['postcode'],
+            'alamat_lengkap'=>$this->post['fulladdress'],
+        ];
+        return $this->db->insert('tb_alamat',$data);
+    }
+
     # store tb pemesanan
     public function store_pemesanan()
     {

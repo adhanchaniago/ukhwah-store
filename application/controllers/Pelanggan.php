@@ -373,4 +373,26 @@ class Pelanggan extends MY_Controller{
         echo json_encode($this->html);
     }
     /* ==================== End Form Add New Alamat ==================== */
+
+    /* ==================== Start Proses Simpan Alamat ==================== */
+    public function store_alamat()
+    {
+        $this->m_pelanggan->post= $this->input->post();
+        if ( $this->m_pelanggan->store_alamat() ) {
+            # code...
+            $this->msg= [
+                'stats'=>1,
+                'msg'=>'Alamat Baru Berhasil Ditambahkan'
+            ];
+        } else {
+            # code...
+            $this->msg= [
+                'stats'=>0,
+                'msg'=>'Alamat Baru Gagal Ditambahkan'
+            ];
+        }
+        
+        echo json_encode($this->msg);
+    }
+    /* ==================== End Proses Simpan Alamat ==================== */
 }
