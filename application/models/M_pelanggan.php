@@ -40,21 +40,60 @@ class M_pelanggan extends CI_Model{
     {
         return $this->db->get_where('tb_alamat',['id_pelanggan'=> $this->session->userdata('pelanggan')['id'] ])->result_object();
     }
-
+    # get satu alamat
+    public function get_one_alamat($id)
+    {
+        return $this->db->get_where('tb_alamat',['id'=> $id ])->row();
+    }
     # store tb alamat
     public function store_alamat()
     {
         $data=[
             'id_pelanggan'=>$this->session->userdata('pelanggan')["id"],
             'id_provinsi'=>$this->post['provinsi'],
+            'nama_provinsi'=>$this->post['nama_provinsi'],
             'id_kota'=>$this->post['kota'],
+            'nama_kota'=>$this->post['nama_kota'],
+            'alamat_sebagai'=>$this->post['address_by'],
+            'nama_penerima'=>$this->post['name'],
+            'no_telepon'=>$this->post['phone'],
+            'kode_pos'=>$this->post['postcode'],
+            'alamat_lengkap'=>$this->post['fulladdress'],
+            'status'=>0
+        ];
+        return $this->db->insert('tb_alamat',$data);
+    }
+    # update tb alamat
+    public function update_alamat($id)
+    {
+        $data=[
+            'id_provinsi'=>$this->post['provinsi'],
+            'nama_provinsi'=>$this->post['nama_provinsi'],
+            'id_kota'=>$this->post['kota'],
+            'nama_kota'=>$this->post['nama_kota'],
             'alamat_sebagai'=>$this->post['address_by'],
             'nama_penerima'=>$this->post['name'],
             'no_telepon'=>$this->post['phone'],
             'kode_pos'=>$this->post['postcode'],
             'alamat_lengkap'=>$this->post['fulladdress'],
         ];
-        return $this->db->insert('tb_alamat',$data);
+        return $this->db->update('tb_alamat',$data,['id'=>$id]);
+    }
+
+    # remove tb alamat
+    public function remove_alamat($id)
+    {
+        return $this->db->delete('tb_alamat',['id'=>$id]);
+    }
+
+    # set tb alamat
+    public function set_alamat($id)
+    {
+        $this->db->update('tb_alamat',['status'=>1],['id'=>$id]);
+
+        $this->db->where('id !=', $id);
+        $this->db->update('tb_alamat',['status'=>0]);
+        return 1;
     }
 
     # store tb pemesanan

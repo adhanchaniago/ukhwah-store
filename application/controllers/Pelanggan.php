@@ -200,10 +200,42 @@ class Pelanggan extends MY_Controller{
         //     'level' => 'pelanggan'
         // );
         $row_user= $this->session->userdata('pelanggan');
-        $alamat= "";
-        foreach ($this->m_pelanggan->alamat_user() as $key => $value) {
-            
-        }
+        $alamat= '
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nama Alamat</th>
+                        <th>Alamat</th>
+                        <th>Tindakan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                ';
+                foreach ($this->m_pelanggan->alamat_user() as $key => $value) {
+                    $alamat .= '
+                        <tr>
+                            <td><strong>'.$value->alamat_sebagai.'</strong></td>
+                            <td>
+                                <strong>'.$value->nama_penerima.'</strong><br>
+                                '.$value->alamat_lengkap.'<br>
+                                Kota/Kab. '.$value->nama_kota.' Provinsi. '.$value->nama_provinsi.', '.$value->kode_pos.'<br>
+                                Indonesia<br>
+                                Telepon/Handphone:&nbsp'.$value->no_telepon.' 
+                            </td>
+                            <td style="display: inline-flex;">
+                                '.($value->status==0 ? '<a title="Set Alamat Utama" href="'.base_url('set-alamat/' .$value->id).'" class="btn btn-primary set-primary">Set Utama</a>' : '<a title="Tambah Alamat Baru" href="#" class="btn btn-warning">Alamat Utama</a>').'
+                                <a title="Edit Informasi Alamat" href="'.base_url('form-edit-alamat/' .$value->id).'" class="btn btn-default edit">Edit</a>
+                                '.($value->status==0 ? '<a title="Hapus Alamat" href="'.base_url('remove-alamat/' .$value->id).'" class="btn btn-default delete">Hapus</a>' : null).'
+                            </td>
+                        </tr>
+                    ';
+                }
+        $alamat .= '
+                </tbody>
+            </table>
+        </div>
+        ';
         $this->html=[
             'html'=> '
                 <!-- Nav tabs -->
@@ -395,4 +427,119 @@ class Pelanggan extends MY_Controller{
         echo json_encode($this->msg);
     }
     /* ==================== End Proses Simpan Alamat ==================== */
+
+    /* ==================== Start Proses Hapus Alamat ==================== */
+    public function remove_alamat()
+    {
+        if ( $this->m_pelanggan->remove_alamat( $this->uri->segment(2) ) ) {
+            # code...
+            $this->msg= [
+                'stats'=>1,
+                'msg'=>'Alamat Berhasil Dihapus'
+            ];
+        } else {
+            # code...
+            $this->msg= [
+                'stats'=>0,
+                'msg'=>'Alamat Gagal Dihapus'
+            ];
+        }
+        
+        echo json_encode($this->msg);
+    }
+    /* ==================== End Proses Hapus Alamat ==================== */
+
+    /* ==================== Start Proses Set Utama Alamat ==================== */
+    public function set_alamat()
+    {
+        if ( $this->m_pelanggan->set_alamat( $this->uri->segment(2) ) ) {
+            # code...
+            $this->msg= [
+                'stats'=>1,
+                'msg'=>'Alamat Utama Berhasil Diubah'
+            ];
+        } else {
+            # code...
+            $this->msg= [
+                'stats'=>0,
+                'msg'=>'Alamat Utama Gagal Diubah'
+            ];
+        }
+        
+        echo json_encode($this->msg);
+    }
+    /* ==================== End Proses Set Utama Alamat ==================== */
+
+    /* ==================== Start Form Add New Alamat ==================== */
+    public function form_edit_alamat()
+    {
+        $row= $this->m_pelanggan->get_one_alamat( $this->uri->segment(2) );
+        $this->html=[
+            'html'=> '
+            <form method="POST" action="'.base_url('update-alamat/' .$row->id).'" id="formUpdateAlamat">
+                <div class="form-group">
+                    <label>Alamat Sebagai:</label>
+                    <input value="'.$row->alamat_sebagai.'" name="address_by" type="text" class="form-control" placeholder="Contoh: Kantor, Kos, Rumah, dll" required="">
+                </div>
+                <div class="form-group">
+                    <label>Nama Penerima:</label>
+                    <input value="'.$row->nama_penerima.'" name="name" type="text" class="form-control" placeholder="Isi Nama Lengkap" required="">
+                </div>
+                <div class="form-group">
+                    <label>No. Telepon:</label>
+                    <input value="'.$row->no_telepon.'" max="15" name="phone" type="telp" class="form-control" placeholder="Contoh : 08123456789" required="">
+                </div>
+                <div class="form-group">
+                    <label>Pilih Provinsi</label>
+                    <select name="provinsi" id="selProvinsi" class="form-control" data-provinsi="'.$row->id_provinsi.'" required>
+                        <option value="" selected disabled> -- Pilih Provinsi -- </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Pilih Kota</label>
+                    <select name="kota" id="selKota" class="form-control" data-kota="'.$row->id_kota.'" required>
+                        <option value="" selected disabled> -- Pilih Kota -- </option>
+                        <option value="" disabled> Maaf Anda Belum Memilih Provinsi </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kode Pos:</label>
+                    <input value="'.$row->kode_pos.'" name="postcode" type="number" class="form-control" placeholder="Isi Kode Pos" required="">
+                </div>
+                <div class="form-group">
+                    <label>Alamat Lengkap:</label>
+                    <textarea name="fulladdress" class="form-control" rows="5" placeholder="Isi nama jalan, nomor rumah, nama gedung, dsb" required="">'.$row->alamat_lengkap.'</textarea>
+                </div>
+                <!--<div class="checkbox">
+                    <label><input type="checkbox"> Remember me</label>
+                </div>-->
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        '];
+
+        echo json_encode($this->html);
+    }
+    /* ==================== End Form Add New Alamat ==================== */
+
+    /* ==================== Start Proses Update Alamat ==================== */
+    public function update_alamat()
+    {
+        $this->m_pelanggan->post= $this->input->post();
+        if ( $this->m_pelanggan->update_alamat( $this->uri->segment(2) ) ) {
+            # code...
+            $this->msg= [
+                'stats'=>1,
+                'msg'=>'Alamat Baru Berhasil Diubah'
+            ];
+        } else {
+            # code...
+            $this->msg= [
+                'stats'=>0,
+                'msg'=>'Alamat Baru Gagal Diubah'
+            ];
+        }
+        
+        echo json_encode($this->msg);
+    }
+    /* ==================== End Proses Update Alamat ==================== */
 }

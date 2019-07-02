@@ -459,6 +459,8 @@
     j(document).on('submit','#formStoreAlamat',function(e){
       e.preventDefault()
       var formData = new FormData(this);
+      formData.append('nama_provinsi', j('#selProvinsi option:selected').text() );
+      formData.append('nama_kota', j('#selKota option:selected').text() );
       $.ajax({
           url: $(this).attr("action"),
           type: 'POST',
@@ -478,28 +480,111 @@
           dataType: 'json'
       });
     })
+    j(document).on('click','a.set-primary', function(e){
+      e.preventDefault()
+      j.get(j(this).attr('href'),function(data){
+        if ( data.stats==1 ) {
+          toastr["success"]( data.msg );
+          settingUser('Informasi Pengaturan Akun')
+          users()
+        } else {
+          toastr["warning"]( data.msg );
+        }
+      },'json')
+    })
+    j(document).on('click','a.edit',function(e){
+      e.preventDefault()
+      j("div#myModal.modal.fade").find('.modal-title').html( j(this).attr('title') )
+      j.get(j(this).attr('href'),function(data){
+        j("div#myModal.modal.fade").find('.modal-body').html( data.html )
+        selProvinsi()
+        selKota( j('select#selProvinsi.form-control').attr('data-provinsi') )
+      },'json')
+      j("div#myModal.modal.fade").modal("show");
+    })
+    j(document).on('submit','#formUpdateAlamat',function(e){
+      e.preventDefault()
+      var formData = new FormData(this);
+      formData.append('nama_provinsi', j('#selProvinsi option:selected').text() );
+      formData.append('nama_kota', j('#selKota option:selected').text() );
+      $.ajax({
+          url: $(this).attr("action"),
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            if ( data.stats==1 ) {
+              toastr["success"]( data.msg );
+              settingUser('Informasi Pengaturan Akun')
+              users()
+            } else {
+              toastr["warning"]( data.msg );
+            }
+          },
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json'
+      });
+    })
+    j(document).on('click','a.delete', function(e){
+      e.preventDefault()
+      j.get(j(this).attr('href'),function(data){
+        if ( data.stats==1 ) {
+          toastr["success"]( data.msg );
+          settingUser('Informasi Pengaturan Akun')
+          users()
+        } else {
+          toastr["warning"]( data.msg );
+        }
+      },'json')
+    })
     j(document).on('change','select#selProvinsi.form-control',function(){
       selKota( j(this).val() )
     })
     function selProvinsi(){
-      j.get('<?php echo base_url() ?>rajaongkir/province',function(data){
-        var html= `<option value="" selected disabled> -- Pilih Provinsi -- </option>`
-        j.each(data.rajaongkir.results, function(i,item){
-          html += `<option value="${item.province_id}">${item.province}</option>`
-        })
-        j('select#selProvinsi.form-control').html( html )
-        
-      },'json')
+      if ( j('select#selProvinsi.form-control').attr('data-provinsi')=='' ) {
+        j.get('<?php echo base_url() ?>rajaongkir/province',function(data){
+          var html= `<option value="" selected disabled> -- Pilih Provinsi -- </option>`
+          j.each(data.rajaongkir.results, function(i,item){
+            html += `<option value="${item.province_id}">${item.province}</option>`
+          })
+          j('select#selProvinsi.form-control').html( html )
+          
+        },'json')
+
+      }else {
+        j.get('<?php echo base_url() ?>rajaongkir/province',function(data){
+          var html= `<option value="" disabled> -- Pilih Provinsi -- </option>`
+          j.each(data.rajaongkir.results, function(i,item){
+            html += `<option value="${item.province_id}" `+(j('select#selProvinsi.form-control').attr('data-provinsi')==item.province_id ? 'selected' : null)+`>${item.province}</option>`
+          })
+          j('select#selProvinsi.form-control').html( html )
+          
+        },'json')
+      }
     }
     function selKota(province_id){
-      j.get('<?php echo base_url() ?>rajaongkir/city?province='+province_id,function(data){
-        var html= `<option value="" selected disabled> -- Pilih Kota -- </option>`
-        j.each(data.rajaongkir.results, function(i,item){
-          html += `<option value="${item.city_id}">${item.city_name}</option>`
-        })
-        j('select#selKota.form-control').html( html )
-        
-      },'json')
+      if ( j('select#selProvinsi.form-control').attr('data-provinsi')=='' ) {
+        j.get('<?php echo base_url() ?>rajaongkir/city?province='+province_id,function(data){
+          var html= `<option value="" selected disabled> -- Pilih Kota -- </option>`
+          j.each(data.rajaongkir.results, function(i,item){
+            html += `<option value="${item.city_id}">${item.city_name}</option>`
+          })
+          j('select#selKota.form-control').html( html )
+          
+        },'json')
+
+      }else {
+        j.get('<?php echo base_url() ?>rajaongkir/city?province='+province_id,function(data){
+          var html= `<option value="" disabled> -- Pilih Kota -- </option>`
+          j.each(data.rajaongkir.results, function(i,item){
+            html += `<option value="${item.city_id}" `+(j('select#selKota.form-control').attr('data-kota')==item.city_id ? 'selected' : null)+`>${item.city_name}</option>`
+          })
+          j('select#selKota.form-control').html( html )
+          
+        },'json')
+      }
+      
     }
     /* End alamat */
   /* End Pelanggan Js */
