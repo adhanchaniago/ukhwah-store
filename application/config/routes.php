@@ -65,6 +65,7 @@ $route['login'] = 'pelanggan/login';
 $route['login-check'] = 'pelanggan/check';
 $route['users'] = 'pelanggan/users';
 $route['setting'] = 'pelanggan/setting';
+$route['form-edit-user'] = 'pelanggan/form-edit-user';
 $route['daftar'] = 'pelanggan/daftar';
 $route['logout'] = 'pelanggan/logout';
 $route['register'] = 'pelanggan/register';

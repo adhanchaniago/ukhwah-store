@@ -232,7 +232,7 @@ class Pelanggan extends MY_Controller{
                             </table>
                         </div>
                         <div class="buttons">
-                            <div class="pull-left"><a href="'.base_url('form-edit-user').'" id="formEditUser" class="btn btn-primary">Ubah Profil</a></div>
+                            <div class="pull-left"><a title="Ubah Informasi Profil" href="'.base_url('form-edit-user').'" id="formEditUser" class="btn btn-primary">Ubah Profil</a></div>
                         </div>
                     </div>
                     <div id="menu1" class="tab-pane fade">
@@ -249,36 +249,33 @@ class Pelanggan extends MY_Controller{
 
     public function form_edit_user()
     {
+        $row_user= $this->session->userdata('pelanggan');
         $this->html=[
             'html'=> '
-            <form method="POST" action="http://localhost/orders/2019-04/EKA/register" id="formDaftar">
+            <form method="POST" action="'.base_url('update-user').'" id="formUpdateUser">
                 <div class="form-group">
                     <label for="name">Nama Lengkap:</label>
-                    <input name="name" type="text" class="form-control" id="name" placeholder="Masukan Nama Disini" required="">
-                </div>
-                <div class="form-group">
-                    <label for="address">Alamat:</label>
-                    <textarea name="address" class="form-control" rows="5" id="address" placeholder="Masukan Alamat Disini ..." required=""></textarea>
+                    <input value="'.$row_user["nama"].'" name="name" type="text" class="form-control" id="name" placeholder="Masukan Nama Disini" required="">
                 </div>
                 <div class="form-group">
                     <label for="phone">No Telpon:</label>
-                    <input name="phone" type="telp" class="form-control" id="phone" placeholder="+628123456789" required="">
+                    <input value="'.$row_user["no_handphone"].'" name="phone" type="telp" class="form-control" id="phone" placeholder="+628123456789" required="">
                 </div>
                 <div class="form-group">
                     <label for="username">Username:</label>
-                    <input name="username" type="text" class="form-control" id="username" placeholder="Masukan Username Disini" required="">
+                    <input value="'.$row_user["username"].'" readonly name="username" type="text" class="form-control" id="username" placeholder="Masukan Username Disini">
                 </div>
                 <div class="form-group">
-                    <label for="pwd">Password:</label>
-                    <input name="password" type="password" class="form-control" id="pwd" placeholder="********" required="">
+                    <label for="pwd">Password: <span class="badge">Jika Password Tidak Diganti Dikosongkan Saja</span></label>
+                    <input name="password" type="password" class="form-control" id="pwd" placeholder="********">
                 </div>
                 <!--<div class="checkbox">
                     <label><input type="checkbox"> Remember me</label>
                 </div>-->
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
-        ';
-        
+        '];
+
         echo json_encode($this->html);
     }
 }

@@ -418,7 +418,11 @@
     }
     j(document).on('click','a#formEditUser',function(e){
       e.preventDefault()
-      console.log(this)
+      j("div#myModal.modal.fade").find('.modal-title').html( j(this).attr('title') )
+      j.get('<?php echo base_url() ?>form-edit-user',function(data){
+        j("div#myModal.modal.fade").find('.modal-body').html( data.html )
+      },'json')
+      j("div#myModal.modal.fade").modal("show");
     })
   /* End Pelanggan Js */
   // toastr["success"]( 'data.msg' );
