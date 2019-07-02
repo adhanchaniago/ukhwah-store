@@ -20,6 +20,22 @@ class M_pelanggan extends CI_Model{
         ];
         return $this->db->insert('tb_pelanggan',$data);
     }
+    # update tb pelanggan
+    public function update_user()
+    {
+        $data=[
+            'nama'=>$this->post['name'],
+            'no_handphone'=>$this->post['phone'],
+        ];
+        if ( ! empty( $this->post['password'] ) ) {
+            $data['password']= $this->post['password'];
+        }
+        return $this->db->update('tb_pelanggan',$data,['id_pelanggan'=> $this->session->userdata('pelanggan')['id'] ]);
+    }
+    public function row_user()
+    {
+        return $this->db->get_where('tb_pelanggan',['id_pelanggan'=> $this->session->userdata('pelanggan')['id'] ])->row();
+    }
 
     # store tb pemesanan
     public function store_pemesanan()

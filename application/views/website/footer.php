@@ -424,6 +424,28 @@
       },'json')
       j("div#myModal.modal.fade").modal("show");
     })
+    j(document).on('submit','#formUpdateUser',function(e){
+      e.preventDefault()
+      var formData = new FormData(this);
+      $.ajax({
+          url: $(this).attr("action"),
+          type: 'POST',
+          data: formData,
+          success: function (data) {
+            if ( data.stats==1 ) {
+              toastr["success"]( data.msg );
+              settingUser('Informasi Pengaturan Akun')
+              users()
+            } else {
+              toastr["warning"]( data.msg );
+            }
+          },
+          cache: false,
+          contentType: false,
+          processData: false,
+          dataType: 'json'
+      });
+    })
   /* End Pelanggan Js */
   // toastr["success"]( 'data.msg' );
 /*   toastr.options.onShown = function() { console.log('hello'); }

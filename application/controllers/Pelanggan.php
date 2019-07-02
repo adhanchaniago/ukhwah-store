@@ -278,4 +278,38 @@ class Pelanggan extends MY_Controller{
 
         echo json_encode($this->html);
     }
+
+    public function update_user()
+    {
+        $this->m_pelanggan->post= $this->input->post();
+        if ( $this->m_pelanggan->update_user() ) {
+            # code...
+            $row= $this->m_pelanggan->row_user();
+            $data_session = array(
+                'id' => $row->id_pelanggan,
+                'username' => $row->username,
+                'password' => $row->password,
+                'nama' => $row->nama,
+                'alamat' => $row->alamat,
+                'no_handphone' => $row->no_handphone,
+                'status' => 1,
+                'level' => 'pelanggan'
+            );
+        
+            $this->session->set_userdata(['pelanggan'=>$data_session]);
+
+            $this->msg= [
+                'stats'=>1,
+                'msg'=>'Informasi Profil Anda Telah Berhasil Diubah'
+            ];
+        } else {
+            # code...
+            $this->msg= [
+                'stats'=>0,
+                'msg'=>'Informasi Profil Anda Gagal Diubah'
+            ];
+        }
+        
+        echo json_encode($this->msg);
+    }
 }
