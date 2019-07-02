@@ -34,6 +34,9 @@ class Cart extends CI_Controller
 				'weight' => $row->berat,
 			],
 		];
+		if ( !empty($this->input->post('size')) ) {
+			$data['options']['size']= $this->input->post('size');
+		}
 
 		# masukan ke cart
 		$this->cart->insert($data);
@@ -104,7 +107,7 @@ class Cart extends CI_Controller
 				$rows['items'] .= '
 					<tr>
 						<td class="text-center"><a href="'.base_url( 'produk/detail/' .$value['id'] .'/' .$value['name'] ).'"><img width="50px" class="img-thumbnail" title="Medali SJ118" alt="Medali SJ118" src="'.base_url('src/produk/128/' .$value['options']['image']).'"></a></td>
-						<td class="text-left"><a href="'.base_url( 'produk/detail/' .$value['id'] .'/' .$value['name'] ).'">'.$value['name'].'</a></td>
+						<td class="text-left"><a href="'.base_url( 'produk/detail/' .$value['id'] .'/' .$value['name'] ).'">'.$value['name'].'</a>'.(!empty($value['options']['size'])? '<br><span class="badge badge-info">Ukuran : ('.$value['options']['size'].')</span>' : null ).'</td>
 						<td class="text-right">x '.$value['qty'].'</td>
 						<td class="text-right">'.idr($value['subtotal']).'</td>
 						<td class="text-center"><button rowid="'.$value['rowid'].'" class="btn btn-danger btn-xs removeItemNav" title="Hapus Produk '.$value['name'].'" type="button"><i class="fa fa-times"></i></button></td>
