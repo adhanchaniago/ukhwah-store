@@ -103,9 +103,17 @@ class Rajaongkir extends CI_Controller {
 	{
 		return [
 			'jne',
-			'post',
+			'pos',
 			'tiki',
 		];
+	}
+	public function courier_html_option()
+	{
+		$html= "<option value='' selected disabled> --Pilih Kurir-- </option>";
+		foreach ($this->courier() as $key => $value) {
+			$html .= "<option value='{$value}'>{$value}</option>";
+		}
+		echo $html;
 	}
   
 }

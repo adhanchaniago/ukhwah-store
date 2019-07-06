@@ -639,6 +639,18 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
           dataType: 'json'
       });
     })
+
+    $.get('<?php echo base_url() ?>rajaongkir/courier-html-option',function(html){
+      $('#kurir').html( html )
+    },'html')
+
+    $('select#kurir').on('change',function(){
+      var _kurir= $(this).val();
+      // console.log(_kurir)
+      $.get('<?php echo base_url() ?>rajaongkir/cost/?courier='+_kurir,function(html){
+        $('div#kurirDetail').html(html).css("display","block");
+      },'html')
+    })
   
   
   /* function selKota(option=null){

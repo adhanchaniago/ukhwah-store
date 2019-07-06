@@ -84,75 +84,45 @@
     <div class="col-sm-6">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title"><i class="fa fa-book"></i> Alamat</h4>
+            <h4 class="panel-title">Detail Pembeli</h4>
           </div>
           <div class="panel-body">
-            <fieldset id="address" class="required">
-              <div class="form-group required">
-                <label name="postcode" for="input-payment-postcode" class="control-label">Pilih Provinsi</label>
-                <select name="provinsi" id="selProvinsi" class="form-control" data-provinsi="" required>
-                  <option value="" selected disabled> -- Pilih Provinsi -- </option>
-                </select>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                dfsf
               </div>
-              <div class="form-group required">
-                <label name="postcode" for="input-payment-postcode" class="control-label">Pilih Kabupaten</label>
-                <select name="kabupaten" id="selKabupaten" class="form-control" data-kabupaten="" required>
-                  <option value="" selected disabled> -- Pilih Kabupaten -- </option>
-                  <option value="" disabled> Maaf Anda Belum Memilih Provinsi </option>
-                </select>
+              <div class="panel-body">
+                Kost Pak Sapto
+                Kos Pak Sapto, Pengok Kidul GK IV 1094A RT 026 rw 007 kel. Baciro ,Kota Yogyakarta
+                Gondokusuman, Yogyakarta
+                Daerah Istimewa Yogyakarta, 55225
+                Indonesia
+                628122530688
               </div>
-              <div class="form-group required">
-                <label name="postcode" for="input-payment-postcode" class="control-label">Pilih Kota</label>
-                <select name="kota" id="selKota" class="form-control" data-kota="" data-biaya="" required>
-                  <option value="" selected disabled> -- Pilih Kota -- </option>
-                  <option value="" disabled> Maaf Anda Belum Memilih Kabupaten </option>
-                </select>
-              </div>
-              <div class="form-group required">
-                <label for="input-payment-alamat-lengkap" class="control-label">Upload Bukti Pembayaran <small class="text-info">(Jumlah Harus Sesuai Total Pembayaran)</small></label>
-                <input name="fupload" type="file" class="form-control" required>
-              </div>
-              <div class="form-group required">
-                <label for="input-payment-alamat-lengkap" class="control-label">Alamat Lengkap</label>
-                <textarea id="input-payment-full-address" name="full_address" rows="5" class="form-control" placeholder="Alamat lengkap"><?php echo $this->session->userdata('pelanggan')['alamat'] ?></textarea>
-              </div>
-              <!-- 
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" checked="checked" value="1" name="shipping_address">
-                  My delivery and billing addresses are the same.</label>
-              </div> -->
-            </fieldset>
+            </div>
+            <input type="hidden" name="kota" id="selKota" class="form-control" data-kota="" data-biaya="" required>
+            <div class="form-group required">
+              <label>Upload Bukti Pembayaran <small class="text-info">(Jumlah Harus Sesuai Total Pembayaran)</small></label>
+              <input name="fupload" type="file" class="form-control" required>
+            </div>
+            <div class="form-group required">
+              <label for="">Kurir</label>
+              <select name="kurir" id="kurir" class="form-control text-uppercase">
+              </select>
+              <div id="kurirDetail" style="border: 1px solid #eee;padding: 1em;display:none"></div>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-sm-6">
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h4 class="panel-title"><i class="fa fa-user"></i> Informasi Pribadi</h4>
-          </div>
-            <div class="panel-body">
-              <fieldset id="account">
-                <div class="form-group required">
-                  <label for="input-payment-firstname" class="control-label">Nama Lengkap</label>
-                  <input required type="text" class="form-control text-capitalize" placeholder="Nama Lengkap" value="<?php echo $this->session->userdata('pelanggan')['nama'] ?>" name="fullname">
-                </div>
-                <div class="form-group required">
-                  <label for="input-payment-telephone" class="control-label">Telepon</label>
-                  <input required type="text" class="form-control" placeholder="Telepon" value="<?php echo $this->session->userdata('pelanggan')['no_handphone'] ?>" name="phone">
-                </div>
-              </fieldset>
-            </div>
-        </div>
-        <!-- ./ end row -->
         <div class="row">
           <div class="col-sm-12">
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title"><i class="fa fa-pencil"></i> Tambahkan Komentar Tentang Pemesanan</h4>
+                <h4 class="panel-title">Tambahkan Komentar Tentang Pemesanan</h4>
               </div>
               <div class="panel-body">
-                <textarea rows="4" class="form-control" id="confirm_comment" name="comments"></textarea>
+                <textarea rows="4" class="form-control" id="confirm_comment" name="comments" placeholder="Isi tambahan informasi untuk pemesanan anda ..."></textarea>
                 <br>
                 <label class="control-label" for="confirm_agree">
                   <!-- <input type="checkbox" checked="checked" value="1" required="" class="validate required" id="confirm_agree" name="confirm agree"> -->
