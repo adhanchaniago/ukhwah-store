@@ -40,6 +40,17 @@ class M_pelanggan extends CI_Model{
     {
         return $this->db->get_where('tb_alamat',['id_pelanggan'=> $this->session->userdata('pelanggan')['id'] ])->result_object();
     }
+    # mendapatkan alamat user aktif
+    public function alamat_user_aktif()
+    {
+        $this->db->select('*');
+        $this->db->from('tb_alamat');
+        $this->db->where([
+            'id_pelanggan'=> $this->session->userdata('pelanggan')['id'],
+            'status'=> 1 
+        ]);
+        return $this->db->get()->row();
+    }
     # get satu alamat
     public function get_one_alamat($id)
     {

@@ -12,7 +12,7 @@
               <td class="text-left">Produk</td>
               <td class="text-left">Kategori</td>
               <td class="text-left">Jumlah</td>
-              <td class="text-left">Berat(Kg)</td>
+              <td class="text-left">Berat(Gram)</td>
               <td class="text-right">Harga</td>
               <td class="text-right">Sub-Total</td>
               <td class="text-center"></td>
@@ -20,9 +20,10 @@
           </thead>
           <tbody>
             <?php
-              // echo "<pre>";
-              // print_r($this->session->userdata());
-              // echo "</pre>";
+              echo "<pre>";
+              print_r($this->session->userdata());
+              print_r($rows_address);
+              echo "</pre>";
               foreach ($rows as $key => $value) {
                 echo '
                   <tr>
@@ -39,7 +40,7 @@
                         <div class="clear"></div>
                       </div>
                     </td>
-                    <td class="text-right weight">'.( ($value['qty']*$value['options']['weight']) / 1000  ).'</td>
+                    <td class="text-right weight">'.( ($value['qty']*$value['options']['weight']) ).'</td>
                     <td class="text-right">'.idr($value['price']).'</td>
                     <td class="text-right subtotal">'.idr($value['subtotal']).'</td>
                     <td><button class="btn btn-danger btn-xs removeItemViewCart" title="Hapus '.$value['name'].'" type="button"><i class="fa fa-times"></i></button></td>
@@ -89,25 +90,55 @@
           <div class="panel-body">
             <div class="panel panel-default">
               <div class="panel-heading">
-                dfsf
+                <div style="display:flow-root">
+                  <div style="float:left">
+                    <h5><strong><?php echo $address->nama_penerima ?></strong></h5>
+                  </div>
+                  <div style="float:right">
+                    <div class="dropdown">
+                      <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown">Kirim ke alamat lain
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu dropdown-menu-right">
+                        <?php
+                          foreach ($rows_address as $key => $value) {
+                            echo ($key==0? null : "<li class='divider'></li>" )
+                            ."<li>
+                              <a href='#'>
+                                <strong>{$value->nama_penerima} ({$value->alamat_sebagai})</strong><br>
+                                {$address->alamat_lengkap}<br>
+                                Kota/Kab. {$address->nama_kota} Provinsi. {$address->nama_provinsi}, {$address->kode_pos}<br>
+                                Indonesia<br>
+                                Telepon/Handphone:&nbsp{$address->no_telepon}
+                                </a>
+                            </li>";
+                          }
+                        ?>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="panel-body">
-                Kost Pak Sapto
-                Kos Pak Sapto, Pengok Kidul GK IV 1094A RT 026 rw 007 kel. Baciro ,Kota Yogyakarta
-                Gondokusuman, Yogyakarta
-                Daerah Istimewa Yogyakarta, 55225
-                Indonesia
-                628122530688
+                <p>
+                  <?php
+                    echo "
+                      {$address->alamat_lengkap}<br>
+                      Kota/Kab. {$address->nama_kota} Provinsi. {$address->nama_provinsi}, {$address->kode_pos}<br>
+                      Indonesia<br>
+                      Telepon/Handphone:&nbsp{$address->no_telepon}
+                    ";
+                  ?>
+                </p>
               </div>
             </div>
-            <input type="hidden" name="kota" id="selKota" class="form-control" data-kota="" data-biaya="" required>
             <div class="form-group required">
               <label>Upload Bukti Pembayaran <small class="text-info">(Jumlah Harus Sesuai Total Pembayaran)</small></label>
               <input name="fupload" type="file" class="form-control" required>
             </div>
             <div class="form-group required">
               <label for="">Kurir</label>
-              <select name="kurir" id="kurir" class="form-control">
+              <select name="kurir" id="kurir" class="form-control" required="">
+                <option value="10000">10000</option>
               </select>
             </div>
           </div>
@@ -121,14 +152,13 @@
                 <h4 class="panel-title">Tambahkan Komentar Tentang Pemesanan</h4>
               </div>
               <div class="panel-body">
-                <textarea rows="4" class="form-control" id="confirm_comment" name="comments" placeholder="Isi tambahan informasi untuk pemesanan anda ..."></textarea>
+                <textarea rows="4" class="form-control" id="confirm_comment" name="comments" placeholder="Tambahan informasi untuk pemesanan anda ..."></textarea>
                 <br>
                 <label class="control-label" for="confirm_agree">
-                  <!-- <input type="checkbox" checked="checked" value="1" required="" class="validate required" id="confirm_agree" name="confirm agree"> -->
-                  <!-- <span>I have read and agree to the <a class="agree" href="#"><b>Terms &amp; Conditions</b></a></span> </label> -->
                 <div class="buttons">
                   <div class="pull-right">
                     <input type="hidden" name="id_pelanggan" value="<?php echo $this->session->userdata('pelanggan')['id'] ?>">
+                    <input type="hidden" name="id_kota" value="<?php echo $address->id ?>">
                     <input id="formKodeUnik" type="hidden" name="kode_unik" value="">
                     <input id="formBiayaOngkir" type="hidden" name="biaya_ongkir" value="">
                     <input type="submit" class="btn btn-primary payment-confirm" id="button-confirm" value="Kirim Pemesanan">

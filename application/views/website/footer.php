@@ -644,13 +644,13 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
       $('#kurir').html( html )
     },'html')
 
-    $('select#kurir').on('change',function(){
-      var _kurir= $(this).val();
-      // console.log(_kurir)
-      $.get('<?php echo base_url() ?>rajaongkir/cost/?courier='+_kurir,function(html){
-        $('div#kurirDetail').html(html).css("display","block");
-      },'html')
-    })
+    // $('select#kurir').on('change',function(){
+    //   var _kurir= $(this).val();
+    //   // console.log(_kurir)
+    //   $.get('<?php echo base_url() ?>rajaongkir/cost/?courier='+_kurir,function(html){
+    //     $('div#kurirDetail').html(html).css("display","block");
+    //   },'html')
+    // })
   
   
   /* function selKota(option=null){
@@ -694,17 +694,23 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
   /* form */
 
   /* update biaya kirim */
-  // biayaKirim()
+  biayaKirim()
   function biayaKirim()
   {
-    $('.biaya-kirim').attr('data-biaya',$('#selKota').attr('data-biaya'));
-    _weight_total= j('.biaya-kirim').attr('data-weight',Math.ceil(getWeightTotal()))
-    var _total= (idrToNumber(j('.total').html()));
-    var _kode_unik= (j('.kode-unik').html()*1);
-    var _biaya_kirim= _weight_total.html('Rp. '+formatRupiah(_weight_total.attr('data-biaya')*_weight_total.attr('data-weight')*1));
-    j('.total-pembayaran').html('Rp. '+formatRupiah(_total+_kode_unik+idrToNumber(_biaya_kirim.html() ) ) )
-    j('#formKodeUnik').val(_kode_unik)
-    j('#formBiayaOngkir').val(j('#selKota').attr('data-biaya')*1)
+    var data= {
+      "weight" : j(document).find('.biaya-kirim').attr('data-weight'),
+      "kurir" : j(document).find('select#kurir option:selected').val()
+    }
+    console.log(data)
+
+    // $('.biaya-kirim').attr('data-biaya',$('#selKota').attr('data-biaya'));
+    // _weight_total= j('.biaya-kirim').attr('data-weight',Math.ceil(getWeightTotal()))
+    // var _total= (idrToNumber(j('.total').html()));
+    // var _kode_unik= (j('.kode-unik').html()*1);
+    // var _biaya_kirim= _weight_total.html('Rp. '+formatRupiah(_weight_total.attr('data-biaya')*_weight_total.attr('data-weight')*1));
+    // j('.total-pembayaran').html('Rp. '+formatRupiah(_total+_kode_unik+idrToNumber(_biaya_kirim.html() ) ) )
+    // j('#formKodeUnik').val(_kode_unik)
+    // j('#formBiayaOngkir').val(j('#selKota').attr('data-biaya')*1)
   }
 
   /* Fungsi formatRupiah */

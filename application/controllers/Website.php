@@ -5,7 +5,7 @@ class Website extends MY_Controller{
 	function __construct(){
 		parent::__construct();
 	
-		$this->load->model('m_website');
+		$this->load->model(['m_website','m_pelanggan']);
     }
     
     public function index()
@@ -97,6 +97,8 @@ class Website extends MY_Controller{
         $this->load->helper('currency');
         $this->load->library('cart');
         $this->content['rows']= $this->cart->contents();
+        $this->content['address']= $this->m_pelanggan->alamat_user_aktif();
+        $this->content['rows_address']= $this->m_pelanggan->alamat_user();
         $this->view= 'website/checkout';
         $this->render_websites();
     }
