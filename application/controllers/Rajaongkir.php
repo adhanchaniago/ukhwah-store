@@ -62,7 +62,7 @@ class Rajaongkir extends CI_Controller {
 			echo $response;
 		}
 	}
-	public function cost()
+	public function cost($data)
 	{
 		$curl = curl_init();
 
@@ -74,11 +74,7 @@ class Rajaongkir extends CI_Controller {
 		CURLOPT_TIMEOUT => 30,
 		CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 		CURLOPT_CUSTOMREQUEST => "POST",
-		CURLOPT_POSTFIELDS => "origin=501&destination=114&weight=1700" .( 
-								empty($this->input->get('courier'))
-								? null
-								: '&courier=' .$this->input->get('courier')
-							),
+		CURLOPT_POSTFIELDS => "origin=501&destination={$data['destination']}&weight={$data['weight']}&courier={$data['courier']}",
 		// CURLOPT_POSTFIELDS => "origin=501&destination=114&weight=1700&courier=jne",
 		CURLOPT_HTTPHEADER => array(
 			"content-type: application/x-www-form-urlencoded",
@@ -92,11 +88,9 @@ class Rajaongkir extends CI_Controller {
 		curl_close($curl);
 
 		if ($err) {
-		echo "cURL Error #:" . $err;
+			return "cURL Error #:" . $err;
 		} else {
-			echo '<pre>';
-			print_r(json_decode($response));
-			echo '</pre>';
+			return $response;
 		}
 	}
 	public function courier()
@@ -107,11 +101,44 @@ class Rajaongkir extends CI_Controller {
 			'tiki',
 		];
 	}
+	public function cost_all($get=null){
+		$data= [];
+		foreach ($this->courier() as $key => $value) {
+			$kurir= json_decode(
+				$this->cost([
+					'destination'=> $get['destination'],
+					'weight'=> $get['weight'],
+					'courier'=> $value,
+				])
+			)->rajaongkir->results;
+
+			foreach ($kurir as $key_kurir => $value_kurir) {
+				$code= strtoupper( $value_kurir->code );
+				foreach ($value_kurir->costs as $key_costs => $value_costs) {
+					$service= $value_costs->service;
+					foreach ($value_costs->cost as $key_cost => $value_cost) {
+						$data[]= [
+							'code'=> $code,
+							'service'=> $service,
+							'etd'=> $value_cost->etd .($code=='POS'? null : ' HARI' ),
+							'value'=> $value_cost->value,
+						];
+					}
+				}
+			}
+		}
+		return $data;
+	}
 	public function courier_html_option()
 	{
-		$html= "<option value='' selected disabled> --Pilih Kurir-- </option>";
-		foreach ($this->courier() as $key => $value) {
-			$html .= "<option value='{$value}'>{$value}</option>";
+		$this->load->helper('currency');
+		$rows= $this->cost_all([
+			'destination'=> 114,
+			'weight'=> 200,
+		]);
+		$html= "";
+		foreach ($rows as $key => $value) {
+			$html .= "<option value='{$value["value"]}'>{$value["code"]} {$value["service"]} ({$value["etd"]}) - ".idr($value['value'])."</option>";
 		}
 		echo $html;
 	}

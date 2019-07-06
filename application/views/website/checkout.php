@@ -107,9 +107,8 @@
             </div>
             <div class="form-group required">
               <label for="">Kurir</label>
-              <select name="kurir" id="kurir" class="form-control text-uppercase">
+              <select name="kurir" id="kurir" class="form-control">
               </select>
-              <div id="kurirDetail" style="border: 1px solid #eee;padding: 1em;display:none"></div>
             </div>
           </div>
         </div>
