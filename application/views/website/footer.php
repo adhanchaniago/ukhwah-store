@@ -664,7 +664,7 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
       } else {
         var _get= data
       }
-      console.log(_get);
+      /* console.log(_get); */
       j.get('<?php echo base_url() ?>rajaongkir/courier-html-option',_get,function(html){
         j('#kurir').html( html )
         /* target updated */

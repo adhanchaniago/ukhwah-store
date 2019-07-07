@@ -116,7 +116,8 @@ class M_pelanggan extends CI_Model{
             'kode_unik'=> $this->post['kode_unik'],
             'biaya_ongkir'=> $this->post['biaya_ongkir'],
             'komentar_pesanan'=> $this->post['comments'],
-            'alamat_pengiriman'=> "{$this->post['full_address']} ({$this->post['kota']},{$this->post['kabupaten']},{$this->post['provinsi']})",
+            'kurir'=> $this->post['kurir'],
+            'alamat_pengiriman'=> $this->post['alamat_pengiriman'],
         ];
         $this->db->insert('tb_pemesanan',$data);
         return $this->db->insert_id();
@@ -147,6 +148,7 @@ class M_pelanggan extends CI_Model{
                 'berat'=> $value['options']['weight'],
                 'gambar'=> $value['options']['image'],
                 'jumlah'=> $value['qty'],
+                'ukuran'=> (!empty($value['options']['size'])? $value['options']['size'] : NULL ),
             ];
         }
         return $this->db->insert_batch('det_pemesanan', $data);

@@ -250,6 +250,11 @@ class Cart extends CI_Controller
 	public function checkout_process()
 	{
 		$this->m_pelanggan->post= $this->input->post();
+		// echo '<pre>';
+		// print_r($this->m_pelanggan);
+		// print_r($this->cart->contents());
+		// echo '</pre>';
+		// die();
 		if ( empty($_FILES['fupload']['tmp_name']) ) {
             # code...without upload file
 			$this->msg= [
