@@ -59,6 +59,7 @@ $route['cara-pemesanan'] = 'website/cara_pemesanan';
 $route['kontak-kami'] = 'website/kontak_kami';
 $route['view-cart'] = 'website/view_cart';
 $route['checkout'] = 'website/checkout';
+$route['tes'] = 'website/tes';
 
 # Pelanggan
 $route['login'] = 'pelanggan/login';

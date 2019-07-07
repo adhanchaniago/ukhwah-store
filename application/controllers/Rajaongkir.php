@@ -133,12 +133,12 @@ class Rajaongkir extends CI_Controller {
 	{
 		$this->load->helper('currency');
 		$rows= $this->cost_all([
-			'destination'=> 114,
-			'weight'=> 200,
+			'destination'=> $this->input->get('destination'),
+			'weight'=> $this->input->get('weight'),
 		]);
 		$html= "";
 		foreach ($rows as $key => $value) {
-			$html .= "<option value='{$value["value"]}'>{$value["code"]} {$value["service"]} ({$value["etd"]}) - ".idr($value['value'])."</option>";
+			$html .= "<option value='{$value["value"]}' kurir='{$value["code"]} {$value["service"]} ({$value["etd"]})' >{$value["code"]} {$value["service"]} ({$value["etd"]}) - ".idr($value['value'])."</option>";
 		}
 		echo $html;
 	}

@@ -7,6 +7,17 @@ class Website extends MY_Controller{
 	
 		$this->load->model(['m_website','m_pelanggan']);
     }
+
+    public function tes()
+    {
+        $this->load->view('tes');
+    }
+    public function tes_request()
+    {
+        echo "
+            <option value='1' tes='dsfsdf'>1</option><option value='2'>2</option><option>3</option><option>4</option>
+        ";
+    }
     
     public function index()
     {

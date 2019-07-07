@@ -296,19 +296,8 @@
         _sub_total.html( data.subtotal )
         _weight.html(  data.weight )
         _total.html(  data.total )
-        _weight_total= j('.biaya-kirim').attr('data-weight',Math.ceil(getWeightTotal()))
-        // console.log(get)
-        if ( _weight_total.attr('data-biaya')==0 ) {
-          _weight_total.html('?')
-          var _kode_unik= (j('.kode-unik').html()*1);
-          j('.total-pembayaran').html('Rp. '+formatRupiah(idrToNumber(_total.html())+_kode_unik ) )
-        } else {
-          // var _total= (idrToNumber(j('.total').html()));
-          var _kode_unik= (j('.kode-unik').html()*1);
-          var _biaya_kirim= _weight_total.html('Rp. '+formatRupiah(_weight_total.attr('data-biaya')*_weight_total.attr('data-weight')*1));
-          j('.total-pembayaran').html('Rp. '+formatRupiah(idrToNumber(_total.html())+_kode_unik+idrToNumber(_biaya_kirim.html() ) ) )
-          // alert(_weight_total.attr('data-biaya'))
-        }
+        _weight_total= j('.biaya-kirim').attr('data-weight',getWeightTotal())
+        set_kurir()
         
       },'json')
       
@@ -618,6 +607,7 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
       j(document).on('submit','#formCheckout',function(e){
       e.preventDefault()
       var formData = new FormData(this);
+          formData.append('alamat_pengiriman', j('#formFullName').text() +'<br>' +j('#formFullAddress').html() );
       $.ajax({
           url: $(this).attr("action"),
           type: 'POST',
@@ -640,78 +630,66 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
       });
     })
 
-    $.get('<?php echo base_url() ?>rajaongkir/courier-html-option',function(html){
-      $('#kurir').html( html )
-    },'html')
-
-    // $('select#kurir').on('change',function(){
-    //   var _kurir= $(this).val();
-    //   // console.log(_kurir)
-    //   $.get('<?php echo base_url() ?>rajaongkir/cost/?courier='+_kurir,function(html){
-    //     $('div#kurirDetail').html(html).css("display","block");
-    //   },'html')
-    // })
-  
-  
-  /* function selKota(option=null){
-    if (option==null) {
-      j.get('<?php echo base_url() ?>kota',function(data){
-        var _selKota= j('#selKota').html(data.html);      
-        _selKota.html(data.html);      
-        _selKota.attr({
-          "data-kota":'',
-          "data-biaya":'',
-        });      
-      },'json')  
-      
-    } else {
-      if ( option.kota==undefined ) {
-        j.get('<?php echo base_url() ?>kota',{"kabupaten":option.kabupaten},function(data){
-          var _selKota= j('#selKota').html(data.html);      
-          _selKota.html(data.html);      
-          _selKota.attr({
-            "data-kota":'',
-            "data-biaya":'',
-          });      
-        },'json')  
-        
-      } else {
-          j.get('<?php echo base_url() ?>kota',{"kabupaten":option.kabupaten,"kota":option.kota},function(data){
-            var _selKota= j('#selKota').html(data.html);      
-            _selKota.html(data.html);      
-            _selKota.attr({
-              "data-kota":option.kota,
-              "data-biaya":data.biaya,
-            });       
-            biayaKirim()  
-          },'json')
-        
+    /* form kolom alamat on change */
+    j(document).on('click','a.address-mod',function(e){
+      e.preventDefault()
+      var d= {
+        "id" : j(this).attr('data-idkota'),
+        "name" : j(this).attr('data-nama'),
+        "address" : j(this).find('p').html()
       }
+      /* console.log(d) */
+
+      /* target updated */
+      var t= {
+        "formIdKota" : j('input#formIdKota').val( d.id ),
+        "formFullName" : j('strong#formFullName').html( d.name ),
+        "formFullAddress" : j('p#formFullAddress').html( d.address )
+      }
+      // console.log(t)
+      set_kurir()
+        
+    })
+
+    /* set default kurir */
+    if ( j('select#kurir').length > 0 ) {
+      set_kurir()
+    }
+    function set_kurir(data=null){
+      if ( data==null ) {
+        var _get= {
+          "weight" : j(document).find('.biaya-kirim').attr('data-weight'),
+          "destination" : j(document).find('input#formIdKota').val(),
+        } 
+      } else {
+        var _get= data
+      }
+      console.log(_get);
+      j.get('<?php echo base_url() ?>rajaongkir/courier-html-option',_get,function(html){
+        j('#kurir').html( html )
+        /* target updated */
+        var t= {
+          "biayaKirim" : j('td.biaya-kirim').html( 'Rp. '+formatRupiah( j(document).find('select#kurir option:selected').val() ) ),
+          "formBiayaOngkir" : j('input#formBiayaOngkir').val( j('select#kurir option:selected').val() ),
+          "totalPembayaran" : j('td.total-pembayaran').html( 'Rp. '+formatRupiah( idrToNumber( $('td.total').html() ) +(j('td.kode-unik').html()*1) +(j('select#kurir option:selected').val()*1) ) ),
+          "formJasaPengiriman" : j('input#formJasaPengiriman').val( j('select#kurir option:selected').attr('kurir') ),
+        }        
+        
+      },'html')
+    }
+
+    /* kurir on change */
+    j('select#kurir').on('change',function(){
+      /* target updated */
+      var t= {
+        "biayaKirim" : j('td.biaya-kirim').html( 'Rp. '+formatRupiah( j(this).val() ) ),
+        "formBiayaOngkir" : j('input#formBiayaOngkir').val( j(this).val() ),
+        "totalPembayaran" : j('td.total-pembayaran').html( 'Rp. '+formatRupiah( idrToNumber( $('td.total').html() ) +(j('td.kode-unik').html()*1) +(j(this).val()*1) ) ),
+        "formJasaPengiriman" : j('input#formJasaPengiriman').val( j('select#kurir option:selected').attr('kurir') ),
+      } 
       
-    }
-    // console.log(option)
-  } */
+    })
   /* form */
-
-  /* update biaya kirim */
-  biayaKirim()
-  function biayaKirim()
-  {
-    var data= {
-      "weight" : j(document).find('.biaya-kirim').attr('data-weight'),
-      "kurir" : j(document).find('select#kurir option:selected').val()
-    }
-    console.log(data)
-
-    // $('.biaya-kirim').attr('data-biaya',$('#selKota').attr('data-biaya'));
-    // _weight_total= j('.biaya-kirim').attr('data-weight',Math.ceil(getWeightTotal()))
-    // var _total= (idrToNumber(j('.total').html()));
-    // var _kode_unik= (j('.kode-unik').html()*1);
-    // var _biaya_kirim= _weight_total.html('Rp. '+formatRupiah(_weight_total.attr('data-biaya')*_weight_total.attr('data-weight')*1));
-    // j('.total-pembayaran').html('Rp. '+formatRupiah(_total+_kode_unik+idrToNumber(_biaya_kirim.html() ) ) )
-    // j('#formKodeUnik').val(_kode_unik)
-    // j('#formBiayaOngkir').val(j('#selKota').attr('data-biaya')*1)
-  }
 
   /* Fungsi formatRupiah */
   function formatRupiah(bilangan){

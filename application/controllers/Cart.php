@@ -58,7 +58,7 @@ class Cart extends CI_Controller
 			# code...
 			$row= $this->cart->contents()[ $this->input->post('rowid') ];
 			$row['subtotal']= idr($row['subtotal']);
-			$row['weight']= ( ($row['qty']*$row['options']['weight']) / 1000 );
+			$row['weight']= ( ($row['qty']*$row['options']['weight']) );
 			$row['total']= idr( $this->cart->total() );
 		} else {
 			# code...

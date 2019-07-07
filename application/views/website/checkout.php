@@ -20,10 +20,10 @@
           </thead>
           <tbody>
             <?php
-              echo "<pre>";
-              print_r($this->session->userdata());
-              print_r($rows_address);
-              echo "</pre>";
+              // echo "<pre>";
+              // print_r($this->session->userdata());
+              // print_r($rows_address);
+              // echo "</pre>";
               foreach ($rows as $key => $value) {
                 echo '
                   <tr>
@@ -92,7 +92,7 @@
               <div class="panel-heading">
                 <div style="display:flow-root">
                   <div style="float:left">
-                    <h5><strong><?php echo $address->nama_penerima ?></strong></h5>
+                    <h5><strong id="formFullName"><?php echo $address->nama_penerima ?></strong></h5>
                   </div>
                   <div style="float:right">
                     <div class="dropdown">
@@ -103,13 +103,15 @@
                           foreach ($rows_address as $key => $value) {
                             echo ($key==0? null : "<li class='divider'></li>" )
                             ."<li>
-                              <a href='#'>
-                                <strong>{$value->nama_penerima} ({$value->alamat_sebagai})</strong><br>
-                                {$address->alamat_lengkap}<br>
-                                Kota/Kab. {$address->nama_kota} Provinsi. {$address->nama_provinsi}, {$address->kode_pos}<br>
+                              <a href='' class='address-mod' data-nama='{$value->nama_penerima}' data-idkota='{$value->id_kota}'>
+                                <strong>{$value->nama_penerima} ({$value->alamat_sebagai})</strong>
+                                <p>
+                                {$value->alamat_lengkap}<br>
+                                Kota/Kab. {$value->nama_kota} Provinsi. {$value->nama_provinsi}, {$value->kode_pos}<br>
                                 Indonesia<br>
-                                Telepon/Handphone:&nbsp{$address->no_telepon}
-                                </a>
+                                Telepon/Handphone:&nbsp{$value->no_telepon}
+                                </p>
+                              </a>
                             </li>";
                           }
                         ?>
@@ -119,7 +121,7 @@
                 </div>
               </div>
               <div class="panel-body">
-                <p>
+                <p id="formFullAddress">
                   <?php
                     echo "
                       {$address->alamat_lengkap}<br>
@@ -137,8 +139,8 @@
             </div>
             <div class="form-group required">
               <label for="">Kurir</label>
-              <select name="kurir" id="kurir" class="form-control" required="">
-                <option value="10000">10000</option>
+              <select id="kurir" class="form-control" required="">
+                <option value="0">?</option>
               </select>
             </div>
           </div>
@@ -158,9 +160,10 @@
                 <div class="buttons">
                   <div class="pull-right">
                     <input type="hidden" name="id_pelanggan" value="<?php echo $this->session->userdata('pelanggan')['id'] ?>">
-                    <input type="hidden" name="id_kota" value="<?php echo $address->id ?>">
-                    <input id="formKodeUnik" type="hidden" name="kode_unik" value="">
+                    <input id="formIdKota" type="hidden" name="id_kota" value="<?php echo $address->id_kota ?>">
+                    <input id="formKodeUnik" type="hidden" name="kode_unik" value="<?php echo $this->session->userdata('kode_unik') ?>">
                     <input id="formBiayaOngkir" type="hidden" name="biaya_ongkir" value="">
+                    <input id="formJasaPengiriman" type="hidden" name="kurir" value="">
                     <input type="submit" class="btn btn-primary payment-confirm" id="button-confirm" value="Kirim Pemesanan">
                   </div>
                 </div>
