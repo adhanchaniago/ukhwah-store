@@ -169,4 +169,19 @@ class M_pelanggan extends CI_Model{
         }
         return $data;
     }
+
+    # mendapatkan transaksi user
+    public function transaction()
+    {
+        return $this->db->query("
+            SELECT *,
+                tb_pemesanan.tanggal AS tanggal_pemesanan
+            FROM tb_pemesanan
+                INNER JOIN tb_konfirmasi
+                    ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+            WHERE 1=1
+                AND tb_pemesanan.id_pelanggan=1
+                ORDER BY tb_pemesanan.tanggal DESC
+        ")->result_object();
+    }
 }

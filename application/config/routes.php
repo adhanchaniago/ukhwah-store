@@ -81,6 +81,7 @@ $route['provinsi'] = 'cart/provinsi';
 $route['kabupaten'] = 'cart/kabupaten';
 $route['kota'] = 'cart/kota';
 $route['checkout-process'] = 'cart/checkout_process';
+$route['transaction'] = 'pelanggan/transaction';
 
 
 

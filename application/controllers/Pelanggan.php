@@ -124,6 +124,7 @@ class Pelanggan extends MY_Controller{
                 'html'=> '
                     <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"> <i class="fa fa-user"></i> | '.$this->session->userdata('pelanggan')['username'].'</button>
                     <ul class="dropdown-menu users-dropdown" style="width:auto">
+                        <li><a href="'.base_url('transaction').'" id="transaction" title="Informasi Transaksi">Transaksi</a></li>
                         <li><a href="'.base_url('setting').'" id="setting" title="Informasi Pengaturan Akun">Pengaturan</a></li>
                         <li><a href="'.base_url('logout').'">Logout</a></li>
                     </ul>
@@ -185,6 +186,64 @@ class Pelanggan extends MY_Controller{
 
     }
     /* ==================== End Proses Simpan Pelanggan ==================== */
+    
+    /* ==================== Start Transaksi Pelanggan ==================== */
+    public function transaction()
+    {
+        $this->load->helper('dates');
+        $this->html= [];
+        $tbody='';
+        foreach ($this->m_pelanggan->transaction() as $key => $value) {
+            $tbody .= '
+                <tr>
+                    <td>#US'.$value->id_pemesanan.'</td>
+                    <td>'.tgl_indo($value->tanggal_pemesanan).'</td>
+                    <td>'.($value->status==0? '<span class="label label-info">Menunggu Konfirmasi</span>' : '<span class="label label-success">Success</span>' ).'</td>
+                    <td>'.($value->status==0
+                            ? '<span class="label label-info">Menunggu Konfirmasi Pembayaran</span>'
+                            : (empty($value->no_resi)
+                                ? '<span class="label label-warning">Menunggu Proses Jasa Pengiriman</span>'
+                                : '<span class="label label-primary"><b>No Resi Anda : '.$value->no_resi.'</b></span>'  
+                            )
+                        ).'</td>
+                    <td>'.$value->kurir.'</td>
+                    <td><a href="'.base_url('detail-transaction/' .$value->id_pemesanan).'" class="btn btn-primary detail-transaction" title="Informasi Detail Transaksi" role="button">Detail Pemesanan</a></td>
+                </tr>
+            ';
+        }
+        $this->html['html']= '
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Invoice</th>
+                            <th>Tanggal</th>
+                            <th>Status Pembayaran</th>
+                            <th>No Resi Pengiriman</th>
+                            <th>Kurir</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        '.$tbody.'
+                    </tbody>
+                    <tfoot>
+                        <div class="alert alert-info">
+                            <strong>Info!</strong> Jika Nomor Resi Sudah Muncul Anda Bisa Melacak Pengiriman Dengan Memilih Link Yang Ada Di Bawah Ini:
+                            <hr>
+                            <b>
+                            <a target="_blank" href="https://cekresi.com/">Klik Disini Untuk Tracking JNE</a> ||
+                            <a target="_blank" href="https://cekresi.com/m/tracking-pos.php">Klik Disini Untuk Tracking POS</a> ||
+                            <a target="_blank" href="https://cekresi.com/m/tracking-tiki.php">Klik Disini Untuk Tracking TIKI</a>
+                            </b>
+                        </div>
+                    </tfoot>
+                </table>
+            </div>
+        ';
+        echo json_encode($this->html);
+    }
+    /* ==================== End Transaksi Pelanggan ==================== */
 
     /* ==================== Start Setting Pelanggan ==================== */
     public function setting()

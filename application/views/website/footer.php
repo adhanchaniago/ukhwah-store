@@ -393,6 +393,19 @@
       },'json')
     }
 
+    /* transaksi User */
+    j(document).on('click','a#transaction',function(e){
+      e.preventDefault()
+      transaction( j(this).attr('title') )
+    })
+    function transaction(title){
+      j("div#myModal.modal.fade").find('.modal-title').html( title )
+      j.get('<?php echo base_url() ?>transaction',function(data){
+        j("div#myModal.modal.fade").find('.modal-body').html( data.html )
+        j('div#myModal').find('.modal-dialog').addClass('modal-lg');
+      },'json')
+      j("div#myModal.modal.fade").modal("show");
+    }
     /* setting User */
     j(document).on('click','a#setting',function(e){
       e.preventDefault()
