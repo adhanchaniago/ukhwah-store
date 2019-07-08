@@ -34,7 +34,7 @@
                   <th>Nama Pelanggan</th>
                   <th>Username</th>
                   <th>No Telpon</th>
-                  <th>Alamat</th>
+                  <!-- <th>Alamat</th> -->
                   <!-- <th>Action</th> -->
                 </tr>
                 </thead>
@@ -46,7 +46,7 @@
                         <td>{$value->nama}</td>
                         <td>{$value->username}</td>
                         <td>{$value->no_handphone}</td>
-                        <td>{$value->alamat}</td>
+                        <!--<td>{$value->alamat}</td>-->
                         <!--<td>
                           <div class='btn-group'>
                             <button type='button' class='btn btn-default'>Action</button>
