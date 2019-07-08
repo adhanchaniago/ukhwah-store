@@ -39,6 +39,7 @@
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
+                  <th>Invoice</th>
                   <th>Nama Pelanggan</th>
                   <th>Tanggal Pemesanan</th>
                   <th></th>
@@ -49,6 +50,7 @@
                   foreach ($rows as $key => $value) {
                     echo "
                       <tr>
+                        <td>#US{$value->id_pemesanan}</td>
                         <td>{$value->nama}</td>
                         <td>".tgl_indo($value->tanggal)."</td>
                         <td>
