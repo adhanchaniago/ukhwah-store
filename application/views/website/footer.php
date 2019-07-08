@@ -398,6 +398,10 @@
       e.preventDefault()
       transaction( j(this).attr('title') )
     })
+    j(document).on('click','a.detail-transaction',function(e){
+      e.preventDefault()
+      transactionDetail( j(this).attr('title'), j(this).attr('href') )
+    })
     function transaction(title){
       j("div#myModal.modal.fade").find('.modal-title').html( title )
       j.get('<?php echo base_url() ?>transaction',function(data){
@@ -405,6 +409,17 @@
         j('div#myModal').find('.modal-dialog').addClass('modal-lg');
       },'json')
       j("div#myModal.modal.fade").modal("show");
+    }
+    function transactionDetail(title,urls){
+      j("div#myModal.modal.fade").find('.modal-title').html( title )
+      j.get(urls,function(data){
+        j("div#myModal.modal.fade").find('.modal-body').html( data.html )
+        j('div#myModal').find('.modal-dialog').addClass('modal-lg');
+      },'json')
+      j("div#myModal.modal.fade").modal("show");
+      // $("div#myModal").on('hide.bs.modal', function(){
+      //   console.log(transaction('Informasi Transaksi'))
+      // });
     }
     /* setting User */
     j(document).on('click','a#setting',function(e){

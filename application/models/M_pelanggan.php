@@ -173,15 +173,50 @@ class M_pelanggan extends CI_Model{
     # mendapatkan transaksi user
     public function transaction()
     {
-        return $this->db->query("
-            SELECT *,
-                tb_pemesanan.tanggal AS tanggal_pemesanan
-            FROM tb_pemesanan
-                INNER JOIN tb_konfirmasi
-                    ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
-            WHERE 1=1
-                AND tb_pemesanan.id_pelanggan=1
-                ORDER BY tb_pemesanan.tanggal DESC
-        ")->result_object();
+        if ( empty($this->post['id_pemesanan']) ) {
+            # code...
+            return $this->db->query("
+                SELECT *,
+                    tb_pemesanan.tanggal AS tanggal_pemesanan
+                FROM tb_pemesanan
+                    INNER JOIN tb_konfirmasi
+                        ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+                WHERE 1=1
+                    AND tb_pemesanan.id_pelanggan='".$this->session->userdata('pelanggan')['id']."'
+                    ORDER BY tb_pemesanan.tanggal DESC
+            ")->result_object();
+        } else {
+            return $this->db->query("
+                SELECT *,
+                    tb_pemesanan.tanggal AS tanggal_pemesanan
+                FROM tb_pemesanan
+                    INNER JOIN tb_konfirmasi
+                        ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+                    INNER JOIN tb_pelanggan
+                        ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
+                WHERE 1=1
+                    AND tb_pemesanan.id_pelanggan='".$this->session->userdata('pelanggan')['id']."'
+                    AND tb_pemesanan.id_pemesanan='{$this->post["id_pemesanan"]}'
+                    ORDER BY tb_pemesanan.tanggal DESC
+            ")->row();
+            # code...
+        }
+        
     }
+    public function detail_pemesanan()
+	{
+		if( empty($this->post['id_pemesanan']) ){
+			return 'id_pemesanan tidak boleh kosong';
+			
+		}else {
+			return $this->db->query("
+			SELECT * FROM det_pemesanan
+				LEFT JOIN tb_pemesanan
+					ON det_pemesanan.id_pemesanan=tb_pemesanan.id_pemesanan
+			WHERE tb_pemesanan.id_pemesanan ={$this->post["id_pemesanan"]}
+			ORDER BY det_pemesanan.id_det_pemesanan DESC
+			")->result_object();
+
+		}
+	}
 }

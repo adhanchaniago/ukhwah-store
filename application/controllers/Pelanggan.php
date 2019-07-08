@@ -207,7 +207,7 @@ class Pelanggan extends MY_Controller{
                             )
                         ).'</td>
                     <td>'.$value->kurir.'</td>
-                    <td><a href="'.base_url('detail-transaction/' .$value->id_pemesanan).'" class="btn btn-primary detail-transaction" title="Informasi Detail Transaksi" role="button">Detail Pemesanan</a></td>
+                    <td><a href="'.base_url('detail-transaction/' .$value->id_pemesanan).'" class="btn btn-primary detail-transaction" title="Informasi Detail Transaksi" role="button">Detail Transaksi</a></td>
                 </tr>
             ';
         }
@@ -241,6 +241,113 @@ class Pelanggan extends MY_Controller{
                 </table>
             </div>
         ';
+        echo json_encode($this->html);
+    }
+    public function transaction_detail()
+    {
+        $this->html=[];
+        $this->load->helper(['currency','dates']);
+		$this->m_pelanggan->post['id_pemesanan']= $this->uri->segment(2);
+        $pemesanan= $this->m_pelanggan->transaction();
+		$this->html['html']= '
+		<div class="rowX">
+			<div class="col-12">
+				<h4>
+					<i class="fa fa-globe"></i> Ukhwah Store.
+					<small class="float-right" style="float:right">Tanggal: '.tgl_indo($pemesanan->tanggal).'</small>
+				</h4>
+			</div>
+			<!-- /.col -->
+		</div>
+		<div class="row invoice-info">
+			<div class="col-sm-4 invoice-col">
+			Pelanggan :
+			<address>
+				<strong class="text-capitalize">Nama: '.$pemesanan->nama.'</strong><br>
+				<strong class="text-capitalize">Telpon: '.$pemesanan->no_handphone.'</strong><br>
+
+			</address>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-4 invoice-col">
+			Alamat Pengiriman :
+			<address>
+				<strong>'.$pemesanan->alamat_pengiriman.'</strong><br>
+			</address>
+			</div>
+			<!-- /.col -->
+			<div class="col-sm-4 invoice-col">
+			<b>Invoice #US'.$pemesanan->id_pemesanan.'</b>
+			<br>
+			<br>
+			Catatan :
+			<address>
+				<strong>'.($pemesanan->komentar_pesanan==''? 'Tidak Ada Catatan' : $pemesanan->komentar_pesanan ).'</strong><br>
+			</address>
+			</div>
+			<!-- /.col -->
+		</div>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Gambar</th>
+						<th>Nama Produk</th>
+						<th>Kategori</th>
+						<th>Jumlah</th>
+						<th>Berat(Gram)</th>
+						<th>Harga</th>
+						<th>Sub-Total</th>
+					</tr>
+				</thead>
+				<tbody>';
+				$total= 0;
+				$total_berat= 0;
+				foreach ($this->m_pelanggan->detail_pemesanan() as $key => $value) {
+					$this->html['html'] .= '
+					<tr>
+						<td><img class="img-size-64" src="'.base_url('src/produk/128/' .$value->gambar).'"></td>
+						<td>'.$value->nama_produk.(empty($value->ukuran)? null : '<br><b>Ukuran : '.$value->ukuran.'<b>' ).'</td>
+						<td>'.$value->kategori.'</td>
+						<td>'.$value->jumlah.'</td>
+						<td>'.( ($value->jumlah*$value->berat) ).'</td>
+						<td>'.idr($value->harga).'</td>
+						<td>'.idr( ($value->jumlah*$value->harga) ).'</td>
+					</tr>
+					';
+					$total += ($value->jumlah*$value->harga);
+					$total_berat += ceil( ($value->jumlah*$value->berat) /1000 );
+				}
+				
+				$this->html['html'] .='
+				</tbody>
+				<tfoot>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Total:</strong></td>
+						<td class="text-right total">'.idr($total).'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Kode Unik:</strong></td>
+						<td class="text-right kode-unik">'.$pemesanan->kode_unik.'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Biaya Kirim '.$pemesanan->kurir.':</strong></td>
+						<td class="text-right biaya-kirim" data-biaya="0" data-weight="1210">'.idr($pemesanan->biaya_ongkir).'</td>
+					</tr>
+					<tr>
+						<td class="text-right" colspan="6"><strong>Total Pembayaran:</strong></td>
+						<td class="text-right total-pembayaran">'.idr( $total +$pemesanan->kode_unik +($pemesanan->biaya_ongkir) ).'</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 text-center">
+				<label>Bukti Pembayaran</label>
+				<img class="img-thumbnail" src="'.base_url('src/bukti_pembayaran/768/' .$pemesanan->bukti_pembayaran).'">
+			</div>
+		</div>
+		';
         echo json_encode($this->html);
     }
     /* ==================== End Transaksi Pelanggan ==================== */
