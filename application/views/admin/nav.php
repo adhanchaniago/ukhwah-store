@@ -104,12 +104,12 @@
                   <p>Pelanggan</p>
                 </a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a href="<?php echo base_url() ?>admin/data-ongkir" class="nav-link <?php echo ($this->uri->segment(2)=='data-ongkir') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Ongkir</p>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
         </ul>
