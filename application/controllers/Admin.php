@@ -32,6 +32,36 @@ class Admin extends MY_Controller{
 		$this->view= 'admin/pembelian_produk';
 		$this->render_pages();
 	}
+	public function form_no_resi()
+	{
+		$this->html= '
+        <form action="'.base_url().'admin/update-no-resi" role="form" id="updateNoResi" method="post" enctype="multipart/form-data">
+			<div class="form-group">
+				<label>No Resi:</label>
+				<input value="" name="no_resi" type="text" class="form-control" placeholder="*) Masukan no resi disini" required="">
+			</div>
+			<input value="'.$this->uri->segment(3).'" name="id_pemesanan" type="hidden">
+            <button type="submit" class="btn btn-primary">Publish</button>
+        </form>
+        ';
+        echo $this->html;
+	}
+	public function update_no_resi()
+	{
+		$this->m_admin->post= $this->input->post();
+		if ( $this->m_admin->update_no_resi() ) {
+			$this->msg= [
+				"stats" => 1,
+				"msg" 	=> 'Data Berhasil Diupdate'
+			];
+		} else {
+			$this->msg= [
+				"stats" => 0,
+				"msg" 	=> 'Data Gagal Diupdate'
+			];
+		}
+		echo json_encode($this->msg);
+	}
 	
 /* ==================== End Transaksi: Pemesanan Produk ==================== *
 /

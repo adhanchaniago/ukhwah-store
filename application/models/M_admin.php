@@ -311,6 +311,14 @@ class M_admin extends CI_Model{
 
 		}
 	}
+	public function update_no_resi()
+	{
+		$data= [
+			'no_resi'=> $this->post['no_resi'],
+		];
+		$where=['id_pemesanan'=>$this->post['id_pemesanan']];
+		return $this->db->update('tb_pemesanan', $data ,$where);
+	}
 /* ==================== End Transaksi : Pembelian Produk ==================== */
 	
 }

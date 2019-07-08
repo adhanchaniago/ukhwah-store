@@ -42,6 +42,8 @@
                   <th>Invoice</th>
                   <th>Nama Pelanggan</th>
                   <th>Tanggal Pemesanan</th>
+                  <th>No Resi</th>
+                  <th>Kurir</th>
                   <th></th>
                 </tr>
                 </thead>
@@ -53,6 +55,8 @@
                         <td>#US{$value->id_pemesanan}</td>
                         <td>{$value->nama}</td>
                         <td>".tgl_indo($value->tanggal)."</td>
+                        <td>".(empty($value->no_resi)? '-' : $value->no_resi )."</td>
+                        <td>{$value->kurir}</td>
                         <td>
                           <div class='btn-group'>
                             <button type='button' class='btn btn-default'>Action</button>
@@ -62,6 +66,7 @@
                             </button>
                             <div class='dropdown-menu' role='menu' x-placement='top-start' style='position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(67px, -165px, 0px);'>
                               <a class='dropdown-item detail' href='".base_url('admin/detail-konfirmasi-pembayaran/' .$value->id_pemesanan .'/true')."'>Detail Pemesanan</a>
+                              <a class='dropdown-item form-no-resi' href='".base_url('admin/form-no-resi/' .$value->id_pemesanan)."' title='Update Nomor Resi'>Update No Resi</a>
                             </div>
                           </div>
                         </td>
@@ -133,5 +138,36 @@
       $('#myModal .modal-body').html(data);
       $('#myModal').modal('show');
     },'html');
+  });
+  $(document).on('click', '.form-no-resi', function(e){
+    e.preventDefault();
+    var title= $(this).attr('title');
+    $.get($(this).attr('href'), function(data){
+      $('#myModal .modal-title').html( title );
+      $('#myModal .modal-body').html(data);
+      $('#myModal').modal('show');
+    },'html');
+  });
+  $(document).on('submit', 'form#updateNoResi', function(e) {
+    e.preventDefault();    
+    var formData = new FormData(this);
+    $.ajax({
+        url: $(this).attr("action"),
+        type: 'POST',
+        data: formData,
+        success: function (data) {
+          if ( data.stats==1 ) {
+            alert( data.msg )
+            location.reload()
+          } else {
+            alert( data.msg );
+          }
+          // console.log(data);
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+        dataType: 'json'
+    });
   });
 </script>
