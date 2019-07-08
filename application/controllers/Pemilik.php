@@ -201,6 +201,9 @@ class Pemilik extends MY_Controller{
 			</div>
 			<!-- /.col -->
 			<div class="col-sm-4 invoice-col">
+			<b>Invoice #US'.$pemesanan->id_pemesanan.'</b>
+			<br>
+			<br>
 			Catatan :
 			<address>
 				<strong>'.($pemesanan->komentar_pesanan==''? 'Tidak Ada Catatan' : $pemesanan->komentar_pesanan ).'</strong><br>
@@ -216,7 +219,7 @@ class Pemilik extends MY_Controller{
 						<th>Nama Produk</th>
 						<th>Kategori</th>
 						<th>Jumlah</th>
-						<th>Berat(Kg)</th>
+						<th>Berat(Gram)</th>
 						<th>Harga</th>
 						<th>Sub-Total</th>
 					</tr>
@@ -228,10 +231,10 @@ class Pemilik extends MY_Controller{
 					$this->html .= '
 					<tr>
 						<td><img class="img-size-64" src="'.base_url('src/produk/128/' .$value->gambar).'"></td>
-						<td>'.$value->nama_produk.'</td>
+						<td>'.$value->nama_produk.(empty($value->ukuran) ? null : '<br><b>Ukuran : ' .$value->ukuran .'</b>').'</td>
 						<td>'.$value->kategori.'</td>
 						<td>'.$value->jumlah.'</td>
-						<td>'.( ($value->jumlah*$value->berat) /1000 ).'</td>
+						<td>'.( ($value->jumlah*$value->berat) ).'</td>
 						<td>'.idr($value->harga).'</td>
 						<td>'.idr( ($value->jumlah*$value->harga) ).'</td>
 					</tr>
@@ -252,12 +255,12 @@ class Pemilik extends MY_Controller{
 						<td class="text-right kode-unik">'.$pemesanan->kode_unik.'</td>
 					</tr>
 					<tr>
-						<td class="text-right" colspan="6"><strong>Biaya Kirim ('.($total_berat).' Kg):</strong></td>
-						<td class="text-right biaya-kirim" data-biaya="0" data-weight="1210">'.idr($total_berat*$pemesanan->biaya_ongkir).'</td>
+						<td class="text-right" colspan="6"><strong>Biaya Kirim '.($pemesanan->kurir).':</strong></td>
+						<td class="text-right biaya-kirim" data-biaya="0" data-weight="1210">'.idr($pemesanan->biaya_ongkir).'</td>
 					</tr>
 					<tr>
 						<td class="text-right" colspan="6"><strong>Total Pembayaran:</strong></td>
-						<td class="text-right total-pembayaran">'.idr( $total +$pemesanan->kode_unik +($total_berat*$pemesanan->biaya_ongkir) ).'</td>
+						<td class="text-right total-pembayaran">'.idr( $total +$pemesanan->kode_unik +($pemesanan->biaya_ongkir) ).'</td>
 					</tr>
 				</tfoot>
 			</table>
@@ -278,7 +281,20 @@ class Pemilik extends MY_Controller{
 	}
 	public function print_laporan_pembelian_produk()
 	{
-		$this->load->view('pemilik/print_pembelian',[]);
+		$data=[];
+		$no= 1;
+		foreach ($this->m_pemilik->print_pembelian() as $key => $value) {
+			$items= $this->m_pemilik->print_pembelian_items($value->id_pemesanan);
+			$value->no= $no;
+			$value->items= $items;
+			$value->items_count= count($items);
+			$data[]= $value;
+			$no++;
+		}
+		$this->load->helper(['currency','dates']);
+		$this->load->view('pemilik/print_pembelian',[
+			'rows'=> $data,
+		]);
 	}
 	public function print_detail_pembelian()
 	{

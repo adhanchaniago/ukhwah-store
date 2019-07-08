@@ -311,5 +311,30 @@ class M_pemilik extends CI_Model{
 		}
 	}
 /* ==================== End Laporan : Pembelian Produk ==================== */
+
+/* ==================== Start Print Laporan : Pembelian Produk ==================== */
+	public function print_pembelian()
+	{
+		return $this->db->query("
+			SELECT *,
+				tb_pemesanan.tanggal AS tanggal_pemesanan
+			FROM tb_pemesanan
+				INNER JOIN tb_konfirmasi
+					ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+				INNER JOIN tb_pelanggan
+					ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
+			WHERE 1=1
+				AND tb_konfirmasi.status='1'
+				ORDER BY tb_pemesanan.id_pemesanan ASC
+		")->result_object();
+	}
+	public function print_pembelian_items($id)
+	{
+		return $this->db->query("
+			SELECT * FROM det_pemesanan WHERE id_pemesanan='{$id}'
+		")->result_object();
+	}
+/* ==================== End Print Laporan : Pembelian Produk ==================== */
+
 	
 }

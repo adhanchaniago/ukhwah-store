@@ -64,6 +64,9 @@
 			</div>
 			<!-- /.col -->
 			<div class="col-sm-4 invoice-col">
+			<b>Invoice #US'.$pemesanan->id_pemesanan.'</b>
+			<br>
+			<br>
 			Catatan :
 			<address>
 				<strong>'.($pemesanan->komentar_pesanan==''? 'Tidak Ada Catatan' : $pemesanan->komentar_pesanan ).'</strong><br>
@@ -78,7 +81,7 @@
 						<th>Nama Produk</th>
 						<th>Kategori</th>
 						<th>Jumlah</th>
-						<th>Berat(Kg)</th>
+						<th>Berat(Gram)</th>
 						<th>Harga</th>
 						<th>Sub-Total</th>
 					</tr>
@@ -89,10 +92,10 @@
 				foreach ($this->m_pemilik->detail_pemesanan() as $key => $value) {
 					echo '
 					<tr>
-						<td>'.$value->nama_produk.'</td>
+						<td>'.$value->nama_produk.(empty($value->ukuran) ? null : '<br><b>Ukuran : ' .$value->ukuran .'</b>').'</td>
 						<td>'.$value->kategori.'</td>
 						<td>'.$value->jumlah.'</td>
-						<td>'.( ($value->jumlah*$value->berat) /1000 ).'</td>
+						<td>'.( ($value->jumlah*$value->berat) ).'</td>
 						<td>'.idr($value->harga).'</td>
 						<td>'.idr( ($value->jumlah*$value->harga) ).'</td>
 					</tr>
@@ -113,12 +116,12 @@
 						<td class="text-right kode-unik">'.$pemesanan->kode_unik.'</td>
 					</tr>
 					<tr>
-						<td class="text-right" colspan="5"><strong>Biaya Kirim ('.($total_berat).' Kg):</strong></td>
-						<td class="text-right biaya-kirim" data-biaya="0" data-weight="1210">'.idr($total_berat*$pemesanan->biaya_ongkir).'</td>
+						<td class="text-right" colspan="5"><strong>Biaya Kirim '.($pemesanan->kurir).':</strong></td>
+						<td class="text-right biaya-kirim" data-biaya="0" data-weight="1210">'.idr($pemesanan->biaya_ongkir).'</td>
 					</tr>
 					<tr>
 						<td class="text-right" colspan="5"><strong>Total Pembayaran:</strong></td>
-						<td class="text-right total-pembayaran">'.idr( $total +$pemesanan->kode_unik +($total_berat*$pemesanan->biaya_ongkir) ).'</td>
+						<td class="text-right total-pembayaran">'.idr( $total +$pemesanan->kode_unik +($pemesanan->biaya_ongkir) ).'</td>
 					</tr>
 				</tfoot>
 			</table>
