@@ -653,7 +653,9 @@ toastr.options.onCloseClick = function() { console.log('close button clicked'); 
 
     /* set default kurir */
     if ( j('select#kurir').length > 0 ) {
-      set_kurir()
+      if ( j(document).find('input#formIdKota').val()!='' ) {
+        set_kurir()
+      }
     }
     function set_kurir(data=null){
       if ( data==null ) {

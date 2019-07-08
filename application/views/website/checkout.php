@@ -92,7 +92,7 @@
               <div class="panel-heading">
                 <div style="display:flow-root">
                   <div style="float:left">
-                    <h5><strong id="formFullName"><?php echo $address->nama_penerima ?></strong></h5>
+                    <h5><strong id="formFullName"><?php echo (empty($address->nama_penerima) ? '?' : $address->nama_penerima ) ?></strong></h5>
                   </div>
                   <div style="float:right">
                     <div class="dropdown">
@@ -123,12 +123,16 @@
               <div class="panel-body">
                 <p id="formFullAddress">
                   <?php
-                    echo "
-                      {$address->alamat_lengkap}<br>
-                      Kota/Kab. {$address->nama_kota} Provinsi. {$address->nama_provinsi}, {$address->kode_pos}<br>
-                      Indonesia<br>
-                      Telepon/Handphone:&nbsp{$address->no_telepon}
-                    ";
+                    echo (empty($address->nama_penerima)
+                      ? '? <a href="'.base_url().'setting" id="setting" title="Informasi Pengaturan Akun">Buat Alamat Baru</a>'
+                      : 
+                        "
+                          {$address->alamat_lengkap}<br>
+                          Kota/Kab. {$address->nama_kota} Provinsi. {$address->nama_provinsi}, {$address->kode_pos}<br>
+                          Indonesia<br>
+                          Telepon/Handphone:&nbsp{$address->no_telepon}
+                        "
+                    );
                   ?>
                 </p>
               </div>
@@ -140,7 +144,7 @@
             <div class="form-group required">
               <label for="">Kurir</label>
               <select id="kurir" class="form-control" required="">
-                <option value="0">?</option>
+                <option value="">?</option>
               </select>
             </div>
           </div>
@@ -160,7 +164,7 @@
                 <div class="buttons">
                   <div class="pull-right">
                     <input type="hidden" name="id_pelanggan" value="<?php echo $this->session->userdata('pelanggan')['id'] ?>">
-                    <input id="formIdKota" type="hidden" name="id_kota" value="<?php echo $address->id_kota ?>">
+                    <input id="formIdKota" type="hidden" name="id_kota" value="<?php echo (empty($address->id_kota)? null: $address->id_kota) ?>">
                     <input id="formKodeUnik" type="hidden" name="kode_unik" value="<?php echo $this->session->userdata('kode_unik') ?>">
                     <input id="formBiayaOngkir" type="hidden" name="biaya_ongkir" value="">
                     <input id="formJasaPengiriman" type="hidden" name="kurir" value="">

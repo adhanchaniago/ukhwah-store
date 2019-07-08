@@ -6,7 +6,7 @@ class Admin extends MY_Controller{
 		parent::__construct();
 	
 		if($this->session->userdata('status') != "login" && $this->session->userdata('level') != "admin"){
-			redirect(base_url("login"));
+			redirect(base_url("auth"));
 		}
 		$this->load->model('m_admin');
 		
