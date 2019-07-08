@@ -53,9 +53,9 @@ class Pelanggan extends MY_Controller{
                     <label for="name">Nama Lengkap:</label>
                     <input name="name" type="text" class="form-control" id="name" placeholder="Masukan Nama Disini" required="">
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="address">Alamat:</label>
-                    <textarea name="address" class="form-control" rows="5" id="address" placeholder="Masukan Alamat Disini ..." required=""></textarea>
+                    <textarea name="address" class="form-control" rows="5" id="address" placeholder="Masukan Alamat Disini ..." required=""></textarea>-->
                 </div>
                 <div class="form-group">
                     <label for="phone">No Telpon:</label>
@@ -96,7 +96,7 @@ class Pelanggan extends MY_Controller{
                 'username' => $row->username,
                 'password' => $row->password,
                 'nama' => $row->nama,
-                'alamat' => $row->alamat,
+                // 'alamat' => $row->alamat,
                 'no_handphone' => $row->no_handphone,
                 'status' => 1,
                 'level' => 'pelanggan'
@@ -166,7 +166,7 @@ class Pelanggan extends MY_Controller{
                 'username' => $row->username,
                 'password' => $row->password,
                 'nama' => $row->nama,
-                'alamat' => $row->alamat,
+                // 'alamat' => $row->alamat,
                 'no_handphone' => $row->no_handphone,
                 'status' => 1,
                 'level' => 'pelanggan'

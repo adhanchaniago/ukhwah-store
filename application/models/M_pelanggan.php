@@ -15,7 +15,7 @@ class M_pelanggan extends CI_Model{
             'username'=>$this->post['username'],
             'password'=>$this->post['password'],
             'nama'=>$this->post['name'],
-            'alamat'=>$this->post['address'],
+            // 'alamat'=>$this->post['address'],
             'no_handphone'=>$this->post['phone'],
         ];
         return $this->db->insert('tb_pelanggan',$data);
