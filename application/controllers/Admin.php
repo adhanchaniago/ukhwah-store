@@ -77,6 +77,9 @@ class Admin extends MY_Controller{
 			</div>
 			<!-- /.col -->
 			<div class="col-sm-4 invoice-col">
+			<b>Invoice #US'.$pemesanan->id_pemesanan.'</b>
+			<br>
+			<br>
 			Catatan :
 			<address>
 				<strong>'.($pemesanan->komentar_pesanan==''? 'Tidak Ada Catatan' : $pemesanan->komentar_pesanan ).'</strong><br>
@@ -104,7 +107,7 @@ class Admin extends MY_Controller{
 					$this->html .= '
 					<tr>
 						<td><img class="img-size-64" src="'.base_url('src/produk/128/' .$value->gambar).'"></td>
-						<td>'.$value->nama_produk.'</td>
+						<td>'.$value->nama_produk.(empty($value->ukuran)? null : '<br><b>Ukuran : '.$value->ukuran.'<b>' ).'</td>
 						<td>'.$value->kategori.'</td>
 						<td>'.$value->jumlah.'</td>
 						<td>'.( ($value->jumlah*$value->berat) ).'</td>
