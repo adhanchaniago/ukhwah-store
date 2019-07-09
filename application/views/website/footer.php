@@ -36,7 +36,13 @@
               <h5>Jasa Pengiriman </h5>
               
               <div class="delivery-service"> 
+                <img data-toggle="tooltip" src="<?php echo base_url() ?>src/jasa_pengiriman/jne.png" alt="JNE Express" title="JNE Express" data-original-title="Pos Indonesia" class="img-responsive">
+              </div>
+              <div class="delivery-service"> 
                 <img data-toggle="tooltip" src="<?php echo base_url() ?>src/jasa_pengiriman/pos-indonesia.png" alt="POS INDONESIA" title="POS INDONESIA" data-original-title="Pos Indonesia" class="img-responsive">
+              </div>
+              <div class="delivery-service"> 
+                <img data-toggle="tooltip" src="<?php echo base_url() ?>src/jasa_pengiriman/tiki.png" alt="TIKI" title="TIKI" data-original-title="Pos Indonesia" class="img-responsive">
               </div>
               
             </div>
