@@ -408,6 +408,18 @@
       e.preventDefault()
       transactionDetail( j(this).attr('title'), j(this).attr('href') )
     })
+    j(document).on('click','button.btn-bill-conf', function(e){
+      e.preventDefault()
+      var id_pemesanan= j(this).attr('data-id')
+      j.get('<?php echo base_url() ?>transaction-accept/' +id_pemesanan,function(data){
+        if ( data.stats==1 ) {
+          toastr["success"]( data.msg );
+          transaction( 'Informasi Transaksi' )
+        } else {
+          toastr["warning"]( data.msg );
+        }
+      },'json')
+    })
     function transaction(title){
       j("div#myModal.modal.fade").find('.modal-title').html( title )
       j.get('<?php echo base_url() ?>transaction',function(data){

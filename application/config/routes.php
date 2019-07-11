@@ -83,6 +83,7 @@ $route['kota'] = 'cart/kota';
 $route['checkout-process'] = 'cart/checkout_process';
 $route['transaction'] = 'pelanggan/transaction';
 $route['detail-transaction/(:num)'] = 'pelanggan/transaction_detail';
+$route['transaction-accept/(:num)'] = 'pelanggan/transaction_accept';
 
 
 

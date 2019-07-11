@@ -202,8 +202,11 @@ class Pelanggan extends MY_Controller{
                     <td>'.($value->status==0
                             ? '<span class="label label-info">Menunggu Konfirmasi Pembayaran</span>'
                             : (empty($value->no_resi)
-                                ? '<span class="label label-warning">Menunggu Proses Jasa Pengiriman</span>'
-                                : '<span class="label label-primary"><b>No Resi Anda : '.$value->no_resi.'</b></span>'  
+                                ? '<span class="label label-warning">Pesanan Sedang Diproses</span>'
+                                : (empty($value->status_pemesanan)
+                                    ? '<span class="label label-primary"><b>Sedang dikirim dengan No Resi : '.$value->no_resi.'</b></span><br><br><button type="button" class="btn btn-default btn-bill-conf" data-id="'.$value->id_pemesanan.'">Sudah Terima</button>'  
+                                    : '<span class="label label-success"><b>Sudah diterima dengan No Resi : '.$value->no_resi.' </b></span><br><span class="label label-default">Pada Tanggal : '.tgl_indo($value->tanggal_terima).'</span>'
+                                )
                             )
                         ).'</td>
                     <td>'.$value->kurir.'</td>
@@ -219,7 +222,7 @@ class Pelanggan extends MY_Controller{
                             <th>Invoice</th>
                             <th>Tanggal</th>
                             <th>Status Pembayaran</th>
-                            <th>No Resi Pengiriman</th>
+                            <th>Status Pembelian</th>
                             <th>Kurir</th>
                             <th>Action</th>
                         </tr>
@@ -349,6 +352,24 @@ class Pelanggan extends MY_Controller{
 		</div>
 		';
         echo json_encode($this->html);
+    }
+    public function transaction_accept()
+    {
+        $this->m_pelanggan->post['id_pemesanan']= $this->uri->segment(2);
+        if ( $this->m_pelanggan->transaction_accept() ) {
+            $this->msg= [
+                'stats'=>1,
+                'msg'=>'Konfirmasi Pembelian Berhasil'
+            ];
+        } else {
+            # code...
+            $this->msg= [
+                'stats'=>0,
+                'msg'=>'Konfirmasi Pembellian Gagal'
+            ];
+        }
+        
+        echo json_encode($this->msg);
     }
     /* ==================== End Transaksi Pelanggan ==================== */
 

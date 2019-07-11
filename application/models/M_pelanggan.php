@@ -218,5 +218,13 @@ class M_pelanggan extends CI_Model{
 			")->result_object();
 
 		}
-	}
+    }
+    public function transaction_accept()
+    {
+        $data= [
+            'status_pemesanan'=> 1,
+            'tanggal_terima'=> date('Y-m-d'),
+        ];
+        return $this->db->update('tb_pemesanan',$data,['id_pemesanan'=> $this->session->userdata('pelanggan')['id'], 'id_pemesanan'=>$this->post['id_pemesanan'] ]);
+    }
 }
