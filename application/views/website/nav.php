@@ -77,7 +77,7 @@ echo '</pre>'; */
           <ul id="cat_accordion">
             <?php
               foreach ($kategori as $key => $value) {
-                echo "<li><a href='".base_url()."produk/kategori/{$value->kategori}/?q={$value->id_kategori}'>{$value->kategori}</a></span><li>";
+              echo "<li><a href='".base_url()."produk/kategori/{$value->kategori}/?q={$value->id_kategori}'>{$value->kategori}</a></span><li>";
               }
             ?>
           </ul>

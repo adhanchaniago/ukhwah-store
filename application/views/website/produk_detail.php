@@ -6,9 +6,9 @@
         <div class="image" style="border: 1px solid #e5e1e1;"><div style="height:381px;width:381px;" class="zoomWrapper"><img class="img-responsive" itemprop="image" id="zoom_01" src="<?php echo base_url('src/produk/' .$row->gambar) ?>" title="{image_name}" alt="{image_name}" data-zoom-image="<?php echo base_url('src/produk/' .$row->gambar) ?>" style="position: absolute;"></div> </div>
         <div class="image-additional" id="gallery_01">
             
-          <a class="thumbnail" href="#" data-zoom-image="<?php echo base_url('src/produk/' .$row->gambar) ?>" data-image="<?php echo base_url('src/produk/' .$row->gambar) ?>" title="{image_single}gamis_arab_hitam.jpg{/image_single}"> 
-            <img src="<?php echo base_url('src/produk/128/' .$row->gambar) ?>" title="gamis_arab_hitam.jpg" alt="gamis_arab_hitam.jpg">
-          </a>
+          <!-- <a class="thumbnail" href="#" data-zoom-image="<?php echo base_url('src/produk/' .$row->gambar) ?>" data-image="<?php echo base_url('src/produk/' .$row->gambar) ?>" title="{image_single}gamis_arab_hitam.jpg{/image_single}">  -->
+            <!-- <img src="<?php echo base_url('src/produk/128/' .$row->gambar) ?>" title="gamis_arab_hitam.jpg" alt="gamis_arab_hitam.jpg"> -->
+          <!-- </a> -->
             
         </div>
       </div>

@@ -71,11 +71,6 @@
           <div class="powered_text pull-left flip">
             <p>Ukhwah Store © <?php echo date('Y')?> </p>
           </div>
-          <div class="social pull-right flip">
-	          	<a href="www.twitter.com" target="_blank"> <img data-toggle="tooltip" src="https://img.icons8.com/color/48/000000/twitter.png" alt="Twitter" title="Twitter"></a>
-	          	<a href="www.instagram.com" target="_blank"> <img data-toggle="tooltip" src="https://img.icons8.com/color/48/000000/instagram-new.png" alt="Instagram" title="Instagram"></a>
-	          	<a href="www.facebook.com" target="_blank"> <img data-toggle="tooltip" src="https://img.icons8.com/color/48/000000/facebook.png" alt="Facebook" title="Facebook"></a>
-          </div>
         </div>
       </div>
     </div>

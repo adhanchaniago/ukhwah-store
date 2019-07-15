@@ -324,6 +324,7 @@ class M_pemilik extends CI_Model{
 				INNER JOIN tb_pelanggan
 					ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
 			WHERE 1=1
+				AND tb_pemesanan.tanggal BETWEEN '{$this->post["start"]}' AND '{$this->post["end"]}'
 				AND tb_konfirmasi.status='1'
 				ORDER BY tb_pemesanan.id_pemesanan ASC
 		")->result_object();

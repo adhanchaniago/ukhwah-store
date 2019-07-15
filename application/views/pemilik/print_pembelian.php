@@ -79,6 +79,14 @@
   echo '
   <div id="DivIdToPrint" class="container border p-3 mt-3">
     <div class="row">
+      <div class="col-sm-12 text-center">
+        <hr>
+        <h2>UKHWAH STORE</h2>
+        <h3><b>Laporan Penjualan</b></h3>
+        <h5>Periode '.$start.' s.d '.$end.'</h5>
+        <!--<p><b>jalan jalan</b></p>-->
+        <hr>
+      </div>
       <div class="col-sm-12">
         <table id="example1" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
           <thead>

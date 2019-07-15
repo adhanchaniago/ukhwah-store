@@ -27,7 +27,6 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title d-none">Daftar Informasi Kelas</h3>
               <div class="alert alert-info fade in alert-dismissible show">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                   <span aria-hidden="true" style="font-size:20px">×</span>
@@ -35,7 +34,12 @@
               </div>
             </div>
             <div class="card-header">
-              <a target="_blank" href="<?php echo base_url() ?>pemilik/print-laporan-pembelian-produk" class="btn btn-default float-right form-add-new"><i class="fa fa-plus"></i> Print Laporan</a>
+              <form method="POST" class="form-inline" action="<?php echo base_url() ?>pemilik/print-laporan-pembelian-produk" class="floar-right" target="_blank">
+                <label for="" class="mb-2 mr-sm-2">Periode</label> <input type="date" class="form-control mb-2 mr-sm-2" name="start" required="">
+                <label for="" class="mb-2 mr-sm-2">s.d</label> <input type="date" class="form-control mb-2 mr-sm-2" name="end" required="">
+                <button type="submit" class="btn btn-default mb-2 mr-sm-2"><i class="fa fa-plus"></i> Print Laporan</button>
+              </form>
+              <!-- <a target="_blank" href="<?php echo base_url() ?>pemilik/print-laporan-pembelian-produk" class="btn btn-default float-right form-add-new"><i class="fa fa-plus"></i> Print Laporan</a> -->
             </div>
             <!-- /.card-header -->
             <div class="card-body">

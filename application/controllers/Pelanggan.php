@@ -232,6 +232,7 @@ class Pelanggan extends MY_Controller{
                     </tbody>
                     <tfoot>
                         <div class="alert alert-info">
+                        <strong>Info!</strong> Jika Barang Sudah Diterima, Anda dapat Menekan Tombol "Sudah Terima" Pada Status Pembelian <br>
                             <strong>Info!</strong> Jika Nomor Resi Sudah Muncul Anda Bisa Melacak Pengiriman Dengan Memilih Link Yang Ada Di Bawah Ini:
                             <hr>
                             <b>

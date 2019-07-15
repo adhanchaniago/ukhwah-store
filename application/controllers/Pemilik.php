@@ -281,6 +281,7 @@ class Pemilik extends MY_Controller{
 	}
 	public function print_laporan_pembelian_produk()
 	{
+		$this->m_pemilik->post= $this->input->post();
 		$data=[];
 		$no= 1;
 		foreach ($this->m_pemilik->print_pembelian() as $key => $value) {
@@ -294,6 +295,8 @@ class Pemilik extends MY_Controller{
 		$this->load->helper(['currency','dates']);
 		$this->load->view('pemilik/print_pembelian',[
 			'rows'=> $data,
+			'start'=> tgl_indo($this->input->post('start')),
+			'end'=> tgl_indo($this->input->post('end')),
 		]);
 	}
 	public function print_detail_pembelian()
