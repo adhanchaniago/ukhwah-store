@@ -18,6 +18,16 @@ class Pelanggan extends MY_Controller{
     /* ==================== Start Formorm Login ==================== */
     public function login()
     {
+        $digit1 = mt_rand(1,20);
+        $digit2 = mt_rand(1,20);
+        if( mt_rand(0,1) === 1 ) {
+                $math = "$digit1 + $digit2";
+                $_SESSION['answer'] = $digit1 + $digit2;
+        } else {
+                $math = "$digit1 - $digit2";
+                $_SESSION['answer'] = $digit1 - $digit2;
+        }
+    
         $this->html=[
             'title'=> 'Login',
             'form'=> '
@@ -29,6 +39,9 @@ class Pelanggan extends MY_Controller{
                 <div class="form-group">
                     <label for="pwd">Password:</label>
                     <input name="password" type="password" class="form-control" id="pwd" placeholder="********" required="">
+                </div>
+                <div class="form-group">
+                    <input class="form-control" name="captcha" type="text" placeholder="Jawab '.$math.' ?" />
                 </div>
                 <!--<div class="checkbox">
                     <label><input type="checkbox"> Remember me</label>
@@ -59,7 +72,7 @@ class Pelanggan extends MY_Controller{
                 </div>
                 <div class="form-group">
                     <label for="phone">No Telpon:</label>
-                    <input name="phone" type="telp" class="form-control" id="phone" placeholder="+628123456789" required="">
+                    <input maxlength="15" onkeypress="return hanyaAngka(event)" name="phone" type="telp" class="form-control" id="phone" placeholder="08123456789" required="">
                 </div>
                 <div class="form-group">
                     <label for="username">Username:</label>
@@ -85,30 +98,39 @@ class Pelanggan extends MY_Controller{
     public function check()
     {
         $this->m_pelanggan->post= $this->input->post();
-        if ( $this->m_pelanggan->check()->num_rows() > 0 ) {
-            $this->msg= [
-                'stats'=>1,
-                'msg'=>'Login Success'
-            ];
-            $row= $this->m_pelanggan->check()->row();
-            $data_session = array(
-                'id' => $row->id_pelanggan,
-                'username' => $row->username,
-                'password' => $row->password,
-                'nama' => $row->nama,
-                // 'alamat' => $row->alamat,
-                'no_handphone' => $row->no_handphone,
-                'status' => 1,
-                'level' => 'pelanggan'
-            );
-        
-            $this->session->set_userdata(['pelanggan'=>$data_session]);
-        } else {
+        if ( $_SESSION['answer']==$_REQUEST['captcha'] ) {
+            if ( $this->m_pelanggan->check()->num_rows() > 0 ) {
+                $this->msg= [
+                    'stats'=>1,
+                    'msg'=>'Login Success'
+                ];
+                $row= $this->m_pelanggan->check()->row();
+                $data_session = array(
+                    'id' => $row->id_pelanggan,
+                    'username' => $row->username,
+                    'password' => $row->password,
+                    'nama' => $row->nama,
+                    // 'alamat' => $row->alamat,
+                    'no_handphone' => $row->no_handphone,
+                    'status' => 1,
+                    'level' => 'pelanggan'
+                );
+            
+                $this->session->set_userdata(['pelanggan'=>$data_session]);
+            } else {
+                $this->msg= [
+                    'stats'=>0,
+                    'msg'=>'Maaf Username dan Password tidak sesuai mohon periksa kembali'
+                ];
+                # code...
+            }
+
+        }else {
+            # code...
             $this->msg= [
                 'stats'=>0,
-                'msg'=>'Maaf Username dan Password tidak sesuai mohon periksa kembali'
+                'msg'=>'Maaf jawaban anda salah'
             ];
-            # code...
         }
 
         echo json_encode($this->msg);
@@ -194,21 +216,40 @@ class Pelanggan extends MY_Controller{
         $this->html= [];
         $tbody='';
         foreach ($this->m_pelanggan->transaction() as $key => $value) {
+            $status_pembayaran= '';
+            $status_pembelian= '';
+            switch ($value->status) {
+                case '0':
+                    $status_pembayaran= '<span class="label label-info">Menunggu Konfirmasi</span>';
+                    $status_pembelian= '<span class="label label-info">Menunggu Konfirmasi Pembayaran</span>';
+                    break;
+
+                case '1':
+                    $status_pembayaran= '<span class="label label-success">Success</span>';
+                    $status_pembelian= (empty($value->no_resi)
+                        ? '<span class="label label-warning">Pesanan Sedang Diproses</span>'
+                        : (empty($value->status_pemesanan)
+                            ? '<span class="label label-primary"><b>Sedang dikirim dengan No Resi : '.$value->no_resi.'</b></span><br><br><button type="button" class="btn btn-default btn-bill-conf" data-id="'.$value->id_pemesanan.'">Sudah Terima</button>'  
+                            : '<span class="label label-success"><b>Sudah diterima dengan No Resi : '.$value->no_resi.' </b></span><br><span class="label label-default">Pada Tanggal : '.tgl_indo($value->tanggal_terima).'</span>'
+                        )
+                    );
+                    break;
+
+                case '2':
+                    $status_pembayaran= '<span class="label label-warning">Pembayaran tidak sesuai</span>';
+                    $status_pembelian= '<span class="label label-warning">Pembelian ditunda</span>';
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
             $tbody .= '
                 <tr>
                     <td>#US'.$value->id_pemesanan.'</td>
                     <td>'.tgl_indo($value->tanggal_pemesanan).'</td>
-                    <td>'.($value->status==0? '<span class="label label-info">Menunggu Konfirmasi</span>' : '<span class="label label-success">Success</span>' ).'</td>
-                    <td>'.($value->status==0
-                            ? '<span class="label label-info">Menunggu Konfirmasi Pembayaran</span>'
-                            : (empty($value->no_resi)
-                                ? '<span class="label label-warning">Pesanan Sedang Diproses</span>'
-                                : (empty($value->status_pemesanan)
-                                    ? '<span class="label label-primary"><b>Sedang dikirim dengan No Resi : '.$value->no_resi.'</b></span><br><br><button type="button" class="btn btn-default btn-bill-conf" data-id="'.$value->id_pemesanan.'">Sudah Terima</button>'  
-                                    : '<span class="label label-success"><b>Sudah diterima dengan No Resi : '.$value->no_resi.' </b></span><br><span class="label label-default">Pada Tanggal : '.tgl_indo($value->tanggal_terima).'</span>'
-                                )
-                            )
-                        ).'</td>
+                    <td>'.$status_pembayaran.'</td>
+                    <td>'.$status_pembelian.'</td>
                     <td>'.$value->kurir.'</td>
                     <td><a href="'.base_url('detail-transaction/' .$value->id_pemesanan).'" class="btn btn-primary detail-transaction" title="Informasi Detail Transaksi" role="button">Detail Transaksi</a></td>
                 </tr>
@@ -486,7 +527,7 @@ class Pelanggan extends MY_Controller{
                 </div>
                 <div class="form-group">
                     <label for="phone">No Telpon:</label>
-                    <input value="'.$row_user["no_handphone"].'" name="phone" type="telp" class="form-control" id="phone" placeholder="+628123456789" required="">
+                    <input maxlength="15" onkeypress="return hanyaAngka(event)" value="'.$row_user["no_handphone"].'" name="phone" type="telp" class="form-control" id="phone" placeholder="+628123456789" required="">
                 </div>
                 <div class="form-group">
                     <label for="username">Username:</label>

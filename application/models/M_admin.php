@@ -234,6 +234,30 @@ class M_admin extends CI_Model{
 	}
 /* ==================== End Master Data : Ongkir ==================== */
 
+/* ==================== Start Transaksi : Pembelian Pending ==================== */
+	public function pembelian_pending()
+	{
+		if( empty($this->post['id_pemesanan']) ){
+			return $this->db->query("
+			SELECT *,
+				CASE
+					WHEN tb_konfirmasi.status='2' THEN 'Pembayaran tidak sesuai'
+					ELSE 'tidak diketahui'
+				END AS keterangan
+			FROM tb_pemesanan
+				LEFT JOIN tb_konfirmasi
+					ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
+				LEFT JOIN tb_pelanggan
+					ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
+			WHERE tb_konfirmasi.status !='0' AND tb_konfirmasi.status !='1'
+			ORDER BY tb_pemesanan.id_pemesanan DESC
+			")->result_object();
+			
+		}
+		
+	}
+/* ==================== End Transaksi : Pembelian Pending ==================== */
+
 /* ==================== Start Transaksi : Konfirmasi Pembayaran ==================== */
 	public function konfirmasi_pembayaran()
 	{
@@ -256,7 +280,7 @@ class M_admin extends CI_Model{
 					ON tb_pemesanan.id_pemesanan=tb_konfirmasi.id_pemesanan
 				LEFT JOIN tb_pelanggan
 					ON tb_pemesanan.id_pelanggan=tb_pelanggan.id_pelanggan
-			WHERE tb_konfirmasi.status ='{$status}' AND tb_pemesanan.id_pemesanan ={$this->post["id_pemesanan"]}
+			WHERE tb_pemesanan.id_pemesanan ={$this->post["id_pemesanan"]}
 			ORDER BY tb_pemesanan.id_pemesanan DESC
 			")->row();
 
@@ -280,11 +304,18 @@ class M_admin extends CI_Model{
 	}
 	public function konfirmasi_pemesanan()
 	{
-		return $this->db->update('tb_konfirmasi',['status'=>'1'],['id_pemesanan'=>$this->post['id_pemesanan'] ]);
+		$data= [
+			'status'=> '1'
+		];
+		if ( ! empty($this->post['q']) ) {
+			$data['status'] = $this->post['q'];
+		}
+
+		return $this->db->update('tb_konfirmasi', $data, ['id_pemesanan'=>$this->post['id_pemesanan'] ]);
 	}
 /* ==================== End Transaksi : Konfirmasi Pembayaran ==================== */
 
-/* ==================== Start Transaksi : Pmbelian Produk ==================== */
+/* ==================== Start Transaksi : Pembelian Produk ==================== */
 	public function pembelian_produk()
 	{
 		if( empty($this->post['id_pemesanan']) ){

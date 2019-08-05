@@ -48,7 +48,7 @@
               </p>
             </a>
           </li>
-          <li class="nav-item has-treeview <?php echo ($this->uri->segment(2)=='data-pemesanan-produk' || $this->uri->segment(2)=='data-konfirmasi-pembayaran') ? 'menu-open' : null ?>">
+          <li class="nav-item has-treeview <?php echo ($this->uri->segment(2)=='data-pemesanan-produk' || $this->uri->segment(2)=='data-pembelian-pending' || $this->uri->segment(2)=='data-konfirmasi-pembayaran') ? 'menu-open' : null ?>">
             <a href="#" class="nav-link">
               <i class="nav-icon fa fa-user"></i>
               <p>
@@ -61,6 +61,12 @@
                 <a href="<?php echo base_url() ?>admin/data-pemesanan-produk" class="nav-link <?php echo ($this->uri->segment(2)=='data-pemesanan-produk') ? 'active' : null ?>">
                   <i class="fa fa-circle-o nav-icon"></i>
                   <p>Pembelian Produk</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="<?php echo base_url() ?>admin/data-pembelian-pending" class="nav-link <?php echo ($this->uri->segment(2)=='data-pembelian-pending') ? 'active' : null ?>">
+                  <i class="fa fa-circle-o nav-icon"></i>
+                  <p>Pembelian Pending</p>
                 </a>
               </li>
               <li class="nav-item">

@@ -49,7 +49,7 @@
               <div>
                 <div class="qty">
                   <label class="control-label" for="input-quantity">Qty</label>
-                  <input type="text" name="quantity" value="1" size="2" id="input-quantity" class="form-control">
+                  <input readonly="" type="text" name="quantity" value="1" size="2" id="input-quantity" class="form-control">
                   <a class="qtyBtn plus" href="javascript:void(0);">+</a><br>
                   <a class="qtyBtn mines" href="javascript:void(0);">-</a>
                   <div class="clear"></div>

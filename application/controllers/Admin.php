@@ -63,8 +63,18 @@ class Admin extends MY_Controller{
 		echo json_encode($this->msg);
 	}
 	
-/* ==================== End Transaksi: Pemesanan Produk ==================== *
-/
+/* ==================== End Transaksi: Pemesanan Produk ==================== */
+
+/* ==================== Start Transaksi: Pembelian Pending ==================== */
+	function data_pembelian_pending()
+	{
+		$this->load->helper('dates');
+		$this->content['rows']= $this->m_admin->pembelian_pending();
+		$this->view= 'admin/pembelian_pending';
+		$this->render_pages();
+	}
+/* ==================== End Transaksi: Pembelian Pending ==================== */
+
 /* ==================== Start Transaksi: Konfirmasi Pembayaran ==================== */
 	function data_konfirmasi_pembayaran()
 	{
@@ -180,6 +190,8 @@ class Admin extends MY_Controller{
 		<hr>
 		<div>
 			<a id="konfirmasi" href="'.base_url('admin/konfirmasi-pemesanan/' .$pemesanan->id_pemesanan).'" class="btn btn-block btn-primary '.($this->uri->segment(4)=='true'? 'd-none' : null ).'">Konfirmasi Pembayaran</a>
+			<hr>
+			<a id="konfirmasi" href="'.base_url('admin/konfirmasi-pemesanan/' .$pemesanan->id_pemesanan .'/?q=2').'" class="btn btn-block btn-warning '.($this->uri->segment(4)=='true'? 'd-none' : null ).'">Pembayaran Tidak Sesuai</a>
 		</div>
 		';
 		echo $this->html;
@@ -193,6 +205,10 @@ class Admin extends MY_Controller{
 	public function konfirmasi_pemesanan()
 	{
 		$this->m_admin->post['id_pemesanan']= $this->uri->segment(3);
+		
+		if( !empty($this->input->get('q')) )
+			$this->m_admin->post['q']= $this->input->get('q');
+
 		if ( $this->m_admin->konfirmasi_pemesanan() ) {
 			# code...
 			$this->msg= [
